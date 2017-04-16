@@ -1,0 +1,48 @@
+{{users_info[0]}}
+<table border=1>
+	<thead>
+		<tr>
+			<td>登录名</td>       
+			<td>中文名</td>       
+			<td>密码</td>       
+			<td>手机号</td>       
+			<td>邮箱</td>       
+			<td>角色</td>       
+			<td>状态</td>       
+			<td>更新时间</td>       
+			<td>最后一次登录时间</td>       
+			<td>操作</td>       
+		</tr>
+	</thead>
+	<tbody>
+		{% for i in users_info %}
+		<tr>
+			<td>{{i.login_name}}</td>
+			<td>{{i.name_cn}}</td>
+			<td>{{i.password}}</td>
+			<td>{{i.mobile}}</td>
+			<td>{{i.email}}</td>
+                        {% if i.role == 0 %}
+				<td>admin</td>
+			{% elif i.role == 1 %}
+				<td>ops</td>
+			{% elif i.role == 2 %}
+				<td>dev</td>
+			{% elif i.role == 3 %}
+				<td>qa</td>
+			{% elif i.role == 4 %}
+				<td>guest</td>
+                  	{% endif %} 
+                        </td>
+			{% if i.status == 0 %}
+				<td>正常</td>
+			{% elif i.status == 1 %}
+				<td>锁定</td>
+			{% endif %}
+			<td>{{i.update_time}}</td>
+			<td>{{i.last_login_time}}</td>
+			<td><a href="/users/update?id={{i.id}}">更新</a>&nbsp<a href="/users/delete?id={{i.id}}">删除</a>&nbsp<a href="/users/update_password?id={{i.id}}">更改密码</a></td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
