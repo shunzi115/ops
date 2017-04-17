@@ -17,31 +17,36 @@ def user_register():
 	user_list = [x[0] for x in mysql_init.select_sql('users',select_fields)]
 	print "**** user_list ****"
 	print user_list
-	user_register = {}
+#	user_register = {}
 	if request.method == 'GET':
 		return render_template('/register.html')
 	if request.method == 'POST':
-		user_register['login_name'] = request.form.get('login_name').strip('')
-		user_register['name_cn'] = request.form.get('name_cn').strip('')
-		user_register['password'] = request.form.get('password').strip('')
-		password_again = request.form.get('password_again').strip('')
-		user_register['mobile'] = request.form.get('mobile').strip('')
-		user_register['email'] = request.form.get('email').strip('')
-		user_register['role'] = request.form.get('role').strip('')
+		user_register = dict((i,j[0]) for i,j in dict(request.form).items())
+		print "**** user_register ****"
+		print user_register
+#		user_register['login_name'] = request.form.get('login_name').strip('')
+#		user_register['name_cn'] = request.form.get('name_cn').strip('')
+#		user_register['password'] = request.form.get('password').strip('')
+#		password_again = request.form.get('password_again').strip('')
+#		user_register['mobile'] = request.form.get('mobile').strip('')
+#		user_register['email'] = request.form.get('email').strip('')
+#		user_register['role'] = request.form.get('role').strip('')
 		user_register['status'] = 0
 		user_register['update_time'] = "2017-04-15 14:05:05" 
 		user_register['last_login_time'] = "2017-04-15 14:05:05" 
-		print "***** user_register *****"
-		print user_register
-		if not user_register['login_name'] or not user_register['name_cn'] or not user_register['password'] or not user_register['mobile'] or not user_register['email'] or not user_register['role']:
+		if not user_register['login_name'].strip('') or not user_register['name_cn'].strip('') or not user_register['password'].strip(''):
+			err_info = "input not null"
+			return render_template("/register.html",err_info=err_info)
+		if not user_register['mobile'].strip('') or not user_register['email'].strip('') or not user_register['role'].strip(''):
 			err_info = "input not null"
 			return render_template("/register.html",err_info=err_info)
 		if user_register['login_name'] in user_list:
 			err_info = "user has exists"
 			return render_template("/register.html",err_info=err_info)
-		if user_register['password'] != password_again:
+		if user_register['password'] != user_register['password_again']:
 			err_info = "two password is not same"
                         return render_template("/register.html",err_info=err_info)
+		del user_register['password_again']
 		insert_fields = [x for x in user_register.keys()]
 		mysql_init.insert_sql('users',insert_fields,user_register)
 		return redirect("/users/user_list")
@@ -104,20 +109,22 @@ def user_update():
 		print request.form
 		print dict(request.form)
 		update_conditions = {}
-		update_user = {}
-		update_conditions['id'] = request.form.get('id').strip('')
-		update_user['login_name'] = request.form.get('login_name').strip('')
-		update_user['name_cn'] = request.form.get('name_cn').strip('')
-		update_user['mobile'] = request.form.get('mobile').strip('')
-		update_user['email'] = request.form.get('email').strip('')
-		update_user['role'] = request.form.get('role').strip('')
-		update_user['status'] = request.form.get('status').strip('')
+		update_user = dict((i,j[0]) for i,j in dict(request.form).items())
+		update_conditions['id'] = update_user['id'].strip('')
+		update_conditions['login_name'] = update_user['login_name'].strip('')
+#		update_user['name_cn'] = request.form.get('name_cn').strip('')
+#		update_user['mobile'] = request.form.get('mobile').strip('')
+#		update_user['email'] = request.form.get('email').strip('')
+#		update_user['role'] = request.form.get('role').strip('')
+#		update_user['status'] = request.form.get('status').strip('')
 		update_user['update_time'] = '2017-04-16 14:41:52'
 		print "**** update_user ****"
 		print update_user
-		if not update_user['name_cn'] or not update_user['mobile'] or not update_user['email']:
+		if not update_user['name_cn'].strip('') or not update_user['mobile'].strip('') or not update_user['email'].strip(''):
 			err_info = "input not null"
 			return render_template("/user_update.html",err_info=err_info)
+		del update_user['id']
+		del update_user['login_name']
 		mysql_init.update_sql('users',update_user,update_conditions)
 		if update_user['role'] == '0':
 			return redirect("/users/user_list")
