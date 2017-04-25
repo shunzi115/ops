@@ -5,11 +5,13 @@ sys.path.append('..')
 print "*** sys.path ***"
 print sys.path
 
-from flask import Flask,request,render_template,redirect
+from flask import Flask,request,render_template,redirect,session
 
 from db_mysql import mysql_init
 
 app = Flask(__name__)
+
+app.secret_key = "haha@hehe.hello"
 
 @app.route('/users/register',methods=['GET','POST'])
 def user_register():
@@ -76,10 +78,13 @@ def user_login():
 		if select_login_info_list[0]['password'] != password:
 			err_info = "password is not right"
                         return render_template("/user_login.html",err_info=err_info)
+		session['login_name'] = login_info['login_name']
 		return render_template("/user_personal_info.html",login_user_info=select_login_info_list[0])
 
 @app.route("/users/user_list",methods=['GET'])
 def user_list():
+	if not session.get('login_name',None):
+		return redirect("/users/login")
 	fields = ['id','login_name','name_cn','password','mobile','email','role','status','update_time','last_login_time']
 	users_info_tuple = mysql_init.select_sql('users',fields)
 	print "***** users_info_tuple *****"
@@ -176,7 +181,10 @@ def user_delete():
 	mysql_init.delete_sql('users',delete_condition)
 	return redirect("/users/user_list")
 
-
+@app.route("/users/logout",methods=['GET'])
+def user_logout():
+	session.pop('login_name')
+	return redirect("/users/login")
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0',port=8888,debug=True)
