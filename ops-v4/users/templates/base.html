@@ -1,0 +1,194 @@
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+<title>莴笋运维管理平台</title>
+
+<link rel="shortcut icon" href="/static/img/facio.ico" type="image/x-icon">
+<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/css/style.css" rel="stylesheet">
+
+<!--plugins-->
+<link href="/static/plugin/Font-Awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet">
+<link href="/static/plugin/layer-v2.4/layer/skin/layer.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/static/plugin/sweetalert-master/dist/sweetalert.css">
+
+
+<script src="/static/js/jquery-3.2.1.min.js"></script>
+
+<!--plugins-->
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/plugin/layer-v2.4/layer/layer.js"></script>
+<script src="/static/plugin/sweetalert-master/dist/sweetalert.min.js"></script>
+
+
+<!--整个页面的框架-->
+<div id="wrapper">
+        
+<!--左边导航-->
+<nav class="navbar-default navbar-static-side" role="navigation">
+<div class="sidebar-collapse">
+
+<ul class="nav" id="side-menu">            
+<!--左边栏头像部分-->
+<li class="nav-header">
+    <div class="dropdown profile-element">
+        <span>
+            <img alt="image" class="img-circle" width="48" height="48" src="/static/img/root.png">
+        </span>
+	</br>
+	</br>
+        <span class="text-muted text-xs block">
+            	<strong class="font-bold">{{session.login_name}} | <span style="color: #8095a8"></span></strong>
+                {% if session.role == 0 %}
+                    管理员  
+                {% elif session.role == 1 %}
+                    运维
+                {% elif session.role == 2 %}
+                    开发
+                {% elif session.role == 3 %}
+                    测试
+                {% elif session.role == 4 %}
+                    访客
+                {% endif %}
+         </span>
+    </div>
+</li>
+<!--左边栏头像部分结束-->
+
+<!--左边菜单栏开始-->
+<li id="index" class="active">
+<a href="/"><i class="fa fa-dashboard"></i> <span class="nav-label">仪表盘</span><span class="label label-info pull-right"></span></a>
+</li>   <!--仪表盘-->
+           
+<li id="juser">
+<a href="#"><i class="fa fa-group"></i> <span class="nav-label">用户管理</span><span class="fa arrow"></span></a>
+   <ul class="nav nav-second-level collapse">
+        <li><a href="/users/user_info">个人中心</a></li>
+        <li><a href="/users/user_list">用户列表</a></li>
+   </ul>
+</li>   <!-- 用户管理 -->     
+     
+<li id="jasset">
+<a><i class="fa fa-inbox"></i> <span class="nav-label">资产管理</span><span class="fa arrow"></span></a>
+  <ul class="nav nav-second-level collapse">
+    <li><a href="/idc">机房管理</a></li>
+    <li> <a href="/cabinet">机柜管理</a></li>
+    <li> <a href="/server">服务器管理</a></li>
+  </ul> 
+</li> <!-- 资产管理 -->     
+            
+         
+<li id="setting">
+<a href="#"><i class="fa fa-gears"></i> <span class="nav-label">监控</span><span class="label label-info pull-right"></span></a>
+</li>    <!--监控-->
+
+<li id="log">
+<a href="#"><i class="fa fa-gears"></i> <span class="nav-label">日志可视化</span><span class="label label-info pull-right"></span></a>
+</li>    <!--日志可视化-->
+
+
+<li id="api">
+<a href="#"><i class="fa fa-gears"></i> <span class="nav-label">第三方接口</span><span class="label label-info pull-right"></span></a>
+</li>    <!--第三方接口-->
+
+<li class="special_link">
+<a href="http://www.51reboot.com" target="_blank"><i class="fa fa-database"></i> <span class="nav-label">访问官网</span></a>
+</li>  <!--link-->
+ 
+</ul> 
+</div>
+</nav>  <!--左边导航结束-->
+<!--左边导航点击自动弹出下拉菜单-->
+
+<script>
+$('li').click(function(){
+    $('li').removeClass("active");   
+    $(this).addClass("active");   
+})
+$('#jasset').click(function(){
+    $("#jasset").children("ul").toggleClass("collapse");   
+})
+$('#juser').click(function(){
+    $("#juser").children("ul").toggleClass("collapse");   
+})
+</script>
+
+<!--右边的整体-->
+<div id="page-wrapper" class="gray-bg">
+
+<!--右边导航第一层-->
+<div class="row border-botto">
+   <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+   <div class="navbar-header">
+       <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"> <i class="fa fa-bars"></i></a>
+    <form role="search" class="navbar-form-custom" method="get" action="">
+            <div class="form-group">
+                <input type="text" placeholder="输入搜索..." class="form-control" name="search" id="top-search">
+            </div>
+        </form> 
+    </div>
+    <ul class="nav navbar-top-links navbar-right">
+        <li>
+            <span class="m-r-sm text-muted welcome-message">莴笋运维管理平台</span>
+        </li>
+        <li>
+            <a href="/users/logout">
+                <i class="fa fa-sign-out"></i> Log out
+            </a>
+        </li> 
+    </ul>
+   </nav>
+</div>
+
+
+<!--右边第二层面包导航-->
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        <ol class="breadcrumb">
+            <li>
+                <a href="/">仪表盘</a>
+            </li>
+            <li>
+                <a href="/">
+                {% block breadcrumb %}
+                {% endblock %}
+          
+                </a>
+            </li>
+        </ol>
+    </div>
+</div> <!--右边导航结束-->
+
+<!--正文部分分了三层-->
+<div class="wrapper wrapper-content">
+
+    <div class="row">
+        <div class="col-sm-12 border-bottom white-bg dashboard-header" style="margin-left:15px;height: 800px">
+                {% block main %}
+                {% endblock %}
+
+         </div>
+    </div>
+    <br>
+
+
+</div> <!--wrapper-content-->
+
+
+
+<!--页面尾部-->
+<div class="footer fixed">
+    <div class="pull-right">
+        Version <strong>0.3.1</strong> GPL.
+    </div>
+    <div>
+        <strong>Copyright</strong>  Watsons.com.cn  Team © 2017-2046
+    </div>
+</div>
+
+</div>  <!--page-wrapper-->
+</div>   <!--wrapper-->
+
+</body></html>
