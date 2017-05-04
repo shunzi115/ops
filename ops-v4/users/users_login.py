@@ -15,6 +15,8 @@ import json
 
 from functools import wraps
 
+from datetime import *
+
 ##定义装饰器做session 校验##
 def session_check(func):
 	@wraps(func)
@@ -38,8 +40,8 @@ def user_register():
 		print "**** user_register ****"
 		print user_register
 		user_register['status'] = 0
-		user_register['update_time'] = "2017-04-15 14:05:05" 
-		user_register['last_login_time'] = "2017-04-15 14:05:05" 
+		user_register['update_time'] = datetime.now().strftime("%Y-%m-%d %X") 
+		user_register['last_login_time'] = datetime.now().strftime("%Y-%m-%d %X") 
 		if not user_register['login_name'].strip('') or not user_register['name_cn'].strip('') or not user_register['password'].strip(''):
 			return json.dumps({'result':1,'msg':'input not null'})
 		if not user_register['mobile'].strip('') or not user_register['email'].strip('') or not user_register['role'].strip(''):
@@ -83,7 +85,10 @@ def user_login():
                         return json.dumps({'result':1,'msg':'password is not right'}) 
 		session['login_name'] = select_login_info_dict['login_name']
 		session['role'] = select_login_info_dict['role']
-		session['status'] = select_login_info_dict['status']	
+		session['status'] = select_login_info_dict['status']
+		print "**** session ****"
+		print session
+		mysql_init.update_sql('users',{'last_login_time':"%s" %(datetime.now().strftime("%Y-%m-%d %X"))},login_info)
 		return json.dumps({'result':0,'msg':'ok'})
 	if request.method == 'GET':
 		return render_template("user_login.html")
@@ -125,8 +130,7 @@ def user_update():
 		print select_results_pre
 		select_result_dict = [dict(zip(select_fields,x)) for x in select_results_pre][0]
 		print "**** select_result_dict ***"
-		print select_result_dict
-		return render_template("/user_update.html",user_info=select_result_dict)
+		return json.dumps(select_result_dict)
 	if request.method == "POST":
 		print "**** request.form ****"
 		print request.form
@@ -135,7 +139,7 @@ def user_update():
 		update_user = dict((i,j[0]) for i,j in dict(request.form).items())
 		update_conditions['id'] = update_user['id'].strip('')
 		update_conditions['login_name'] = update_user['login_name'].strip('')
-		update_user['update_time'] = '2017-04-16 14:41:52'
+		update_user['update_time'] = "%s" %(datetime.now().strftime("%Y-%m-%d %X"))
 		print "**** update_user ****"
 		print update_user
 		if not update_user['name_cn'].strip('') or not update_user['mobile'].strip('') or not update_user['email'].strip(''):
@@ -153,23 +157,27 @@ def user_update_password():
 		select_password_condition = {}
 		update_password_info = {}
 		select_password_condition['login_name'] = request.form.get('login_name').strip('')
-		password_old_input = request.form.get('password_old_input').strip('')
 		update_password_info['password'] = request.form.get('password_new').strip('')
 		password_again = request.form.get('password_new_again').strip('')
-		select_password_pre = mysql_init.select_sql('users',fields,select_password_condition)
-		print "***** select_password_pre ****"
-                print select_password_pre
-		select_password_info = [dict(zip(fields,x)) for x in select_password_pre]
-		print "***** select_password_info ****"
-		print select_password_info
-		password_old = select_password_info[0]['password']
-		if not password_old_input or not update_password_info['password']:
+		if session.get('role',2) != 0 and session.get('role',2) != 1:
+			password_old_input = request.form.get('password_old_input',None).strip('')
+			select_password_pre = mysql_init.select_sql('users',fields,select_password_condition)
+			print "***** select_password_pre ****"
+                	print select_password_pre
+			select_password_info = [dict(zip(fields,x)) for x in select_password_pre]
+			print "***** select_password_info ****"
+			print select_password_info
+			password_old = select_password_info[0]['password']
+			if not password_old_input:
+				return json.dumps({'result':1,'msg':'input not null'}) 
+			if password_old_input != password_old:
+				return json.dumps({'result':1,'msg':'old_password is not right'}) 
+		if not update_password_info['password']:
 			return json.dumps({'result':1,'msg':'input not null'}) 
-		if password_old_input != password_old:
-			return json.dumps({'result':1,'msg':'old_password is not right'}) 
 		if update_password_info['password'] != password_again: 
 			return json.dumps({'result':1,'msg':'two password is not same'}) 
 
+		update_password_info['update_time']="%s" %(datetime.now().strftime("%Y-%m-%d %X"))
 		mysql_init.update_sql('users',update_password_info,select_password_condition)
 		return json.dumps({'result':0,'msg':'ok'})
 
