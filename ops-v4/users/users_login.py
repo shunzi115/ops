@@ -17,6 +17,10 @@ from functools import wraps
 
 from datetime import *
 
+import hashlib
+
+salt="Watsons_OPS@163.com"
+
 ##定义装饰器做session 校验##
 def session_check(func):
 	@wraps(func)
@@ -62,6 +66,7 @@ def user_register():
 			return json.dumps({'result':1,'msg':'two password is not same'})
 		del user_register['password_again']
 		insert_fields = [x for x in user_register.keys()]
+		user_register['password'] = hashlib.md5(user_register['password'] + salt).hexdigest()
 		mysql_init.insert_sql('users',insert_fields,user_register)
 		return json.dumps({'result':0,'msg':'ok'})
 
@@ -81,7 +86,7 @@ def user_login():
 		if not login_info.get('login_name',None) or not login_info.get('password',None):
 			return json.dumps({'result':1,'msg':'input not null'}) 
 		fields = ['id','login_name','name_cn','password','mobile','email','role','status','last_login_time']
-		password = login_info['password']
+		password = hashlib.md5(login_info['password']+salt).hexdigest()
 		del login_info['password']
 		select_login_info = mysql_init.select_sql('users',fields,login_info)
 		print "***** select_login_info *****"
@@ -171,7 +176,7 @@ def user_update_password():
 		update_password_info = {}
 		select_password_condition['login_name'] = request.form.get('login_name').strip('')
 		update_password_info['password'] = request.form.get('password_new').strip('')
-		password_again = request.form.get('password_new_again').strip('')
+		password_again = hashlib.md5(request.form.get('password_new_again').strip('') + salt).hexdigest()
 		if session.get('role',2) != 0 and session.get('role',2) != 1:
 			password_old_input = request.form.get('password_old_input',None).strip('')
 			select_password_pre = mysql_init.select_sql('users',fields,select_password_condition)
@@ -182,11 +187,13 @@ def user_update_password():
 			print select_password_info
 			password_old = select_password_info[0]['password']
 			if not password_old_input:
-				return json.dumps({'result':1,'msg':'input not null'}) 
+				return json.dumps({'result':1,'msg':'input not null'})
+			password_old_input = hashlib.md5(password_old_input + salt).hexdigest()
 			if password_old_input != password_old:
 				return json.dumps({'result':1,'msg':'old_password is not right'}) 
 		if not update_password_info['password']:
 			return json.dumps({'result':1,'msg':'input not null'}) 
+		update_password_info['password'] = hashlib.md5(update_password_info['password'] + salt).hexdigest()
 		if update_password_info['password'] != password_again: 
 			return json.dumps({'result':1,'msg':'two password is not same'}) 
 

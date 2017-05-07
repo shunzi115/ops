@@ -146,24 +146,27 @@ $("#edit").click(function(){
 
 /*用户自己个人信息修改*/
 $("#user_update_btn").click(function(){
-   var str = $("#user_updateForm").serialize()
-   $.post('/users/update',str,function(data){
-        data=JSON.parse(data)
-        console.log(data)
-        if(data['result'] == 0){  
-            swal({
-                title:"success",
-                text:"更新成功",
-                type:"success",
-                confirmButtonText:'确定'
-                },function(){
-                    $('#user_editModal').modal('hide')
-                    location.reload()
-                })
-        }else{
-                swal("error", data['msg'],"error")
-        }
-   })
+   var str_err=$('.Validform_wrong').text()
+   if(!str_err){
+      var str = $("#user_updateForm").serialize()
+      $.post('/users/update',str,function(data){
+           data=JSON.parse(data)
+           console.log(data)
+           if(data['result'] == 0){  
+               swal({
+                   title:"success",
+                   text:"更新成功",
+                   type:"success",
+                   confirmButtonText:'确定'
+                   },function(){
+                       $('#user_editModal').modal('hide')
+                       location.reload()
+                   })
+           }else{
+                   swal("error", data['msg'],"error")
+           }
+      })
+   }
         return false
 })
 
@@ -175,18 +178,21 @@ $("#passwd").click(function(){
 
 /*用户自己修改密码*/
 $("#update_password").click(function(){
-   var str = $("#updatepw").serialize()
-   $.post("/users/update_password",str,function(data){
-        data=JSON.parse(data)
-        console.log(data)
-        if (data['result']==0){
-             swal("更新成功")
-             $('#updatepasswd').modal('hide')
-        }else{
-             swal(data['msg'])
-              }
-   })
-        return false
+   var str_err=$('.Validform_wrong').text()
+   if(!str_err){
+      var str = $("#updatepw").serialize()
+      $.post("/users/update_password",str,function(data){
+           data=JSON.parse(data)
+           console.log(data)
+           if (data['result']==0){
+                swal("更新成功")
+                $('#updatepasswd').modal('hide')
+           }else{
+                swal(data['msg'])
+                 }
+      })
+   }
+           return false
 })
 
 $("#user_updateForm").Validform({
