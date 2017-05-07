@@ -11,17 +11,21 @@
 
 <!--plugins-->
 <link href="/static/plugin/Font-Awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet">
-<link href="/static/plugin/layer-v2.4/layer/skin/layer.css" rel="stylesheet">
+<link href="/static/js/layer-v2.4/layer/skin/layer.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="/static/plugin/sweetalert-master/dist/sweetalert.css">
-
+<style type="text/css">
+  .Validform_right {color:green} 
+  .Validform_wrong {color:red}
+</style>
 
 <script src="/static/js/jquery-3.2.1.min.js"></script>
 
 <!--plugins-->
 <script src="/static/js/bootstrap.min.js"></script>
-<script src="/static/plugin/layer-v2.4/layer/layer.js"></script>
+<script src="/static/js/layer-v2.4/layer/layer.js"></script>
 <script src="/static/plugin/sweetalert-master/dist/sweetalert.min.js"></script>
-
+<script src="/static/js/Validform_v5.3.2_min.js"></script>
+<script src="/static/plugin/passwordStrength/js/passwordStrength.js"></script>
 
 <!--整个页面的框架-->
 <div id="wrapper">
@@ -63,10 +67,12 @@
 </li>   <!--仪表盘-->
            
 <li id="juser">
-<a href="#"><i class="fa fa-group"></i> <span class="nav-label">用户管理</span><span class="fa arrow"></span></a>
+<a href="#"><i class="fa fa-female"></i> <span class="nav-label">用户管理</span><span class="fa arrow"></span></a>
    <ul class="nav nav-second-level collapse">
         <li><a href="/users/user_info">个人中心</a></li>
-        <li><a href="/users/user_list">用户列表</a></li>
+	{% if session.role == 0 or session.role == 1 %}
+           <li><a href="/users/user_list">用户列表</a></li>
+	{% endif %}
    </ul>
 </li>   <!-- 用户管理 -->     
      
@@ -81,16 +87,16 @@
             
          
 <li id="setting">
-<a href="#"><i class="fa fa-gears"></i> <span class="nav-label">监控</span><span class="label label-info pull-right"></span></a>
+<a href="#"><i class="fa fa-bar-chart"></i> <span class="nav-label">监控</span><span class="label label-info pull-right"></span></a>
 </li>    <!--监控-->
 
 <li id="log">
-<a href="#"><i class="fa fa-gears"></i> <span class="nav-label">日志可视化</span><span class="label label-info pull-right"></span></a>
+<a href="#"><i class="fa fa-eye-slash"></i> <span class="nav-label">日志可视化</span><span class="label label-info pull-right"></span></a>
 </li>    <!--日志可视化-->
 
 
 <li id="api">
-<a href="#"><i class="fa fa-gears"></i> <span class="nav-label">第三方接口</span><span class="label label-info pull-right"></span></a>
+<a href="#"><i class="fa fa-deafness"></i> <span class="nav-label">第三方接口</span><span class="label label-info pull-right"></span></a>
 </li>    <!--第三方接口-->
 
 <li class="special_link">

@@ -27,6 +27,16 @@ def session_check(func):
 			return func(*args,**kwargs)
 	return session_if
 
+###定义装饰器,用来判断用户角色是否是 管理员或者是ops###
+def role_check(func):
+	@wraps(func)
+	def role_if(*args,**kwargs):
+		if session.get('role',None) != 0 and session.get('role',None) != 1:
+			return render_template("error_role.html",errmsg="You have no permission !!!")
+		else:
+			return func(*args,**kwargs)
+	return role_if
+
 @app.route('/users/register',methods=['GET','POST'])
 def user_register():
 	select_fields = ['login_name']
@@ -41,7 +51,7 @@ def user_register():
 		print user_register
 		user_register['status'] = 0
 		user_register['update_time'] = datetime.now().strftime("%Y-%m-%d %X") 
-		user_register['last_login_time'] = datetime.now().strftime("%Y-%m-%d %X") 
+		user_register['last_login_time'] = user_register['update_time'] 
 		if not user_register['login_name'].strip('') or not user_register['name_cn'].strip('') or not user_register['password'].strip(''):
 			return json.dumps({'result':1,'msg':'input not null'})
 		if not user_register['mobile'].strip('') or not user_register['email'].strip('') or not user_register['role'].strip(''):
@@ -83,6 +93,8 @@ def user_login():
 		print select_login_info_dict
 		if select_login_info_dict['password'] != password:
                         return json.dumps({'result':1,'msg':'password is not right'}) 
+		if select_login_info_dict['status'] == 1:
+                        return json.dumps({'result':1,'msg':'user is locked,please contact ops'}) 
 		session['login_name'] = select_login_info_dict['login_name']
 		session['role'] = select_login_info_dict['role']
 		session['status'] = select_login_info_dict['status']
@@ -106,6 +118,7 @@ def user_info():
 
 @app.route("/users/user_list",methods=['GET'])
 @session_check
+@role_check
 def user_list():
 	fields = ['id','login_name','name_cn','password','mobile','email','role','status','update_time','last_login_time']
 	users_info_tuple = mysql_init.select_sql('users',fields)
@@ -183,6 +196,7 @@ def user_update_password():
 
 @app.route("/users/delete",methods=['GET'])
 @session_check
+@role_check
 def user_delete():
 	delete_condition = {}
 	delete_condition['id'] = request.args.get('id')
