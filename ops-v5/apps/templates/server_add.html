@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %} 
+添加服务器
+{% endblock %}
+
+{% block main %}
+<div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-10">
+                 <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>填写服务器信息</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form id="registerForm" class="form-horizontal nice-validator n-yellow Formvalid" novalidate="novalidate">
+                            <div class="form-group">
+                                <label for="HostName" class="col-sm-2 control-label  ">主机名<span class="red-fonts ">*</span></label>
+                                <div class="col-sm-6">
+                                    <input name="HostName" placeholder="HostName" type="text" datatype="*3-100" class="form-control" aria-required="true" nullmsg="请输入主机名" errormsg="必须输入3-100个任意字符">
+                                 </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="PrivateIP" class="col-sm-2 control-label">私网IP<span class="red-fonts">*</span></label>
+                                <div class="col-sm-6">
+                                    <input name="PrivateIP" placeholder="PrivateIP" type="text" datatype="ip" class="form-control" aria-required="true" nullmsg="请输入IP地址" errormsg="请输入正确的IP地址">
+                                 </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="PublicIP" class="col-sm-2 control-label">公网IP<span class="red-fonts">*</span></label>
+                                <div class="col-sm-6">
+                                    <input name="PublicIP" placeholder="PublicIP" type="text" datatype="ip" class="form-control" aria-required="true" nullmsg="请输入IP地址" errormsg="请输入正确的IP地址">
+                                 </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="ENV" class="col-sm-2 control-label">所属环境<span class="red-fonts">*</span></label>
+                                <div class="col-sm-6">
+                                  <input name="ENV" placeholder="ENV" type="text" datatype="ip" class="form-control" aria-required="true" nullmsg="请输入所属环境" errormsg="请输入所属环境">
+                                 </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="ServerBrand" class="col-sm-2 control-label">服务器品牌</label>
+                                <div class="col-sm-6">
+                                    <input name="ServerBrand" placeholder="ServerBrand" type="text" class="form-control" aria-required="true">
+                                 </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="ServerModel" class="col-sm-2 control-label">服务器型号</label>
+                                <div class="col-sm-6">
+                                     <input name="ServerModel" placeholder="ServerModel" type="text" class="form-control" aria-required="true">
+                                </div>
+                            </div>
+                            
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="OS" class="col-sm-2 control-label">系统版本<span class="red-fonts">*</span></label>
+                                <div class="col-sm-6">
+                                     <input name="OS" placeholder="OS" type="text" class="form-control" aria-required="true">
+                                </div>
+                            </div>
+                            
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="Kernel" class="col-sm-2 control-label">内核版本<span class="red-fonts">*</span></label>
+                                <div class="col-sm-6">
+                                     <input name="Kernel" placeholder="Kernel" type="text" datatype="*3-50" class="form-control" aria-required="true" nullmsg="请输入内核版本" errormsg="必须是3-50个字符">
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="CpuType" class="col-sm-2 control-label">CPU类型<span class="red-fonts">*</span></label>
+                                <div class="col-sm-6">
+                                     <input name="CpuType" placeholder="CpuType" type="text" datatype="*3-50" class="form-control" aria-required="true" nullmsg="请输入CPU类型" errormsg="必须是3-50个字符">
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="CpuCount" class="col-sm-2 control-label">CPU数量<span class="red-fonts">*</span></label>
+                                <div class="col-sm-6">
+                                     <input name="CpuCount" placeholder="CpuCount" type="text" datatype="n1-2" class="form-control" aria-required="true" nullmsg="请输入CPU数量" errormsg="必须是1-2位数字">
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="RAM_GB" class="col-sm-2 control-label">内存<span class="red-fonts">*</span></label>
+                                <div class="col-sm-6">
+                                     <input name="RAM_GB" placeholder="RAM_GB" type="text" datatype="*1-4" class="form-control" aria-required="true" nullmsg="请输入内存大小" errormsg="必须是1-4位字符">
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="PhyDiskSize" class="col-sm-2 control-label">物理磁盘<span class="red-fonts">*</span></label>
+                                <div class="col-sm-6">
+                                     <input name="PhyDiskSize" placeholder="PhyDiskSize" type="text" datatype="*1-50" class="form-control" aria-required="true" nullmsg="请输入磁盘大小" errormsg="必须是1-50位字符">
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="IDC" class="col-sm-2 control-label">机房<span class="red-fonts">*</span></label>
+                                <div class="col-sm-6">
+                                     <input name="IDC" placeholder="IDC" type="text" datatype="*1-100" class="form-control" aria-required="true" nullmsg="请输入所属机房" errormsg="必须是1-100位字符">
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group"><label class="col-sm-2 control-label">状态<span class="red-fonts">*</span></label>
+				 <div class="col-sm-8">
+                                    <div class="col-sm-2">
+                                        <div class="radio i-checks">
+                                            <label><input type="radio" value="0" class="status" name="status" checked="">在线</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-2">
+                                        <div class="radio i-checks">
+                                            <label><input type="radio" value="1" class="status" name="status">已下线</label>
+                                        </div>
+                                    </div>
+				 </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button id="submit_button" class="btn btn-primary">添加</button>
+                                    <button class="btn btn-warning" type="reset">取消</button>
+				    <button class="btn btn-info" type="reset">重置</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        $("#registerForm").Validform({
+            tiptype:3,
+            datatype:{
+                "zh2-4" : /^[\u4E00-\u9FA5\uf900-\ufa2d]{2,4}$/,
+		"ip" : ([0-9]{1,3}\.){3}[0-9]{1,3}
+            }
+        });
+
+        $("#submit_button").click(function(){
+   	    var str_err=$('.Validform_wrong').text()
+   	    if(!str_err){
+               var str = $("#registerForm").serialize();
+               $.post("/users/register",str,function(data){
+                   data=JSON.parse(data);
+                   if(data["result"] == 0){
+		       swal({
+    		   	   title:"Good",
+			   text:"注册成功",
+			   type:"success",
+			   confirmButtonText:"确定"
+		           },
+  			   function(){
+ 			   location.href="/users/user_list";
+                       })
+                   }else{
+		      swal("OH My God",data['msg'],"error")
+                   };
+               });
+	   };
+            return false;
+        });
+
+    </script>
+{% endblock %}
+
