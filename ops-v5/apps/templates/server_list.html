@@ -15,18 +15,21 @@
         <th class="text-center">私网IP</th>
         <th class="text-center">公网IP</th>
         <th class="text-center">所属环境</th>
-        <th class="text-center">服务器品牌</th>
+<!--        <th class="text-center">服务器品牌</th>
         <th class="text-center">服务器型号</th>
+-->
         <th class="text-center">系统版本</th>
         <th class="text-center">内核版本</th>
-        <th class="text-center">CPU类型</th>
+<!--        <th class="text-center">CPU类型</th>
+-->
         <th class="text-center">CPU数量</th>
         <th class="text-center">内存</th>
         <th class="text-center">物理磁盘</th>
         <th class="text-center">机房</th>
         <th class="text-center">状态</th>
-        <th class="text-center">上线时间</th>
+<!--        <th class="text-center">上线时间</th>
         <th class="text-center">下线时间</th>
+-->
         <th class="text-center">操作</th>
     </tr>
 </thead>
@@ -37,11 +40,13 @@
                 <td class="text-center">{{server.PrivateIP}}</td>
                 <td class="text-center">{{server.PublicIP}}</td>
                 <td class="text-center">{{server.ENV}}</td>
-                <td class="text-center">{{server.ServerBrand}}</td>
+<!--                <td class="text-center">{{server.ServerBrand}}</td>
                 <td class="text-center">{{server.ServerModel}}</td>
+-->
                 <td class="text-center">{{server.OS}}</td>
                 <td class="text-center">{{server.Kernel}}</td>
-                <td class="text-center">{{server.CpuType}}</td>
+<!--                <td class="text-center">{{server.CpuType}}</td>
+-->
                 <td class="text-center">{{server.CpuCount}}</td>
                 <td class="text-center">{{server.RAM_GB}}</td>
                 <td class="text-center">{{server.PhyDiskSize}}</td>
@@ -51,7 +56,8 @@
                 {% else%}
                     <td class="text-center" style="color:red">已下线</td>
                 {% endif %}
-                <td class="text-center">{{server.OnlineTime}}</td>
+<!--                <td class="text-center">{{server.OnlineTime}}</td>
+-->
                 <td class="text-center">
                     <button data-id="{{server.id}}" class="btn btn-xs btn-info user_update">编辑</button>
                     <button data-id="{{server.id}}" class="btn btn-xs btn-primary user_update_password ">修改密码</button>
