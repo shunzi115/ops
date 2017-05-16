@@ -80,3 +80,9 @@ def server_list():
         print server_list_list
 	return render_template("server_list.html",server_list=server_list_list)
 
+@app.route("/cmdb/server_delete",methods=["GET"])
+def server_delete():
+	delete_condition = {}
+	delete_condition['id'] = request.args.get('id')
+	mysql_init.delete_sql('serverinfo',delete_condition)
+	return json.dumps({'result':0,'msg':'ok'})

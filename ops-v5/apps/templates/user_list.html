@@ -331,11 +331,9 @@ $("#updatepw").Validform({
 
 $("#editable").dataTable({
       "autoWidth":true,
-      "jQueryUI":true,
       "bDestroy":true,
-      "sCrollX":"200%",
-      "sScrollXInner": "110%",
-      "bScrollCollapse": true,
+      "bStateSave": true,
+      "sPaginationType": "full_numbers",
       "language":{
             "lengthMenu":"每页 _MENU_ 条记录",
             "zeroRecords":"没有找到记录",
