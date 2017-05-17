@@ -2,12 +2,14 @@
 #coding=utf8
 
 from flask import request,render_template,session,redirect
-from . import app
+from . import app,session_check,role_check
 import mysql_init
 from datetime import *
 import json
 
 @app.route("/cmdb/server_add",methods=['GET','POST'])
+@session_check
+@role_check
 def server_add():
 	if request.method == 'GET':
 		return render_template("server_add.html")
@@ -30,6 +32,7 @@ def server_add():
 		return json.dumps({'result':0,'msg':'ok'})
 
 @app.route("/cmdb/server_update",methods=['GET','POST'])
+@session_check
 def server_update():
 	if request.method == 'GET':
 		select_condition = {}
@@ -66,6 +69,7 @@ def server_update():
                 return json.dumps({'result':0,'msg':'ok'})
 
 @app.route("/cmdb/server_list",methods=['GET'])
+@session_check
 def server_list():
 	fields_1 = ['id','HostName','PrivateIP','PublicIP','ENV','ServerBrand','ServerModel','OS','Kernel']
 	fields_2 = ['CpuType','CpuCount','RAM_GB','PhyDiskSize','IDC','status','OnlineTime','OfflineTime']
@@ -81,6 +85,7 @@ def server_list():
 	return render_template("server_list.html",server_list=server_list_list)
 
 @app.route("/cmdb/server_delete",methods=["GET"])
+@session_check
 def server_delete():
 	delete_condition = {}
 	delete_condition['id'] = request.args.get('id')
