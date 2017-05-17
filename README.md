@@ -65,4 +65,22 @@ CREATE TABLE `serverinfo` (
 
 INSERT INTO `dev_ops`.`serverinfo` (`id`, `HostName`, `PrivateIP`, `PublicIP`, `ENV`, `ServerBrand`, `ServerModel`, `OS`, `Kernel`, `CpuType`, `CpuCount`, `RAM_GB`, `PhyDiskSize`, `IDC`, `status`, `OnlineTime`, `OfflineTime`) VALUES ('1', '10-32-48-164', '10.32.48.164', '202.183.25.138', 'online', 'Dell Inc.', 'OptiPlex 7040', 'CentOS 6.8', '2.6.32-642.el6.x86_64', 'Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz', '8', '15', 'sda:1.5T', '阿里云华东1区', '0', '2017-05-14 22:37:17', NULL);
 
+CREATE TABLE `cmdb_online` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `app_name` varchar(20) NOT NULL COMMENT '应用名',
+  `app_ip` varchar(15) NOT NULL COMMENT 'IP 地址',
+  `describe` varchar(100) NOT NULL COMMENT '描述',
+  `domain` varchar(100) NOT NULL COMMENT '域名',
+  `cdn_domain` varchar(100) NOT NULL COMMENT 'CDN 域名',
+  `app_path` varchar(100) NOT NULL COMMENT '部署路径',
+  `app_shell` varchar(100) NOT NULL COMMENT '启动脚本',
+  `app_log` varchar(100) NOT NULL COMMENT '日志路径',
+  `app_ports` varchar(30) NOT NULL COMMENT '开启的端口',
+  `app_way` varchar(30) NOT NULL COMMENT '部署方式:nginx php tomcat jar',
+  `status` tinyint(2) NOT NULL COMMENT '账号状态:0-online；1-offline',
+  `online_time` varchar(30) NOT NULL COMMENT '上线时间',
+  `offline_time` varchar(30) NOT NULL COMMENT '下线时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uni_app_name` (`app_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='线上 CMDB 表';
 
