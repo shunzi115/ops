@@ -71,8 +71,8 @@ def server_update():
 @app.route("/cmdb/server_list",methods=['GET'])
 @session_check
 def server_list():
-	fields_1 = ['id','HostName','PrivateIP','PublicIP','ENV','ServerBrand','ServerModel','OS','Kernel']
-	fields_2 = ['CpuType','CpuCount','RAM_GB','PhyDiskSize','IDC','status','OnlineTime','OfflineTime']
+	fields_1 = ['id','HostName','PrivateIP','PublicIP','ENV','OS','Kernel']
+	fields_2 = ['CpuCount','RAM_GB','PhyDiskSize','IDC','status']
 	fields = fields_1 + fields_2	
 	print "**** fields ****"
 	print fields
@@ -91,3 +91,40 @@ def server_delete():
 	delete_condition['id'] = request.args.get('id')
 	mysql_init.delete_sql('serverinfo',delete_condition)
 	return json.dumps({'result':0,'msg':'ok'})
+
+@app.route("/cmdb/cmdb_online_add",methods=['GET','POST'])
+@session_check
+@role_check
+def cmdb_online_add():
+        if request.method == 'GET':
+                return render_template("cmdb_online_add.html")
+        if request.method == 'POST':
+                cmdb_add_dict = dict((i,j[0]) for i,j in dict(request.form).items())
+                if not cmdb_add_dict['app_name'].strip() or not cmdb_add_dict['app_ip'].strip():
+                        msg = "input not null"
+                        return json.dumps({'result':1,'msg':msg})
+                if not cmdb_add_dict['app_path'] or not cmdb_add_dict['app_shell'] or not cmdb_add_dict['status']:
+                        msg = "input not null"
+                        return json.dumps({'result':1,'msg':msg})
+                cmdb_add_dict['online_time'] = datetime.now().strftime("%Y-%m-%d %X")
+                print "**** cmdb_online_add_dict ****"
+                print cmdb_add_dict
+                insert_fields = [x for x in cmdb_add_dict.keys()]
+                mysql_init.insert_sql('cmdb_online',insert_fields,cmdb_add_dict)
+                return json.dumps({'result':0,'msg':'ok'})
+
+@app.route("/cmdb/cmdb_online_list",methods=['GET','POST'])
+@session_check
+def cmdb_online_list():
+	fields_1 = ['id','app_name','app_ip','app_describe','app_way','domain','cdn_domain']
+	fields_2 = ['app_path','app_shell','app_log','app_ports','status']
+	fields = fields_1 + fields_2
+        print "**** cmdb_online_fields ****"
+        print fields
+        cmdb_online = mysql_init.select_sql('cmdb_online',fields)
+        print "***** cmdb_online *****"
+        print cmdb_online
+        cmdb_online_list = [dict(zip(fields,i)) for i in cmdb_online]
+        print "***** cmdb_online_list *****"
+        print cmdb_online_list
+	return render_template("cmdb_online_list.html",cmdb_online_list=cmdb_online_list)
