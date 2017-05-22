@@ -215,13 +215,16 @@ $(".cmdb_update").click(function(){
       console.log(server_ip_list)
       console.log(server_ip_select)
       for(var i=0;i<server_ip_list.length;i++){
-	  app_ip_html=app_ip_html+'<option value="'+server_ip_list[i]+'">'+server_ip_list[i]+'</option>'
+	for(var j=0;j<server_ip_select.length;j++){
+	   if( server_ip_select[j]==server_ip_list[i]){
+	      app_ip_html=app_ip_html+'<option value='+server_ip_select[j]+'" selected="selected">'+server_ip_select[j]+'</option>'
+	   }else{
+	      app_ip_html=app_ip_html+'<option value="'+server_ip_list[i]+'">'+server_ip_list[i]+'</option>'
+           };
+	};
       };
-      $("#app_ip").append(app_ip_html);
       console.log(app_ip_html)
-      for(var j=0;j<server_ip_select.length;j++){
-	 $("#app_ip option[value='"+server_ip_select[j]+"']").attr("selected","selected")
-      };
+      $("#app_ip").append(app_ip_html);
       $("#app_ip").multiselect({
             enableFiltering: true,
             maxHeight: 200,

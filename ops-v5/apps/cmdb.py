@@ -106,7 +106,7 @@ def cmdb_online_add():
 		print "**** cmdb_online_add_request.form ****"
 		print request.form
 		print dict(request.form)
-		cmdb_add_dict = dict((i,','.join(j)) for i,j in dict(request.form).items())
+		cmdb_add_dict = dict((i,' ; '.join(j)) for i,j in dict(request.form).items())
                 if not cmdb_add_dict['app_name'].strip() or not cmdb_add_dict['app_ip'].strip():
                         msg = "input not null"
                         return json.dumps({'result':1,'msg':msg})
@@ -132,17 +132,21 @@ def cmdb_online_update():
         	fields_2 = ['app_path','app_shell','app_log','app_ports','status']
                 fields = fields_1 + fields_2
 		ip_list_fields = ['PrivateIP']
-                server_ip_list = [dict(zip(ip_list_fields,i)) for i in mysql_init.select_sql('serverinfo',ip_list_fields)]
+                server_ip_list = [i[0] for i in mysql_init.select_sql('serverinfo',ip_list_fields)]
                 cmdb_info = mysql_init.select_sql('cmdb_online',fields,select_condition)
                 cmdb_info_dict = [dict(zip(fields,i)) for i in cmdb_info][0]
-		server_ip_select_list = cmdb_info_dict['app_ip'],split(',')
+		server_ip_select_list = cmdb_info_dict['app_ip'].split(' ; ')
 		del cmdb_info_dict['app_ip']
+                print "**** cmdb_online_update_server_ip_list ***"
+                print server_ip_list
+                print "**** cmdb_online_update_server_ip_select_list ***"
+                print server_ip_select_list
                 print "**** cmdb_online_info_dict ***"
                 print cmdb_info_dict
-                return json.dumps(cmdb_info_dict)
-#                return json.dumps(cmdb_info_dicti,server_ip_list=server_ip_list,server_ip_select=server_ip_select_list)
+#                return json.dumps(cmdb_info_dict)
+                return json.dumps({'cmdb_info':cmdb_info_dict,'server_ip_list':server_ip_list,'server_ip_select':server_ip_select_list})
         if request.method == 'POST':
-                cmdb_update_dict = dict((i,j[0]) for i,j in dict(request.form).items())
+                cmdb_update_dict = dict((i,' ; '.join(j)) for i,j in dict(request.form).items())
 		if not cmdb_update_dict['app_name'].strip() or not cmdb_update_dict['app_ip'].strip():
                         msg = "input not null"
                         return json.dumps({'result':1,'msg':msg})
