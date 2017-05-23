@@ -58,11 +58,15 @@ def server_update():
                 if not server_update_dict['RAM_GB'] or not server_update_dict['PhyDiskSize'] or not server_update_dict['IDC']:
                         msg = "input not null"
                         return json.dumps({'result':1,'msg':msg})
-                print "**** server_update_dict ****"
-                print server_update_dict
 		update_conditions = {}
 		update_conditions['id'] = server_update_dict['id'].strip('')
 		update_conditions['PrivateIP'] = server_update_dict['PrivateIP'].strip('')
+		if server_update_dict['status'].strip('') == '1':
+			server_update_dict['OfflineTime'] = datetime.now().strftime("%Y-%m-%d %X")
+		else:
+			server_update_dict['OfflineTime'] = ''
+                print "**** server_update_dict ****"
+                print server_update_dict
 		del server_update_dict['id']
 		del server_update_dict['PrivateIP']
                 mysql_init.update_sql('serverinfo',server_update_dict,update_conditions)
@@ -98,7 +102,10 @@ def server_delete():
 def cmdb_online_add():
         if request.method == 'GET':
 		fields = ['PrivateIP']
-		server_ip_list = [dict(zip(fields,i)) for i in mysql_init.select_sql('serverinfo',fields)]
+		ip_list_condition = {}
+                ip_list_condition['ENV'] = 'online'
+                ip_list_condition['status'] = 0
+		server_ip_list = [dict(zip(fields,i)) for i in mysql_init.select_sql('serverinfo',fields,ip_list_condition)]
 		print '**** select_PrivateIP_list ****'
 		print server_ip_list
 		return render_template("cmdb_online_add.html",server_ip_info=server_ip_list)
@@ -132,7 +139,10 @@ def cmdb_online_update():
         	fields_2 = ['app_path','app_shell','app_log','app_ports','status']
                 fields = fields_1 + fields_2
 		ip_list_fields = ['PrivateIP']
-                server_ip_list = [i[0] for i in mysql_init.select_sql('serverinfo',ip_list_fields)]
+		ip_list_condition = {}
+		ip_list_condition['ENV'] = 'online'
+		ip_list_condition['status'] = 0
+                server_ip_list = [i[0] for i in mysql_init.select_sql('serverinfo',ip_list_fields,ip_list_condition)]
                 cmdb_info = mysql_init.select_sql('cmdb_online',fields,select_condition)
                 cmdb_info_dict = [dict(zip(fields,i)) for i in cmdb_info][0]
 		server_ip_select_list = cmdb_info_dict['app_ip'].split(' ; ')
@@ -143,7 +153,6 @@ def cmdb_online_update():
                 print server_ip_select_list
                 print "**** cmdb_online_info_dict ***"
                 print cmdb_info_dict
-#                return json.dumps(cmdb_info_dict)
                 return json.dumps({'cmdb_info':cmdb_info_dict,'server_ip_list':server_ip_list,'server_ip_select':server_ip_select_list})
         if request.method == 'POST':
                 cmdb_update_dict = dict((i,' ; '.join(j)) for i,j in dict(request.form).items())

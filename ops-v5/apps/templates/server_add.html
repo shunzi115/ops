@@ -32,7 +32,12 @@
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="ENV" class="col-sm-4 control-label text-right">所属环境<span class="red-fonts">*</span></label>
-                                  <input name="ENV" placeholder="ENV" type="text" datatype="s2-10" class="form-control" aria-required="true" nullmsg="请输入所属环境" errormsg="请输如任意2-10个字符">
+				<select name="ENV" id="ENV" class="form-control">
+					<option value='online'>线上环境-online</option>
+					<option value='test'>测试环境-test</option>
+					<option value='dev'>开发环境-dev</option>
+					<option value='ops' selected='selected'>运维环境-ops</option>
+                        	</select>
                             </div>
                           </div>
 
@@ -104,7 +109,13 @@
 			  <div class="form-inline row">
                             <div class="form-group col-sm-6">
                                 <label for="IDC" class="col-sm-4 control-label text-right">机房<span class="red-fonts">*</span></label>
-                                     <input name="IDC" placeholder="IDC" type="text" datatype="*1-100" class="form-control" aria-required="true" nullmsg="请输入所属机房" errormsg="必须是1-100位字符">
+				<select name="IDC" id="IDC" class="form-control">
+                                        <option value="阿里云华东1区">阿里云华东1区</option>
+                                        <option value="阿里云华北1区">阿里云华北1区</option>
+                                        <option value="北京IDC">北京IDC</option>
+                                        <option value="佛山IDC">佛山IDC</option>
+                                        <option value="丽丰中心33楼">丽丰中心33楼</option>
+                                </select>
                             </div>
 			  </div>
                           <div class="hr-line-dashed"></div>
@@ -148,6 +159,17 @@
                 "zh2-4" : /^[\u4E00-\u9FA5\uf900-\ufa2d]{2,4}$/,
 		"ip" : /([0-9]{1,3}\.){3}[0-9]{1,3}/
             }
+        });
+
+	$("#ENV").multiselect({
+            maxHeight: 200,
+            buttonWidth: '200px',
+            nonSelectedText: '请选择环境',
+        });
+	$("#IDC").multiselect({
+            maxHeight: 200,
+            buttonWidth: '200px',
+            nonSelectedText: '请选择机房',
         });
 
         $("#submit_button").click(function(){

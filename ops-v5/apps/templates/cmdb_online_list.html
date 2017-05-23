@@ -8,6 +8,8 @@
 
 <div class="col-sm-12">
 <a href="/cmdb/cmdb_online_add" class="btn btn-sm btn-primary "> 添加CMDB</a> 
+</br>
+</br>
 <table class="table table-striped table-bordered table-hover " id="editable">
 <thead>
     <tr>
@@ -60,7 +62,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title">更新用户信息</h4>
+        <h4 class="modal-title">更新 CMDB 信息</h4>
       </div>
       <div class="modal-body">
 	 <form id="updateForm" class="Formvalid form-horizontal nice-validator n-yellow" novalidate="novalidate">
@@ -135,13 +137,13 @@
 			<label class="col-sm-4 control-label text-right">状态<span class="red-fonts">*</span></label>
 			 <div class="col-sm-4">
 					<div class="radio i-checks">
-						<label><input type="radio" value="0" class="status" name="status" checked="">在线</label>
+						<label><input id='status_online' type="radio" value="0" class="status" name="status">在线</label>
 					</div>
 				</div>
 				
 				<div class="col-sm-4">
 					<div class="radio i-checks">
-						<label><input type="radio" value="1" class="status" name="status">已下线</label>
+						<label><input id='status_offline' type="radio" value="1" class="status" name="status">已下线</label>
 					</div>
 				</div>
 		</div>
@@ -232,6 +234,11 @@ $(".cmdb_update").click(function(){
             enableCaseInsensitiveFiltering: true,
         });
       $("#app_ip").multiselect('refresh');
+      if(cmdb_info['status'] == 0){
+	 $("#status_online").attr('checked','');
+      }else{
+         $("#status_offline").attr('checked','');
+      };      
    });
 });
 
