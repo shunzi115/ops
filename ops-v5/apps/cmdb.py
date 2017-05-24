@@ -31,6 +31,19 @@ def server_add():
 		mysql_init.insert_sql('serverinfo',insert_fields,server_add_dict)
 		return json.dumps({'result':0,'msg':'ok'})
 
+def app_ip_detail(mysql_table):
+	app_ip_fields = ['app_ip']
+	app_ip_select = mysql_init.select_sql('%s' %(mysql_table),app_ip_fields)
+	if app_ip_select:
+		app_ip_list_pre = [i[0].split(' ; ') for i in app_ip_select]
+		app_ip_list = []
+		for i in app_ip_list_pre:
+			app_ip_list = app_ip_list + i
+		app_ip_list = list(set(app_ip_list))
+		print "**** app_ip_list ****"
+		print app_ip_list
+		return app_ip_list
+
 @app.route("/cmdb/server_update",methods=['GET','POST'])
 @session_check
 def server_update():
@@ -58,6 +71,11 @@ def server_update():
                 if not server_update_dict['RAM_GB'] or not server_update_dict['PhyDiskSize'] or not server_update_dict['IDC']:
                         msg = "input not null"
                         return json.dumps({'result':1,'msg':msg})
+		if server_update_dict['status'] == '1' or server_update_dict['IDC'] != 'online':
+			app_ip_list = app_ip_detail('cmdb_online')
+			if server_update_dict['PrivateIP'] in app_ip_list:
+				return json.dumps({'result':1,'msg':'ip is in cmdb_online ; please delete if from cmdb first!'})
+			
 		update_conditions = {}
 		update_conditions['id'] = server_update_dict['id'].strip('')
 		update_conditions['PrivateIP'] = server_update_dict['PrivateIP'].strip('')
@@ -136,7 +154,7 @@ def cmdb_online_update():
                 print "**** cmdb_online_select_condition ***"
                 print select_condition
 		fields_1 = ['id','app_name','app_ip','app_describe','app_way','domain','cdn_domain']
-        	fields_2 = ['app_path','app_shell','app_log','app_ports','status']
+        	fields_2 = ['app_path','app_shell','app_log','app_ports','status','online_time','offline_time']
                 fields = fields_1 + fields_2
 		ip_list_fields = ['PrivateIP']
 		ip_list_condition = {}
@@ -164,6 +182,10 @@ def cmdb_online_update():
                         return json.dumps({'result':1,'msg':msg})
                 print "**** cmdb_online_update_dict ****"
                 print cmdb_update_dict
+		if cmdb_update_dict['status'].strip('') == '1':
+                        cmdb_update_dict['offline_time'] = datetime.now().strftime("%Y-%m-%d %X")
+                else:
+                        cmdb_update_dict['offline_time'] = ''
                 update_conditions = {}
                 update_conditions['id'] = cmdb_update_dict['id'].strip('')
                 update_conditions['app_name'] = cmdb_update_dict['app_name'].strip('')

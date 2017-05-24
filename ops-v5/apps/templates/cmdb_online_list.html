@@ -134,6 +134,19 @@
 	  <div class="hr-line-dashed"></div>
 	  <div class="form-inline row">
 		<div class="form-group col-sm-6">
+			<label for="online_time" class="col-sm-4 control-label text-right">上线时间</label>
+			<input id='online_time' name="online_time" placeholder="online_time" type="text" class="form-control" aria-required="true" readonly>
+		</div>
+
+		<div class="form-group col-sm-6">
+			<label for="offline_time" class="col-sm-4 control-label text-right">下线时间</label>
+			<input id='offline_time' name="offline_time" placeholder="offline_time" type="text" class="form-control" aria-required="true" readonly>
+		</div>
+	  </div>
+
+	  <div class="hr-line-dashed"></div>
+	  <div class="form-inline row">
+		<div class="form-group col-sm-6">
 			<label class="col-sm-4 control-label text-right">状态<span class="red-fonts">*</span></label>
 			 <div class="col-sm-4">
 					<div class="radio i-checks">
@@ -212,6 +225,8 @@ $(".cmdb_update").click(function(){
       $("#app_shell").val(cmdb_info['app_shell'])
       $("#app_log").val(cmdb_info['app_log'])
       $("#app_ports").val(cmdb_info['app_ports'])
+      $("#online_time").val(cmdb_info['online_time'])
+      $("#offline_time").val(cmdb_info['offline_time'])
       var server_ip_list=data['server_ip_list']
       var server_ip_select=data['server_ip_select']
       console.log(server_ip_list)
