@@ -2,10 +2,11 @@
 #coding=utf8
 
 from flask import request,render_template,session,redirect
-from . import app,session_check,role_check
-import mysql_init
+from . import app
+from common_func import session_check,role_check
 from datetime import *
 import json
+from utils import mysql_init,woops_log
 
 @app.route("/cmdb/server_add",methods=['GET','POST'])
 @session_check
