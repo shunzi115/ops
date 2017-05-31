@@ -118,8 +118,6 @@ def user_update():
 		update_conditions['id'] = update_user['id'].strip('')
 		update_conditions['login_name'] = update_user['login_name'].strip('')
 		update_user['update_time'] = "%s" %(datetime.now().strftime("%Y-%m-%d %X"))
-		print "**** update_user ****"
-		print update_user
 		woops_log.log_write('users').debug('update_user : %s' % update_user)
 		if not update_user['name_cn'].strip('') or not update_user['mobile'].strip('') or not update_user['email'].strip(''):
 			woops_log.log_write('users').error('User information input can not be empty')
@@ -144,8 +142,6 @@ def user_update_password():
 			password_old_input = request.form.get('password_old_input',None).strip('')
 			select_password_pre = mysql_init.select_sql('users',fields,select_password_condition)
 			select_password_info = [dict(zip(fields,x)) for x in select_password_pre]
-			print "***** select_password_info ****"
-			print select_password_info
 			woops_log.log_write('users').debug('select_password_info : %s' % select_password_info)
 			password_old = select_password_info[0]['password']
 			if not password_old_input:

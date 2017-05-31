@@ -8,11 +8,7 @@ import traceback
 
 mysql_conf = woops_conf.conf_read('woops.conf',section='DB_mysql')
 
-try:
-	db = mysql.connect(host=mysql_conf['db_host'],port=int(mysql_conf['db_port']),user=mysql_conf['db_user'],passwd=mysql_conf['db_password'],db=mysql_conf['db_database'],charset='utf8')
-except:
-	woops_log.log_write('DB_mysql').error("db_connect: %s error: %s" %(db,traceback.format_exc()))
-
+db = mysql.connect(host=mysql_conf['db_host'],port=int(mysql_conf['db_port']),user=mysql_conf['db_user'],passwd=mysql_conf['db_password'],db=mysql_conf['db_database'],charset='utf8')
 cur = db.cursor()
 
 ## 关闭数据库连接 ##
@@ -26,7 +22,6 @@ def insert_sql(table,fields,values):
 	woops_log.log_write('DB_mysql').debug('insert_sql : "%s"' % insert_sql)
 	cur.execute(insert_sql)
 	db.commit()
-	close_db()
 
 ## values 和 condition 都是字典 ##
 def update_sql(table,values,condition):
@@ -34,7 +29,6 @@ def update_sql(table,values,condition):
 	woops_log.log_write('DB_mysql').debug('update_sql : "%s"' % update_sql)
 	cur.execute(update_sql)
 	db.commit()
-	close_db()
 
 ## condition 是字典 ##
 def delete_sql(table,condition):
@@ -42,7 +36,6 @@ def delete_sql(table,condition):
 	woops_log.log_write('DB_mysql').debug('delete_sql : "%s"' % delete_sql)
 	cur.execute(delete_sql)
 	db.commit()
-	close_db()
 
 ## condition 是字典 ##
 def select_sql(table,fields,condition=None):
@@ -53,5 +46,4 @@ def select_sql(table,fields,condition=None):
 	woops_log.log_write('DB_mysql').debug('select_sql : "%s"' % select_sql)
 	cur.execute(select_sql)
 	select_all = cur.fetchall()
-	close_db()
 	return select_all
