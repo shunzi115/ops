@@ -6,7 +6,13 @@ from . import app
 from common_func import session_check,role_check
 from datetime import *
 import json
-from utils import mysql_init,woops_log
+from utils import woops_log,mysql_exec
+
+def apps():
+        select_fields = ['app_name']
+        app_list = [x[0] for x in mysql_exec.select_sql('cmdb_online',select_fields)]
+        woops_log.log_write('server').debug('app_list:%s' % app_list)
+        return app_list
 
 @app.route("/cmdb/cmdb_online_add",methods=['GET','POST'])
 @session_check
@@ -17,7 +23,7 @@ def cmdb_online_add():
                 ip_list_condition = {}
                 ip_list_condition['ENV'] = 'online'
                 ip_list_condition['status'] = 0
-                server_ip_list = [dict(zip(fields,i)) for i in mysql_init.select_sql('serverinfo',fields,ip_list_condition)]
+                server_ip_list = [dict(zip(fields,i)) for i in mysql_exec.select_sql('serverinfo',fields,ip_list_condition)]
                 woops_log.log_write('cmdb_online').debug('server_ip_list: %s' % server_ip_list)
                 return render_template("cmdb_online_add.html",server_ip_info=server_ip_list)
         if request.method == 'POST':
@@ -30,10 +36,13 @@ def cmdb_online_add():
                         woops_log.log_write('cmdb_online').error('The * symbol part of the input cannot be empty')
                         msg = "The * symbol part of the input cannot be empty"
                         return json.dumps({'result':1,'msg':msg})
+		if cmdb_add_dict['app_name'].strip() in apps():
+			woops_log.log_write('server').error('APP "%s" already exists' % cmdb_add_dict['app_name'])
+                        return json.dumps({'result':1,'msg':'APP already exists'})
                 cmdb_add_dict['online_time'] = datetime.now().strftime("%Y-%m-%d %X")
                 woops_log.log_write('cmdb_online').debug('cmdb_add_dict: %s' % cmdb_add_dict)
                 insert_fields = [x for x in cmdb_add_dict.keys()]
-                mysql_init.insert_sql('cmdb_online',insert_fields,cmdb_add_dict)
+                mysql_exec.insert_sql('cmdb_online',insert_fields,cmdb_add_dict)
                 woops_log.log_write('cmdb_online').info('The app "%s" add successfully' % cmdb_add_dict['app_name'])
                 return json.dumps({'result':0,'msg':'ok'})
 
@@ -50,8 +59,8 @@ def cmdb_online_update():
                 ip_list_condition = {}
                 ip_list_condition['ENV'] = 'online'
                 ip_list_condition['status'] = 0
-                server_ip_list = [i[0] for i in mysql_init.select_sql('serverinfo',ip_list_fields,ip_list_condition)]
-                cmdb_info = mysql_init.select_sql('cmdb_online',fields,select_condition)
+                server_ip_list = [i[0] for i in mysql_exec.select_sql('serverinfo',ip_list_fields,ip_list_condition)]
+                cmdb_info = mysql_exec.select_sql('cmdb_online',fields,select_condition)
                 cmdb_info_dict = [dict(zip(fields,i)) for i in cmdb_info][0]
                 server_ip_select_list = cmdb_info_dict['app_ip'].split(' ; ')
                 del cmdb_info_dict['app_ip']
@@ -79,7 +88,7 @@ def cmdb_online_update():
                 update_conditions['app_name'] = cmdb_update_dict['app_name'].strip('')
                 del cmdb_update_dict['id']
                 del cmdb_update_dict['app_name']
-                mysql_init.update_sql('cmdb_online',cmdb_update_dict,update_conditions)
+                mysql_exec.update_sql('cmdb_online',cmdb_update_dict,update_conditions)
                 woops_log.log_write('cmdb_online').info('The app "%s" update successfully' % update_conditions['app_name'])
                 return json.dumps({'result':0,'msg':'ok'})
 
@@ -89,7 +98,7 @@ def cmdb_online_list():
         fields_1 = ['id','app_name','app_ip','app_describe','app_way','domain','cdn_domain']
         fields_2 = ['app_path','app_shell','app_log','app_ports','status']
         fields = fields_1 + fields_2
-        cmdb_online = mysql_init.select_sql('cmdb_online',fields)
+        cmdb_online = mysql_exec.select_sql('cmdb_online',fields)
         cmdb_online_list = [dict(zip(fields,i)) for i in cmdb_online]
         woops_log.log_write('cmdb_online').debug('cmdb_online_list: %s' % cmdb_online_list)
         return render_template("cmdb_online_list.html",cmdb_online_list=cmdb_online_list)
@@ -100,7 +109,7 @@ def cmdb_online_delete():
         delete_condition = {}
         delete_app = {}
         delete_condition['id'] = request.args.get('id')
-        delete_app = [dict(zip(['app_name'],i)) for i in mysql_init.select_sql('cmdb_online',['app_name'],delete_condition)][0]
-        mysql_init.delete_sql('cmdb_online',delete_condition)
+        delete_app = [dict(zip(['app_name'],i)) for i in mysql_exec.select_sql('cmdb_online',['app_name'],delete_condition)][0]
+        mysql_exec.delete_sql('cmdb_online',delete_condition)
         woops_log.log_write('cmdb_online').info('Delete app "%s" success' % delete_app['app_name'])
         return json.dumps({'result':0,'msg':'ok'})

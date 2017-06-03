@@ -104,8 +104,16 @@
 <a href="#"><i class="fa fa-bar-chart"></i> <span class="nav-label">监控系统</span><span class="label label-info pull-right"></span></a>
 </li>    <!--监控-->
 
-<li class="configure">
-<a href="http://www.51reboot.com" target="_blank"><i class="fa fa-deafness"></i> <span class="nav-label">配置中心</span></a>
+<li id="api-interface">
+<a><i class="fa fa-deafness"></i> <span class="nav-label">第三方工具</span><span class="fa arrow"></span></a>
+  <ul class="nav nav-second-level collapse">
+    <li> <a href="/cmdb/cmdb_online_list">IP 138</a></li>
+    <li> <a href="/cabinet">天气预报</a></li>
+    <li> <a href="/cmdb/server_list">json 格式转换</a></li>
+    <li> <a href="/cmdb/server_list">豆瓣图书</a></li>
+    <li> <a href="/cmdb/server_list">豆瓣电影</a></li>
+    <li> <a href="/cmdb/server_list">知乎</a></li>
+  </ul>
 </li>  <!--link-->
  
 </ul> 
@@ -123,6 +131,9 @@ $('#jasset').click(function(){
 })
 $('#juser').click(function(){
     $("#juser").children("ul").toggleClass("collapse");   
+})
+$('#api-interface').click(function(){
+    $("#api-interface").children("ul").toggleClass("collapse");   
 })
 </script>
 

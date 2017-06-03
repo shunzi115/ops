@@ -25,7 +25,7 @@ elif log_level == 'ERROR':
 else:
 	log_level = logging.CRITICAL
 
-format = '%(asctime)s-%(name)s-%(filename)s[line:%(lineno)2d/%(funcName)s]-%(levelname)s-%(message)s'
+format = '%(asctime)s-[%(levelname)s]-%(name)s-%(filename)s[line:%(lineno)2d/%(funcName)s]-%(message)s'
 log_format = logging.Formatter(format)
 
 def log_write(log_name):
