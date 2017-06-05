@@ -22,7 +22,7 @@
         <th class="text-center">启动脚本</th>
         <th class="text-center">开启的端口</th>
         <th class="text-center">状态</th>
-        {% if session.role == 0 %}
+        {% if session.role == 0 or session.role == 1 %}
            <th class="text-center">操作</th>
         {% endif %}
     </tr>
@@ -43,7 +43,7 @@
                 {% else%}
                     <td class="text-center" style="color:red">已下线</td>
                 {% endif %}
-		{% if session.role == 0 %}
+		{% if session.role == 0 or session.role == 1 %}
                 <td class="text-center">
                     <button data-id="{{cmdb.id}}" class="btn btn-xs btn-Primary cmdb_refresh">刷新</button>
                     <button data-id="{{cmdb.id}}" class="btn btn-xs btn-info cmdb_update">编辑&详情</button>
