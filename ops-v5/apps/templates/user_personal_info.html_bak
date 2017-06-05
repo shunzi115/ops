@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %} 
+用户个人中心
+{% endblock %}
+
+{% block main %}
+<div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-10">
+                 <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>用户基本信息</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form id="registerForm" class="form-horizontal nice-validator n-yellow" novalidate="novalidate">
+                            <div class="form-group">
+                                <label for="login_name" class="col-sm-2 control-label  ">登录名</label>
+                                <div class="col-sm-8">
+                                    <input id="login_name" name="login_name" value={{user_info.login_name}} type="text" class="form-control" readonly="readonly">
+                                 </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="name_cn" class="col-sm-2 control-label">中文名</label>
+                                <div class="col-sm-8">
+                                    <input id="name_cn" name="name_cn" value={{user_info.name_cn}} type="text" class="form-control" readonly="readonly">
+                                 </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="mobile" class="col-sm-2 control-label">手机号</label>
+                                <div class="col-sm-8">
+                                    <input id="mobile" name="mobile" value={{user_info.mobile}} type="text" class="form-control" readonly="readonly">
+                                 </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="email" class="col-sm-2 control-label">邮箱</label>
+                                <div class="col-sm-8">
+                                    <input id="email" name="email" value={{user_info.email}} type="text" class="form-control" readonly="readonly">
+                                 </div>
+                            </div>
+                            
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="role" class="col-sm-2 control-label">角色</label>
+                                <div class="col-sm-8">
+				   {% if user_info.role == 0 %}
+                                       <input id="role" name="role" value="管理员" type="text" class="form-control" readonly="readonly">
+				   {% elif user_info.role == 1 %}
+                                       <input id="role" name="role" value="运维" type="text" class="form-control" readonly="readonly">
+				   {% elif user_info.role == 2 %}
+                                       <input id="role" name="role" value="开发" type="text" class="form-control" readonly="readonly">
+				   {% elif user_info.role == 3 %}
+                                       <input id="role" name="role" value="测试" type="text" class="form-control" readonly="readonly">
+				   {% elif user_info.role == 4 %}
+                                       <input id="role" name="role" value="访客" type="text" class="form-control" readonly="readonly">
+				   {% endif %} 	
+                                 </div>
+                            </div>
+                            
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group"><label class="col-sm-2 control-label">状态</label>
+                                <div class="col-sm-8">
+				   {% if user_info.status == 0 %}
+				      <input id="status" name="role" value="正常" type="text" class="form-control" readonly="readonly">
+				   {% elif user_info.status == 1 %}
+				      <input id="status" name="role" value="锁定" type="text" class="form-control" readonly="readonly">
+				   {% endif %}
+				</div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div style="color:red" class="text-center" id="errmsg"></div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button id="submit_button" class="btn btn-primary"><a href="/users/update?id={{user_info.id}}"">修改个人信息</a></button>
+                                    <button id="submit_button" class="btn btn-primary"><a href="/users/update_password?id={{user_info.id}}">修改密码</a></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

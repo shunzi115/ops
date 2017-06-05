@@ -1,0 +1,355 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %} 
+用户列表
+{% endblock %}
+
+
+{% block main %} 
+
+<div class="col-sm-12">
+<a href="/users/register" class="btn btn-sm btn-primary "> 添加用户</a> 
+<table class="table table-striped table-bordered table-hover " id="editable">
+<thead>
+    <tr>
+        <th class="text-center">登陆名</th>
+        <th class="text-center">中文名</th>
+        <th class="text-center">手机号</th>
+        <th class="text-center">邮箱</th>
+        <th class="text-center">角色</th>
+        <th class="text-center">状态</th>
+        <th class="text-center">最后登录时间</th>
+        <th class="text-center">最后修改时间</th>
+        <th class="text-center">操作</th>
+    </tr>
+</thead>
+<tbody>
+   {% for user in users_info %}
+        <tr class="gradeX">
+                <td class="text-center"><strong>{{user.login_name}}</strong></td>
+                <td class="text-center">{{user.name_cn}}</td>
+                <td class="text-center">{{user.mobile}}</td>
+                <td class="text-center">{{user.email}}</td>
+                {% if user.role == 0 %}
+                    <td class="text-center">管理员</td>
+                {% elif user.role == 1 %}
+                    <td class="text-center">运维</td>
+                {% elif user.role == 2 %}
+                    <td class="text-center">开发</td>
+                {% elif user.role == 3 %}
+                    <td class="text-center">测试</td>
+                {% elif user.role == 4 %}
+                    <td class="text-center">访客</td>
+                {% endif %}
+
+                {% if user.status == 0 %}
+                    <td class="text-center" style="color:green">正常</td>
+                {% else%}
+                    <td class="text-center" style="color:red">锁定</td>
+                {% endif %}
+                <td class="text-center">{{user.last_login_time}}</td>
+                <td class="text-center">{{user.update_time}}</td>
+
+                <td class="text-center">
+                    <button data-id="{{user.id}}" class="btn btn-xs btn-info user_update">编辑</button>
+                    <button data-id="{{user.login_name}}" class="btn btn-xs btn-primary user_update_password ">修改密码</button>
+                    <button data-id="{{user.id}}" class="btn btn-xs btn-danger del ">删除</button>
+                </td>
+            </td>
+         </tr>
+    {% endfor %}
+ </tbody>
+</table>
+
+<!--更新模态窗-->
+<div class="modal fade"  id ="updateModal">   
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">更新用户信息</h4>
+      </div>
+      <div class="modal-body">
+	<form class="form-horizontal" id="user_updateForm">
+            <input type="hidden" name="id" id='id'>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">登陆名<span class="red-fonts">*</span></label>
+                <div  class="col-sm-8">
+                        <input name="login_name" id='login_name' class="form-control" readonly="readonly">
+                </div> 
+            </div>
+            <div class="form-group" >
+                 <label class="col-sm-2 control-label">中文名<span class="red-fonts">*</span></label>
+                 <div class="col-sm-8">
+                        <input name="name_cn" id='name_cn' class="form-control" datatype="zh2-4" nullmsg="请输入中文名" errormsg="必须输入2-4个中文">
+                 </div> 
+            </div>
+            <div class="form-group">
+                 <label class="col-sm-2 control-label">Email<span class="red-fonts">*</span></label>
+                 <div class="col-sm-8">
+                        <input class="form-control" id='email' name="email" datatype="e" nullmsg="请输入邮箱" errormsg="邮箱格式不正确">
+                 </div> 
+            </div>
+            <div class="form-group">
+                 <label class="col-sm-2 control-label">手机号<span class="red-fonts">*</span></label>
+                 <div class="col-sm-8">
+                        <input class="form-control" id='mobile' name="mobile" datatype="m" nullmsg="请输入手机号码" errormsg="手机号码格式不正确">
+                 </div>  
+            </div> 
+	    <div class="form-group">
+	         <label for="role" class="col-sm-2 control-label">角色<span class="red-fonts">*</span></label>
+	      <div class="col-sm-10">
+	    	 <div class="col-sm-2">
+	            <div class="radio i-checks">
+	               <label><input type="radio" value="0" class="role" name="role" checked="">管理员</label>
+	            </div>
+	         </div>
+
+	         <div class="col-sm-2">
+	            <div class="radio i-checks">
+	               <label><input type="radio" value="1" class="role" name="role" checked="">运维</label>
+	            </div>
+	         </div>
+
+	         <div class="col-sm-2">
+	            <div class="radio i-checks">
+	               <label><input type="radio" value="2" class="role" name="role" checked="">开发</label>
+	            </div>
+	         </div>
+
+	         <div class="col-sm-2">
+	            <div class="radio i-checks">
+	               <label><input type="radio" value="3" class="role" name="role" checked="">测试</label>
+	            </div>
+	         </div>
+
+	         <div class="col-sm-2">
+	            <div class="radio i-checks">
+	               <label><input type="radio" value="4" class="role" name="role">访客</label>
+	            </div>
+	         </div>
+	      </div>
+	    </div>
+            <div class="form-group"><label class="col-sm-2 control-label">状态<span class="red-fonts">*</span></label>
+              <div class="col-sm-8">
+                 <div class="col-sm-2">
+                     <div class="radio i-checks">
+                        <label><input type="radio" value="0" class="status" name="status" checked="">正常</label>
+                     </div>
+                 </div>
+                                    
+                 <div class="col-sm-2">
+                     <div class="radio i-checks">
+                         <label><input type="radio" value="1" class="status" name="status">锁定</label>
+                     </div>
+                 </div>
+              </div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn_sub"  id = "user_update_btn" >更新</button>
+        <button class="btn btn-warning exit-btn" data-dismiss="modal">退出</button>
+	<button class="btn btn-info btn_reset" type="reset">重置</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- 更新密码模态窗-->
+<div id="updatepasswdModal"  class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+     <div class="modal-header">
+       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span ariaa-hidden="true">&times;</span></button>
+        <h3 class="modal-title">修改密码</h3>
+    </div> <!--modal-header end-->
+    <div class="modal-body">
+    <form class="form-horizontal" id="updatepw">
+        <div class="form-group"> 
+                 <input class="form-control" type="hidden" id="login_name_updpas" name="login_name" readlonly="readonly" >
+        </div> <!-- login_name end-->
+        <div class="form-group">
+                        <label class="control-label col-sm-2">新密码<span class="red-fonts">*</span></label>
+                 <div class="col-sm-8">
+                        <input class="form-control" type="password"  name="password_new" datatype="*8-24" nullmsg="请输入密码" errormsg="必须输入8-24个任意字符">
+                </div> 
+        </div> <!--newpasswd  end-->
+        <div class="form-group">
+                        <label class="control-label col-sm-2">重复密码<span class="red-fonts">*</span></label>
+                 <div class="col-sm-8">
+                        <input class="form-control" type="password"  name="password_new_again" datatype="*8-24" recheck="password_new" nullmsg="请输入密码" errormsg="两次输入的密码不一致">
+                </div> 
+        </div> <!--newpasswdagain  end-->
+        <div class="form-group">
+                <div class="modal-footer">
+                      <button class="btn btn-primary" id = "update_password" >更新</button>
+                      <button class="btn btn-warning exit-btn" data-dismiss="modal">退出</button>
+		      <button class="btn btn-info" type="reset">重置</button>
+                </div>  
+        </div><!--button end-->
+    </form><!--form end--> 
+  </div> <!--modal-body end -->
+
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div> <!--modal end-->
+<!--模态窗结束-->
+
+<!-- 删除模态框 -->
+<div class="modal fade" id='deleteModal'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	<h4 class="modal-title">删除</h4>
+      </div>
+      <div class="modal-body">
+	<p style="color:red"><b>你确认要删除吗?</b></p>
+      </div>
+      <div class="modal-footer">
+	<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>                                                                         
+	<button type="button" class="btn btn-warning del-sure" data-id=''>确认</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- 模态框结束 -->
+
+
+<script>
+
+<!-- 更新用户信息-->
+$(".user_update").click(function(){   
+    $('#updateModal').modal('show')
+    var url="/users/update?id="+$(this).attr('data-id')
+    console.log(url)
+    $.getJSON(url,function(data){
+	console.log(data)
+        $("#id").val(data['id'])
+        $("#login_name").val(data['login_name'])
+        $("#name_cn").val(data['name_cn'])
+        $("#mobile").val(data['mobile'])
+        $("#email").val(data['email'])
+    })
+})
+
+$("#user_update_btn").click(function(){
+   var str_err=$('.Validform_wrong').text()
+   if(!str_err){
+      var str=$("#user_updateForm").serialize()
+      $.post("/users/update",str,function(data){
+         console.log(data)
+         data=JSON.parse(data)
+         if(data['result']==0){
+	   swal({
+             title:"Good",
+	     text:"Update Success",
+	     type:"success",
+	     confirmButtonText:"确定"
+             },
+	     function(){
+	       location.reload()
+           })
+         }else{
+	   swal("OH,My God",data['msg'],"error")
+         }
+      })
+  }
+  return false;
+})
+<!-- 更新用户信息结束-->
+
+<!-- 更新密码-->
+$(".user_update_password").click(function(){
+   $('#updatepasswdModal').modal('show')
+   $("#login_name_updpas").val($(this).attr("data-id"))
+})
+
+$("#update_password").click(function(){
+   var str_err=$('.Validform_wrong').text()
+   if(!str_err){
+      var str=$("#updatepw").serialize()
+      $.post("/users/update_password",str,function(data){
+         console.log(data)
+         data=JSON.parse(data)
+         if(data['result']==0){
+	   swal({
+	      title:"Good",
+	      text:'Update Success',
+	      type:'success',
+	      confirmButtonText:"确定"
+	      },
+	      function(){
+              location.reload()
+           })
+         }else{
+          swal("OH,My God",data['msg'],'error')
+        }
+      })
+  }
+  return false;
+})
+<!-- 更新密码结束-->
+
+<!-- 删除用户-->
+$(".del").click(function(){
+   var id = $(this).attr('data-id')
+   $('#deleteModal').modal('show')
+   $(".del-sure").attr('data-id',id)
+})
+
+$(".del-sure").click(function(){
+   var id = $(this).attr('data-id')
+   var url = "/users/delete?id="+id
+   $.getJSON(url,function(data){
+       swal({
+             title:"Good",
+             text:"Delete Success",
+             type:'success',
+	     confirmButtonText:"确定"
+             },
+             function(){
+                location.reload()
+           })
+   })
+})   
+<!-- 删除用户结束-->
+
+$("#user_updateForm").Validform({
+	btnSubmit:".btn_sub",
+	btnReset:".btn_reset",
+	tiptype:3,
+	datatype:{
+                "zh2-4" : /^[\u4E00-\u9FA5\uf900-\ufa2d]{2,4}$/
+        }
+});
+
+$("#updatepw").Validform({
+            tiptype:3
+});
+
+$("#editable").dataTable({
+      "autoWidth":true,
+      "bDestroy":true,
+      "language":{
+            "lengthMenu":"每页 _MENU_ 条记录",
+            "zeroRecords":"没有找到记录",
+            "sInfo": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 ),显示第 _START_ 至 _END_ 项(总共 _TOTAL_ 项)",
+            "infoEmpty": "无记录",
+            "infoFiltered": "(从 _MAX_ 条记录过滤)",
+            "sSearch": "搜索:",
+            "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上一页",
+                    "sNext": "下一页",
+                    "sLast": "末页"
+            }
+      }
+});
+
+</script>
+
+</div> <!--col-sm-12-->
+{% endblock %}
+

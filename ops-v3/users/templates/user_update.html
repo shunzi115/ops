@@ -1,0 +1,52 @@
+<html>
+<head>
+<script src="/static/js/jquery-3.2.1.min.js"></script>
+<script>
+ $(document).ready(function(){
+   $("#update_btn").click(function(){
+      var str=$("#updateForm").serialize();
+      console.log(str);
+      $.post("/users/update",str,function(data){
+          console.log(data);
+          data=JSON.parse(data);
+          if(data['result']==0){
+             if(data['role']==0){
+                alert(data['msg']);
+                location.href="/users/user_list";
+             }else{
+                alert(data['msg']);
+                location.href="/users/user_info"; 
+             };
+          }else{
+             $("p#err_id").html(data['msg']);
+        };
+      });
+      return false;
+  });
+});
+</script>
+</head>
+<p id="err_id"></p>
+
+<form id="updateForm" method='post'>
+	<p><input id="user_id" type='hidden' name='id' value={{user_info.id}}></p>
+	<p>登录名:<input id="login_name" type='text' name='login_name' value={{user_info.login_name}} readonly="readonly"></p>
+	<p>中文名<input id="name_cn" type='text' name='name_cn' value={{user_info.name_cn}}></p>
+	<p>手机:<input id="mobile" type='text' name='mobile' value={{user_info.mobile}}></p>
+	<p>邮箱:<input id="email" type='text' name='email' value={{user_info.email}}></p>
+	<p>角色:<select id="role" name='role' value={{user_info.role}}>
+	      <option value='0'>admin</option>
+              <option value='1'>ops</option>
+              <option value='2'>dev</option>
+              <option value='3'>qa</option>
+              <option value='4'>guest</option>
+ 	   </select>
+        </p>
+	<p>状态:<select id="status" name='status' value={{user_info.status}}>
+              <option value='0'>正常</option>
+              <option value='1'>锁定</option>
+	   </select>
+        </p>
+	<p><input id="update_btn" type="submit" value="更改"></p>
+</form>
+</html>
