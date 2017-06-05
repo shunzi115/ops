@@ -94,6 +94,10 @@
             
 <li id="order">
 <a href="#"><i class="fa fa-eye-slash"></i> <span class="nav-label">工单系统</span><span class="fa arrow"></span></a>
+  <ul class="nav nav-second-level collapse">
+    <li> <a href="/workform/add">工单申请</a></li>
+    <li> <a href="/workform/list">工单历史</a></li>
+  </ul>
 </li>
          
 <li id="database">
@@ -131,6 +135,9 @@ $('#jasset').click(function(){
 })
 $('#juser').click(function(){
     $("#juser").children("ul").toggleClass("collapse");   
+})
+$('#order').click(function(){
+    $("#order").children("ul").toggleClass("collapse");   
 })
 $('#api-interface').click(function(){
     $("#api-interface").children("ul").toggleClass("collapse");   
