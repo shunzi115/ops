@@ -46,12 +46,12 @@
 <li class="nav-header">
     <div class="dropdown profile-element">
         <span>
-            <img alt="image" class="img-circle" width="48" height="48" src="/static/img/root.png">
+            <p align="center"> <img alt="image" style='text-align:center' class="img-circle" width="60" height="60" src="/static/img/root.png">
         </span>
 	</br>
 	</br>
-        <span class="text-muted text-xs block">
-            	<strong class="font-bold">{{session.login_name}} | <span style="color: #8095a8"></span></strong>
+        <span style='text-align:center' class="text-muted text-xs block">
+            	<strong class="font-bold">{{session.login_name}} | </strong>
                 {% if session.role == 0 %}
                     管理员  
                 {% elif session.role == 1 %}
@@ -69,11 +69,11 @@
 <!--左边栏头像部分结束-->
 
 <!--左边菜单栏开始-->
-<li id="index" class="active">
-<a href="/"><i class="fa fa-dashboard"></i> <span class="nav-label">仪表盘</span><span class="label label-info pull-right"></span></a>
+<li id="index" class="updown">
+<a href="/"><i class="fa fa-dashboard"></i><span class="nav-label">Dashboard</span><span class="label label-info pull-right"></span></a>
 </li>   <!--仪表盘-->
            
-<li id="juser">
+<li id="juser" class="updown">
 <a href="#"><i class="fa fa-female"></i> <span class="nav-label">用户管理</span><span class="fa arrow"></span></a>
    <ul class="nav nav-second-level collapse">
         <li><a href="/users/user_info">个人中心</a></li>
@@ -83,7 +83,7 @@
    </ul>
 </li>   <!-- 用户管理 -->     
      
-<li id="jasset">
+<li id="jasset" class="updown">
 <a><i class="fa fa-inbox"></i> <span class="nav-label">资产管理</span><span class="fa arrow"></span></a>
   <ul class="nav nav-second-level collapse">
     <li><a href="/cmdb/cmdb_online_list">线上CMDB</a></li>
@@ -92,7 +92,7 @@
   </ul> 
 </li> <!-- 资产管理 -->     
             
-<li id="order">
+<li id="order" class="updown">
 <a href="#"><i class="fa fa-eye-slash"></i> <span class="nav-label">工单系统</span><span class="fa arrow"></span></a>
   <ul class="nav nav-second-level collapse">
     <li> <a href="/workform/add">工单申请</a></li>
@@ -100,15 +100,15 @@
   </ul>
 </li>
          
-<li id="database">
+<li id="database" class="updown">
 <a href="#"><i class="fa fa-database"></i> <span class="nav-label">数据库管理</span><span class="label label-info pull-right"></span></a>
 </li>
 
-<li id="monitor">
+<li id="monitor" class="updown">
 <a href="#"><i class="fa fa-bar-chart"></i> <span class="nav-label">监控系统</span><span class="label label-info pull-right"></span></a>
 </li>    <!--监控-->
 
-<li id="api-interface">
+<li id="api-interface" class="updown">
 <a><i class="fa fa-deafness"></i> <span class="nav-label">第三方工具</span><span class="fa arrow"></span></a>
   <ul class="nav nav-second-level collapse">
     <li> <a href="/cmdb/cmdb_online_list">IP 138</a></li>
@@ -126,12 +126,12 @@
 <!--左边导航点击自动弹出下拉菜单-->
 
 <script>
-$('li').click(function(){
+$('.updown').click(function(){
     $('li').removeClass("active");
     $(this).addClass("active");
 })
 $('#jasset').click(function(){
-    $("#jasset").children("ul").toggleClass("collapse");   
+    $("#jasset").children("ul").toggleClass("collapse");
 })
 $('#juser').click(function(){
     $("#juser").children("ul").toggleClass("collapse");   
