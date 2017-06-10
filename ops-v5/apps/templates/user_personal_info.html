@@ -115,10 +115,10 @@
 	    <td style="vertical-align:middle; text-align:center;"><h2>{{user_info.login_name}}</h2></td>
 	    <td>
 		<table class="table table-striped table-bordered table-hover">
-		<tr><td style="text-align:center;">中文名</td><td>{{user_info.name_cn}}</td></tr>
-		<tr><td style="text-align:center;">邮箱</td><td>{{user_info.email}}</td></tr>
-		<tr><td style="text-align:center;">手机号</td><td>{{user_info.mobile}}</td></tr>
-		<tr><td style="text-align:center;">角色</td><td>
+		<tr><td class='text-center'>中文名</td><td class='text-center'>{{user_info.name_cn}}</td></tr>
+		<tr><td class='text-center'>邮箱</td><td class='text-center'>{{user_info.email}}</td></tr>
+		<tr><td class='text-center'>手机号</td><td class='text-center'>{{user_info.mobile}}</td></tr>
+		<tr><td class='text-center'>角色</td><td class='text-center'>
                 {% if user_info.role == 0 %}
                 管理员
                 {% elif user_info.role == 1 %}
@@ -130,7 +130,7 @@
                 {% elif user_info.role == 4 %}
                 访客
                 {% endif %}
-		<tr><td style="text-align:center;">最近一次登陆时间</td><td>{{user_info.last_login_time}}</td></tr>
+		<tr><td class='text-center'>最近一次登陆时间</td><td class='text-center'>{{user_info.last_login_time}}</td></tr>
            </td>
        </tr>
        </table>

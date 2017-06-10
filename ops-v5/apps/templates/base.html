@@ -13,7 +13,7 @@
 <link href="/static/plugin/Font-Awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet">
 <link href="/static/js/layer-v2.4/layer/skin/layer.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="/static/plugin/sweetalert-master/dist/sweetalert.css">
-<link rel="stylesheet" type="text/css" href="/static/plugin/dataTables/dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="/static/plugin/dataTables/dataTables.bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="/static/plugin/jquery-ui-1.12.1/jquery-ui.css">
 <link rel="stylesheet" href="/static/plugin/bootstrap-multiselect/dist/css/bootstrap-multiselect.css" type="text/css"/>
 <style type="text/css">
@@ -31,9 +31,13 @@
 <script src="/static/js/Validform_v5.3.2_min.js"></script>
 <script src="/static/plugin/passwordStrength/js/passwordStrength.js"></script>
 <script src="/static/plugin/dataTables/dataTables.min.js"></script>
+<script src="/static/plugin/dataTables/dataTables.bootstrap.min.js"></script>
 <script src="/static/plugin/jquery-ui-1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="/static/plugin/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
 
+</head>
+
+<body>
 <!--整个页面的框架-->
 <div id="wrapper">
         
@@ -46,7 +50,7 @@
 <li class="nav-header">
     <div class="dropdown profile-element">
         <span>
-            <p align="center"> <img alt="image" style='text-align:center' class="img-circle" width="60" height="60" src="/static/img/root.png">
+            <p align="center"> <img alt="image" style='text-align:center' class="img-circle" width="60" height="60" src="/static/img/wosun.png">
         </span>
 	</br>
 	</br>
@@ -95,8 +99,14 @@
 <li id="order" class="updown">
 <a href="#"><i class="fa fa-eye-slash"></i> <span class="nav-label">工单系统</span><span class="fa arrow"></span></a>
   <ul class="nav nav-second-level collapse">
-    <li> <a href="/workform/add">工单申请</a></li>
-    <li> <a href="/workform/list">工单历史</a></li>
+    <li>
+	<a href="/workform/add">发布系统</a>
+    </li>
+    <li> 
+          <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+	    SQL 操作
+          </button>
+    </li>
   </ul>
 </li>
          
@@ -131,16 +141,16 @@ $('.updown').click(function(){
     $(this).addClass("active");
 })
 $('#jasset').click(function(){
-    $("#jasset").children("ul").toggleClass("collapse");
+    $(this).children("ul").toggleClass("collapse");
 })
 $('#juser').click(function(){
-    $("#juser").children("ul").toggleClass("collapse");   
+    $(this).children("ul").toggleClass("collapse");   
 })
 $('#order').click(function(){
-    $("#order").children("ul").toggleClass("collapse");   
+    $(this).children("ul").toggleClass("collapse");   
 })
 $('#api-interface').click(function(){
-    $("#api-interface").children("ul").toggleClass("collapse");   
+    $(this).children("ul").toggleClass("collapse");
 })
 </script>
 
@@ -150,14 +160,15 @@ $('#api-interface').click(function(){
 <!--右边导航第一层-->
 <div class="row border-botto">
    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-   <div class="navbar-header">
+    <div class="navbar-header">
        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"> <i class="fa fa-bars"></i></a>
-    <form role="search" class="navbar-form-custom" method="get" action="">
+       <form role="search" class="navbar-form-custom" method="get" action="">
             <div class="form-group">
                 <input type="text" placeholder="输入搜索..." class="form-control" name="search" id="top-search">
             </div>
-        </form> 
+       </form> 
     </div>
+    <div id='data-haha' class='col-md-offset-4 col-md-2 text-success' style='height:60px;vertical-align:middle;line-height:60px' role='alert'>欢迎回来...</div>
     <ul class="nav navbar-top-links navbar-right">
         <li>
             <span class="m-r-sm text-muted welcome-message">莴笋运维管理平台</span>
@@ -220,5 +231,9 @@ $('#api-interface').click(function(){
 
 </div>  <!--page-wrapper-->
 </div>   <!--wrapper-->
+
+<script>
+   $("#data-haha").hide(3000).show(3000)
+</script>
 
 </body></html>

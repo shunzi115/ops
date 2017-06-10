@@ -13,3 +13,15 @@ from utils import woops_log,mysql_exec
 def workform_add():
 	if request.method == 'GET':
 		return render_template("/workform/workform_add.html")
+
+@app.route("/workform/list",methods=['GET','POST'])
+def workform_list():
+	if request.method == 'GET':
+		return render_template("test.html")
+
+
+
+@app.route("/test",methods=['GET','POST'])
+def test():
+        if request.method == 'GET':
+                return render_template("test.html")
