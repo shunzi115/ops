@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %} 
+添加用户
+{% endblock %}
+
+{% block main %}
+<div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                 <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>填写工单信息</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form id="workform_addForm" class="form-horizontal nice-validator n-yellow Formvalid" novalidate="novalidate">
+                            <div class="form-group">
+                                <label for="workform_type" class="col-sm-2 control-label text-right">类型<span class="red-fonts">*</span></label>
+                                <select name="workform_type" id="workform_type" class="form-control col-sm-6">
+                                        <option value="发布申请">发布申请</option>
+                                        <option value="数据库操作">数据库操作</option>
+                                        <option value="环境准备">环境准备</option>
+                                        <option value="其他" selected='selected'>其他</option>
+                                </select>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+			    <div class="form-group">
+			            <label for="workform_title" class="col-sm-2 control-label  ">主题<span class="red-fonts ">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="workform_title" name="workform_title" placeholder="工单主题" type="text" class="form-control" aria-required="true">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+			    <div class="form-group">
+                                <label for="workform_level" class="col-sm-2 control-label text-right">优先级<span class="red-fonts">*</span></label>
+                                <select name="workform_level" id="workform_level" class="form-control col-sm-6">
+                                        <option value="紧急">紧急</option>
+                                        <option value="一般">一般</option>
+                                </select>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="workform_content" class="col-sm-2 control-label">描述<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+				    <textarea name='workform_content' id='workform_content' class="form-control" rows="10"></textarea>
+                                </div>
+                            </div>
+			    <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+			       <label for="workform_content" class="col-sm-2 control-label">上传附件<span class="red-fonts">*</span></label>
+                               <div class="col-sm-8">
+			  	   <input type="file" id="exampleInputFile">
+			       </div>
+			    </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+       $("#workform_type").multiselect({
+            maxHeight: 200,
+            buttonWidth: '200px',
+            nonSelectedText: '请选择工单类型'
+        });
+
+       $("#workform_level").multiselect({
+            maxHeight: 200,
+            buttonWidth: '200px',
+            nonSelectedText: '请选择工单优先级'
+        });
+    </script>
+{% endblock %}
+

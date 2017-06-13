@@ -1,12 +1,21 @@
 {% extends "base.html" %}
 
 {% block breadcrumb %} 
-添加用户
+Sorry
 {% endblock %}
 
 {% block main %}
-<div class="wrapper wrapper-content animated fadeInRight">
-        <div class="row">
+
+<div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
+    <ul id="myTabs" class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">发布申请</a></li>
+      <li role="presentation" class=""><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="false">发布历史</a></li>
+      <li role="presentation" class=""><a href="#home" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="false">我的发布</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+      <div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
+	<div class="wrapper wrapper-content animated fadeInRighti">
+          <div class="row">
             <div class="col-sm-12">
                  <div class="ibox float-e-margins">
                     <div class="ibox-title">
@@ -26,62 +35,46 @@
                     <div class="ibox-content">
                         <form id="workform_addForm" class="form-horizontal nice-validator n-yellow Formvalid" novalidate="novalidate">
                             <div class="form-group">
-                                <label for="workform_type" class="col-sm-2 control-label text-right">类型<span class="red-fonts">*</span></label>
-                                <select name="workform_type" id="workform_type" class="form-control col-sm-6">
-                                        <option value="发布申请">发布申请</option>
-                                        <option value="数据库操作">数据库操作</option>
-                                        <option value="环境准备">环境准备</option>
-                                        <option value="其他" selected='selected'>其他</option>
-                                </select>
-                            </div>
-                            <div class="hr-line-dashed"></div>
-			    <div class="form-group">
-			            <label for="workform_title" class="col-sm-2 control-label  ">主题<span class="red-fonts ">*</span></label>
+                                    <label for="workform_title" class="col-sm-2 control-label">主题<span class="red-fonts ">*</span></label>
                                 <div class="col-sm-8">
                                     <input id="workform_title" name="workform_title" placeholder="工单主题" type="text" class="form-control" aria-required="true">
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
-			    <div class="form-group">
-                                <label for="workform_level" class="col-sm-2 control-label text-right">优先级<span class="red-fonts">*</span></label>
-                                <select name="workform_level" id="workform_level" class="form-control col-sm-6">
+                            <div class="form-group">
+                                <label for="workform_level" class="col-sm-2 control-label">优先级<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                   <select name="workform_level" id="workform_level" class="form-control col-sm-2">
                                         <option value="紧急">紧急</option>
                                         <option value="一般">一般</option>
-                                </select>
+                                   </select>
+				</div>
                             </div>
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
                                 <label for="workform_content" class="col-sm-2 control-label">描述<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
-				    <textarea name='workform_content' id='workform_content' class="form-control" rows="10"></textarea>
+                                    <textarea name='workform_content' id='workform_content' class="form-control" rows="10"></textarea>
                                 </div>
                             </div>
-			    <div class="hr-line-dashed"></div>
+                            <div class="hr-line-dashed"></div>
                             <div class="form-group">
-			       <label for="workform_content" class="col-sm-2 control-label">上传附件<span class="red-fonts">*</span></label>
+                               <label for="workform_content" class="col-sm-2 control-label">上传附件<span class="red-fonts">*</span></label>
                                <div class="col-sm-8">
-			  	   <input type="file" id="exampleInputFile">
-			       </div>
-			    </div>
+                                   <input type="file" id="exampleInputFile">
+                               </div>
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
-        </div>
+	  </div>
+	</div>
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
+        <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+      </div>
     </div>
+  </div>
 
-    <script>
-       $("#workform_type").multiselect({
-            maxHeight: 200,
-            buttonWidth: '200px',
-            nonSelectedText: '请选择工单类型'
-        });
-
-       $("#workform_level").multiselect({
-            maxHeight: 200,
-            buttonWidth: '200px',
-            nonSelectedText: '请选择工单优先级'
-        });
-    </script>
 {% endblock %}
-
