@@ -1,0 +1,69 @@
+#!/usr/bin/env python
+#!coding=utf8
+
+from flask import request,render_template,redirect,session
+from . import app
+from common_func import session_check,role_check
+from datetime import *
+import json
+from utils import woops_log,mysql_exec
+
+
+@app.route("/workform/publish",methods=['GET'])
+def publish():
+	return render_template("/workform/publist_index.html")
+
+@app.route("/workform/pub_add",methods=['POST'])
+def pub_add():
+	if request.method == 'POST':
+		pub_info = dict((i,j[0]) for i,j in dict(request.form).items())
+		print "**** pub_info ****"
+		print pub_info
+		woops_log.log_write('publish').debug('pub_info:%s' % pub_info)
+		if not pub_info['pub_title'].strip('') or not pub_info['pub_module'].strip('') or not pub_info['pub_content'].strip(''):
+			msg = 'Input can not be empty'
+			woops_log.log_write('publish').error(msg)
+			return json.dumps({'result':1,'msg':msg})
+		if pub_info['pub_SQL'].strip('') == 'YES' and not pub_info['pub_SQL_detail'].strip(''):
+			msg = 'Please choose correct if there were any SQL'
+			woops_log.log_write('publish').error(msg)
+                        return json.dumps({'result':1,'msg':msg})
+		if pub_info['pub_SQL'].strip('') == 'NO' and pub_info['pub_SQL_detail'].strip(''):
+			msg = 'Please choose correct if there were any SQL'
+                        woops_log.log_write('publish').error(msg)
+                        return json.dumps({'result':1,'msg':msg})
+		if pub_info['pub_level'].strip('') == 'emergency':
+			pub_info['pub_status'] = '3'
+		else:
+			pub_info['pub_status'] = '1'
+		pub_info['pub_submit_time'] = datetime.now().strftime("%Y-%m-%d %X")
+		pub_info['pub_application'] = session.get('login_name',None)
+		print '**** pub_info ****'
+		print pub_info
+		insert_fields = [x for x in pub_info.keys()]
+		mysql_exec.insert_sql('publish_online',insert_fields,pub_info)
+		woops_log.log_write('publish').info('"%s" submit successful' % pub_info['pub_title'])
+		return json.dumps({'result':0,'msg':'ok'})
+
+@app.route("/workform/pub_my",methods=['GET','POST'])
+def pub_my():
+	if request.method == 'GET':
+		return render_template("test.html")
+
+@app.route("/workform/pub_list",methods=['GET'])
+def pub_list():
+	fields_1 = ['id','pub_title','pub_level','pub_module','pub_content','pub_SQL','pub_SQL_detail']
+	fields_2 = ['pub_application','pub_status','pub_audit','pub_submit_time','pub_done_time','pub_operation']
+	fields = fields_1 + fields_2
+	pub_info_tuple = mysql_exec.select_sql('publish_online',fields)
+        pub_info_list = [dict(zip(fields,i)) for i in pub_info_tuple]
+        woops_log.log_write('publish').debug('pub_info_list : %s' % pub_info_list)
+	print "**** pub_info_list ****"
+	print pub_info_list
+        return json.dumps({'pub_info':pub_info_list})
+
+
+@app.route("/test",methods=['GET','POST'])
+def test():
+        if request.method == 'GET':
+                return render_template("test.html")

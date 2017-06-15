@@ -47,13 +47,13 @@
                                  <div class="col-sm-8">
                                     <div class="col-sm-2">
                                         <div class="radio i-checks">
-                                            <label><input type="radio" value="一般" name="pub_level" checked="">一般</label>
+                                            <label><input type="radio" value="non-emergency" name="pub_level" checked="">一般</label>
                                         </div>
                                     </div>
                                     
                                     <div class="col-sm-2">
                                         <div class="radio i-checks">
-                                            <label><input type="radio" value="紧急" name="pub_level">紧急</label>
+                                            <label><input type="radio" value="emergency" name="pub_level">紧急</label>
                                         </div>
                                     </div>
                                  </div>
@@ -123,7 +123,6 @@
           <thead>
              <tr>
                 <th class="text-center">主题</th>
-                <th class="text-center">类型</th>
                 <th class="text-center">优先级</th>
                 <th class="text-center">模块名</th>
                 <th class="text-center">状态</th>
@@ -135,7 +134,7 @@
                 <th class="text-center">详情</th>
              </tr>
           </thead>
-          <tbody>
+          <tbody id='list_tbody'>
 	  </tbody>
 	</table>
       </div>
@@ -146,4 +145,59 @@
     </div>
   </div>
 
+<script>
+$.getJSON("/workform/pub_list",function(data){
+   console.log(data)
+   data = data['pub_info']
+   var str = ''
+   $.each(data,function(k,v){
+      str += '<tr>'
+      str += '<td>'+v['pub_title']+'</td>'
+      str += '<td>'+v['pub_level']+'</td>'
+      str += '<td>'+v['pub_module']+'</td>'
+      str += '<td>'+v['pub_status']+'</td>'
+      str += '<td>'+v['pub_application']+'</td>'
+      str += '<td>'+v['pub_audit']+'</td>'
+      str += '<td>'+v['pub_operation']+'</td>'
+      str += '<td>'+v['pub_submit_time']+'</td>'
+      str += '<td>'+v['pub_done_time']+'</td>'
+      str += '<td>'+'<button class="btn btn-info" data-id="'+v['id']+'">申请详情</button>'+'<button class="btn btn-info" data-id="'+v['id']+'">发布详情</button>'+'</td>'
+      str += '</tr>'      
+   });
+   $("#list_tbody").html(str)
+});
+
+$("#pub_submit").click(function(){
+   var str = $("#pub_addForm").serialize();
+   $.post('/workform/pub_add',str,function(data){
+      data = JSON.parse(data);
+      if(data["result"] == 0){
+          swal({
+                           title:"Good",
+                           text:"发布成功",
+                           type:"success",
+                           confirmButtonText:"确定"
+                           },
+                           function(){
+                           location.reload();
+                })
+       }else{
+                      swal("OH My God",data['msg'],"error")
+       };
+   });
+   return false;
+});
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
 {% endblock %}
