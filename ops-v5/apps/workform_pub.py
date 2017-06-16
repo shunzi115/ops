@@ -45,11 +45,6 @@ def pub_add():
 		woops_log.log_write('publish').info('"%s" submit successful' % pub_info['pub_title'])
 		return json.dumps({'result':0,'msg':'ok'})
 
-@app.route("/workform/pub_my",methods=['GET','POST'])
-def pub_my():
-	if request.method == 'GET':
-		return render_template("test.html")
-
 @app.route("/workform/pub_list",methods=['GET'])
 def pub_list():
 	fields_1 = ['id','pub_title','pub_level','pub_module','pub_content','pub_SQL','pub_SQL_detail']
@@ -61,6 +56,21 @@ def pub_list():
 	print "**** pub_info_list ****"
 	print pub_info_list
         return json.dumps({'pub_info':pub_info_list})
+
+@app.route("/workform/pub_my",methods=['GET','POST'])
+def pub_my():
+	if request.method == 'GET':
+       		fields_1 = ['id','pub_title','pub_level','pub_module','pub_content','pub_SQL','pub_SQL_detail']
+        	fields_2 = ['pub_application','pub_status','pub_audit','pub_submit_time','pub_done_time','pub_operation']
+        	fields = fields_1 + fields_2
+		my_conditon = {}
+		my_conditon['pub_application'] = session.get('login_name',None)
+        	pub_my_tuple = mysql_exec.select_sql('publish_online',fields,my_conditon)
+        	pub_my_list = [dict(zip(fields,i)) for i in pub_my_tuple]
+        	woops_log.log_write('publish').debug('pub_my_list : %s' % pub_my_list)
+        	print "**** pub_my_list ****"
+        	print pub_my_list
+        	return json.dumps({'pub_my':pub_my_list})
 
 
 @app.route("/test",methods=['GET','POST'])
