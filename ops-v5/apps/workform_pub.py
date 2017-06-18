@@ -33,9 +33,9 @@ def pub_add():
                         woops_log.log_write('publish').error(msg)
                         return json.dumps({'result':1,'msg':msg})
 		if pub_info['pub_level'].strip('') == 'emergency':
-			pub_info['pub_status'] = '3'
+			pub_info['pub_status'] = '0'
 		else:
-			pub_info['pub_status'] = '1'
+			pub_info['pub_status'] = '3'
 		pub_info['pub_submit_time'] = datetime.now().strftime("%Y-%m-%d %X")
 		pub_info['pub_application'] = session.get('login_name',None)
 		print '**** pub_info ****'
@@ -72,6 +72,20 @@ def pub_my():
         	print pub_my_list
         	return json.dumps({'pub_my':pub_my_list})
 
+@app.route("/workform/pub_audit",methods=['GET','POST'])
+def pub_audit():
+        if request.method == 'GET':
+                fields_1 = ['id','pub_title','pub_level','pub_module','pub_content','pub_SQL','pub_SQL_detail']
+                fields_2 = ['pub_application','pub_status','pub_submit_time']
+                fields = fields_1 + fields_2
+		audit_conditon = {}
+		audit_conditon['pub_status'] = session.get('role',None)
+        	pub_audit_tuple = mysql_exec.select_sql('publish_online',fields,audit_conditon)
+                pub_audit_list = [dict(zip(fields,i)) for i in pub_audit_tuple]
+                woops_log.log_write('publish').debug('pub_audit_list : %s' % pub_audit_list)
+                print "**** pub_my_audit ****"
+                print pub_audit_list
+                return json.dumps({'pub_audit':pub_audit_list})
 
 @app.route("/test",methods=['GET','POST'])
 def test():

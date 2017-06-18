@@ -88,3 +88,16 @@ def select_sql(table,fields,condition=None):
                 woops_log.log_write('DB_mysql').error('select_sql : "%s",error: %s' %(select_sql,traceback.format_exc()))
         finally:
                 close_db()
+
+def general_sql(sql_str):
+        select_sql = sql_str 
+        woops_log.log_write('DB_mysql').debug('select_sql : "%s"' % select_sql)
+        try:
+                db_connect()
+                cur.execute(select_sql)
+                select_all = cur.fetchall()
+                return select_all
+        except:
+                woops_log.log_write('DB_mysql').error('select_sql : "%s",error: %s' %(select_sql,traceback.format_exc()))
+        finally:
+                close_db()

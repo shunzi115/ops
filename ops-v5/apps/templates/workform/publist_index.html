@@ -8,11 +8,11 @@
 
 <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
     <ul id="myTabs" class="nav nav-tabs" role="tablist">
-      <li role="presentation" class=""><a href="#publish_application" id="home-tab" role="tab" data-toggle="tab" aria-controls="publish_application" aria-expanded="false">发布申请</a>
+      <li role="presentation" class=""><a href="#publish_application" id="pub_add-tab" role="tab" data-toggle="tab" aria-controls="publish_application" aria-expanded="false">发布申请</a>
       </li>
-      <li role="presentation" class="active"><a href="#publish_list" role="tab" id="profile-tab" data-toggle="tab" aria-controls="publish_list" aria-expanded="true">发布历史</a></li>
-      <li role="presentation" class=""><a href="#publish_my" role="tab" id="profile-tab" data-toggle="tab" aria-controls="publish_my" aria-expanded="false">我的发布</a></li>
-      <li role="presentation" class=""><a href="#publish_audit" role="tab" id="profile-tab" data-toggle="tab" aria-controls="publish_audit" aria-expanded="false">发布审批</a></li>
+      <li role="presentation" class="active"><a href="#publish_list" role="tab" id="pub_list-tab" data-toggle="tab" aria-controls="publish_list" aria-expanded="true">发布历史</a></li>
+      <li role="presentation" class=""><a href="#publish_my" role="tab" id="pub_my-tab" data-toggle="tab" aria-controls="publish_my" aria-expanded="false">我的发布</a></li>
+      <li role="presentation" class=""><a href="#publish_audit" role="tab" id="pub_audit-tab" data-toggle="tab" aria-controls="publish_audit" aria-expanded="false">发布审批</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
       <div role="tabpanel" class="tab-pane fade" id="publish_application" aria-labelledby="home-tab">
@@ -67,7 +67,7 @@
                             </div>
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
-                                <label for="pub_content" class="col-sm-2 control-label">发布详情<span class="red-fonts">*</span></label>
+                                <label for="pub_content" class="col-sm-2 control-label">发布说明<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
                                     <textarea name='pub_content' id='pub_content' class="form-control" rows="10"></textarea>
                                 </div>
@@ -118,8 +118,6 @@
 	</div>
       </div>
 
-
-
       <div role="tabpanel" class="tab-pane fade active in" id="publish_list" aria-labelledby="profile-tab">
 	<br>
 	<table class="table table-striped table-bordered">
@@ -128,6 +126,7 @@
                 <th class="text-center">主题</th>
                 <th class="text-center">优先级</th>
                 <th class="text-center">模块名</th>
+                <th class="text-center">SQL有无</th>
                 <th class="text-center">状态</th>
                 <th class="text-center">申请人</th>
                 <th class="text-center">审批人</th>
@@ -141,6 +140,7 @@
 	  </tbody>
 	</table>
       </div>
+
       <div role="tabpanel" class="tab-pane fade" id="publish_my" aria-labelledby="profile-tab">
 	<br>
         <table class="table table-striped table-bordered">
@@ -149,23 +149,133 @@
                 <th class="text-center">主题</th>
                 <th class="text-center">优先级</th>
                 <th class="text-center">模块名</th>
+                <th class="text-center">SQL有无</th>
                 <th class="text-center">状态</th>
                 <th class="text-center">申请人</th>
                 <th class="text-center">审批人</th>
                 <th class="text-center">操作人</th>
                 <th class="text-center">申请时间</th>
                 <th class="text-center">完成时间</th>
-                <th class="text-center">详情</th>
+                <th class="text-center">操作</th>
              </tr>
           </thead>
           <tbody id='my_tbody'>
           </tbody>
         </table>
       </div>
+
+
       <div role="tabpanel" class="tab-pane fade" id="publish_audit" aria-labelledby="profile-tab">
+        <br>
+        <table class="table table-striped table-bordered">
+          <thead>
+             <tr>
+                <th class="text-center">主题</th>
+                <th class="text-center">优先级</th>
+                <th class="text-center">模块名</th>
+                <th class="text-center">SQL有无</th>
+                <th class="text-center">状态</th>
+                <th class="text-center">申请人</th>
+                <th class="text-center">申请时间</th>
+                <th class="text-center">操作</th>
+             </tr>
+          </thead>
+          <tbody id='audit_tbody'>
+          </tbody>
+        </table>
       </div>
     </div>
-  </div>
+</div>
+
+
+<!-- 审批模态框 -->
+<div class="modal fade" id='auditModal'>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">审批</h4>
+      </div>
+      <div class="modal-body">
+	<form id="pub_auditForm" class="form-horizontal nice-validator n-yellow Formvalid" novalidate="novalidate">
+           <div class="form-group">
+              <label for="pub_title" class="col-sm-2 control-label">主题<span class="red-fonts ">*</span></label>
+              <div class="col-sm-8">
+                  <input id="pub_title_audit" name="pub_title" placeholder="工单主题" type="text" class="form-control" aria-required="true" readonly="readonly">
+              </div>
+           </div>
+           <div class="hr-line-dashed"></div>
+           <div class="form-group"><label class="col-sm-2 control-label">优先级<span class="red-fonts">*</span></label>
+              <div class="col-sm-8">
+                  <div class="col-sm-2">
+                      <div class="radio i-checks">
+                           <label><input type="radio" value="non-emergency" name="pub_level" checked="">一般</label>
+                      </div>
+                  </div>
+                                    
+                  <div class="col-sm-2">
+                      <div class="radio i-checks">
+                            <label><input type="radio" value="emergency" name="pub_level">紧急</label>
+                      </div>
+                  </div>
+              </div>
+           </div>
+           <div class="hr-line-dashed"></div>
+           <div class="form-group">
+               <label for="pub_module" class="col-sm-2 control-label">发布模块名<span class="red-fonts ">*</span></label>
+               <div class="col-sm-8">
+                   <input id="pub_module_audit" name="pub_module" placeholder="模块名1 ; 模块名2;......" type="text" class="form-control" aria-required="true" readonly="readonly">
+               </div>
+           </div>
+           <div class="hr-line-dashed"></div>
+           <div class="form-group">
+               <label for="pub_content" class="col-sm-2 control-label">发布说明<span class="red-fonts">*</span></label>
+               <div class="col-sm-8">
+                   <textarea name='pub_content' id='pub_content_audit' class="form-control" rows="10" readonly="readonly"></textarea>
+               </div>
+           </div> 
+           <div class="hr-line-dashed"></div>
+           <div class="form-group">
+               <label class="col-sm-2 control-label">是否有SQL<span class="red-fonts">*</span></label>
+               <div class="col-sm-8">
+                   <div class="col-sm-2">
+                        <div class="radio i-checks">
+                            <label><input type="radio" value="NO" name="pub_SQL" checked="">无 SQL</label>
+                        </div>
+                   </div>
+                                    
+                   <div class="col-sm-2">
+                        <div class="radio i-checks">
+                            <label><input type="radio" value="YES" name="pub_SQL">有 SQL</label>
+                        </div>
+                   </div>
+               </div>
+           </div>
+           <div class="hr-line-dashed"></div>
+           <div class="form-group">
+               <label for="pub_content" class="col-sm-2 control-label">SQL详情</label>
+               <div class="col-sm-8">
+                   <textarea name='pub_SQL_detail' id='pub_SQL_detail_audit' class="form-control" rows="10" readonly="readonly" placeholder="适用于少于SQL少于10行 ; 超过10行请以下面附件的形式上传......"></textarea>
+               </div>
+           </div>
+           <div class="hr-line-dashed"></div>
+           <div class="form-group">
+               <label for="pub_attach" class="col-sm-2 control-label">SQL附件</label>
+               <div class="col-sm-8">
+                   <input type="file" name="pub_attach" id="exampleInputFile_audit">
+               </div>
+           </div>
+	</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>                                                                         
+        <button type="button" class="btn btn-warning del-sure" data-id=''>确认</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- 模态框结束 -->
+
 
 <script>
 $.getJSON("/workform/pub_list",function(data){
@@ -181,13 +291,18 @@ $.getJSON("/workform/pub_list",function(data){
           str += '<td class="text-center" style="color:green">正常</td>'
       };
       str += '<td class="text-center">'+v['pub_module']+'</td>'
-      if(v['pub_status']== 1){
-          str += '<td class="text-center" style="color:blue">QA 审批中...</td>'
-      }else if(v['pub_status']== 2){
-          str += '<td class="text-center" style="color:blue">OPS 处理中...</td>'
-      }else if(v['pub_status']== 3){
-          str += '<td class="text-center" style="color:blue">经理审批中...</td>'
-      }else if(v['pub_status']== 4){
+      if(v['pub_SQL']=='YES'){
+          str += '<td class="text-center" style="color:green">'+v['pub_SQL']+'</td>'
+      }else{
+          str += '<td class="text-center">'+v['pub_SQL']+'</td>'
+      };
+      if(v['pub_status']== 3){
+          str += '<td class="text-center" style="color:blue">待 QA 审批...</td>'
+      }else if(v['pub_status']== 1){
+          str += '<td class="text-center" style="color:blue">待 OPS 处理...</td>'
+      }else if(v['pub_status']== 0){
+          str += '<td class="text-center" style="color:blue">待经理审批...</td>'
+      }else if(v['pub_status']== 5){
           str += '<td class="text-center" style="color:green">处理完成</td>'
       };
       str += '<td class="text-center">'+v['pub_application']+'</td>'
@@ -214,13 +329,18 @@ $.getJSON("/workform/pub_my",function(data){
           str += '<td class="text-center" style="color:green">正常</td>'
       };
       str += '<td class="text-center">'+v['pub_module']+'</td>'
-      if(v['pub_status']== 1){
-          str += '<td class="text-center" style="color:blue">QA 审批中...</td>'
-      }else if(v['pub_status']== 2){
-          str += '<td class="text-center" style="color:blue">OPS 处理中...</td>'
-      }else if(v['pub_status']== 3){
-          str += '<td class="text-center" style="color:blue">经理审批中...</td>'
-      }else if(v['pub_status']== 4){
+      if(v['pub_SQL']=='YES'){
+          str += '<td class="text-center" style="color:green">'+v['pub_SQL']+'</td>'
+      }else{
+          str += '<td class="text-center">'+v['pub_SQL']+'</td>'
+      };
+      if(v['pub_status']== 3){
+          str += '<td class="text-center" style="color:blue">待 QA 审批...</td>'
+      }else if(v['pub_status']== 1){
+          str += '<td class="text-center" style="color:blue">待 OPS 处理...</td>'
+      }else if(v['pub_status']== 0){
+          str += '<td class="text-center" style="color:blue">待经理审批...</td>'
+      }else if(v['pub_status']== 5){
           str += '<td class="text-center" style="color:green">处理完成</td>'
       };
       str += '<td class="text-center">'+v['pub_application']+'</td>'
@@ -232,6 +352,41 @@ $.getJSON("/workform/pub_my",function(data){
       str += '</tr>'      
    });
    $("#my_tbody").html(str)
+});
+
+$.getJSON("/workform/pub_audit",function(data){
+   console.log(data)
+   data = data['pub_audit']
+   var str = ''
+   $.each(data,function(k,v){
+      str += '<tr>'
+      str += '<td>'+v['pub_title']+'</td>'
+      if(v['pub_level']=='emergency'){
+          str += '<td class="text-center" style="color:red">紧急</td>'
+      }else{
+          str += '<td class="text-center" style="color:green">正常</td>'
+      };
+      str += '<td class="text-center">'+v['pub_module']+'</td>'
+      if(v['pub_SQL']=='YES'){
+          str += '<td class="text-center" style="color:green">'+v['pub_SQL']+'</td>'
+      }else{
+          str += '<td class="text-center">'+v['pub_SQL']+'</td>'
+      };
+      if(v['pub_status']== 3){
+          str += '<td class="text-center" style="color:blue">待 QA 审批...</td>'
+      }else if(v['pub_status']== 1){
+          str += '<td class="text-center" style="color:blue">待 OPS 处理...</td>'
+      }else if(v['pub_status']== 0){
+          str += '<td class="text-center" style="color:blue">待经理审批...</td>'
+      }else if(v['pub_status']== 5){
+          str += '<td class="text-center" style="color:green">处理完成</td>'
+      };
+      str += '<td class="text-center">'+v['pub_application']+'</td>'
+      str += '<td class="text-center">'+v['pub_submit_time']+'</td>'
+      str += '<td class="text-center"><button class="btn btn-xs btn-primary audit_btn" data-id="'+v['id']+'">审批</button></td>'
+      str += '</tr>'
+   });
+   $("#audit_tbody").html(str)
 });
 
 $("#pub_submit").click(function(){
@@ -255,9 +410,7 @@ $("#pub_submit").click(function(){
    return false;
 });
 
-
-
-
+$(document).on('click','.audit_btn',function(){$("#auditModal").modal('show')})
 
 
 
