@@ -99,11 +99,11 @@ CREATE TABLE `publish_online` (
   `pub_SQL` varchar(10) NOT NULL COMMENT '是否有SQL',
   `pub_SQL_detail` varchar(1000) DEFAULT NULL COMMENT 'SQL详情',
   `pub_application` varchar(50) NOT NULL COMMENT '申请人',
-  `pub_status` tinyint(2) NOT NULL COMMENT '状态:1-QA审批中；2-OPS处理中；3-经理审批中；4-处理完成',
+  `pub_status` tinyint(2) NOT NULL COMMENT '状态-跟用户表角色相关联:3-QA审批中；1-OPS处理中；0-经理审批中；5-处理完成;',
   `pub_audit` varchar(50) DEFAULT NULL COMMENT '上线审批人',
   `pub_submit_time` varchar(30) NOT NULL COMMENT '发布申请时间',
   `pub_done_time` varchar(30) DEFAULT NULL COMMENT '发布完成时间',
   `pub_operation` varchar(50) DEFAULT NULL COMMENT '上线操作人',
   PRIMARY KEY (`id`),
   UNIQUE KEY `pub_title` (`pub_title`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='模块发布表';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='模块发布表';
