@@ -199,77 +199,102 @@
       <div class="modal-body">
 	<form id="pub_auditForm" class="form-horizontal nice-validator n-yellow Formvalid" novalidate="novalidate">
            <div class="form-group">
-              <label for="pub_title" class="col-sm-2 control-label">主题<span class="red-fonts ">*</span></label>
+              <label for="pub_title" class="col-sm-3 control-label">主题<span class="red-fonts ">*</span></label>
               <div class="col-sm-8">
                   <input id="pub_title_audit" name="pub_title" placeholder="工单主题" type="text" class="form-control" aria-required="true" readonly="readonly">
               </div>
            </div>
            <div class="hr-line-dashed"></div>
-           <div class="form-group"><label class="col-sm-2 control-label">优先级<span class="red-fonts">*</span></label>
+           <div class="form-group"><label class="col-sm-3 control-label">优先级<span class="red-fonts">*</span></label>
               <div class="col-sm-8">
                   <div class="col-sm-2">
                       <div class="radio i-checks">
-                           <label><input type="radio" value="non-emergency" name="pub_level" checked="">一般</label>
+                           <label><input type="radio" id="pub_level_non_emergency" value="non-emergency" name="pub_level">一般</label>
                       </div>
                   </div>
                                     
                   <div class="col-sm-2">
                       <div class="radio i-checks">
-                            <label><input type="radio" value="emergency" name="pub_level">紧急</label>
+                            <label><input type="radio" id="pub_level_emergency" value="emergency" name="pub_level">紧急</label>
                       </div>
                   </div>
               </div>
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group">
-               <label for="pub_module" class="col-sm-2 control-label">发布模块名<span class="red-fonts ">*</span></label>
+               <label for="pub_module" class="col-sm-3 control-label">发布模块名<span class="red-fonts ">*</span></label>
                <div class="col-sm-8">
                    <input id="pub_module_audit" name="pub_module" placeholder="模块名1 ; 模块名2;......" type="text" class="form-control" aria-required="true" readonly="readonly">
                </div>
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group">
-               <label for="pub_content" class="col-sm-2 control-label">发布说明<span class="red-fonts">*</span></label>
+               <label for="pub_content" class="col-sm-3 control-label">发布说明<span class="red-fonts">*</span></label>
                <div class="col-sm-8">
                    <textarea name='pub_content' id='pub_content_audit' class="form-control" rows="10" readonly="readonly"></textarea>
                </div>
            </div> 
            <div class="hr-line-dashed"></div>
            <div class="form-group">
-               <label class="col-sm-2 control-label">是否有SQL<span class="red-fonts">*</span></label>
+               <label class="col-sm-3 control-label">SQL有无<span class="red-fonts">*</span></label>
                <div class="col-sm-8">
-                   <div class="col-sm-2">
+                   <div class="col-sm-3">
                         <div class="radio i-checks">
-                            <label><input type="radio" value="NO" name="pub_SQL" checked="">无 SQL</label>
+                            <label><input type="radio" id="SQL_no" value="NO" name="pub_SQL">无 SQL</label>
                         </div>
                    </div>
                                     
-                   <div class="col-sm-2">
+                   <div class="col-sm-3">
                         <div class="radio i-checks">
-                            <label><input type="radio" value="YES" name="pub_SQL">有 SQL</label>
+                            <label><input type="radio" id="SQL_yes" value="YES" name="pub_SQL">有 SQL</label>
                         </div>
                    </div>
                </div>
            </div>
            <div class="hr-line-dashed"></div>
-           <div class="form-group">
-               <label for="pub_content" class="col-sm-2 control-label">SQL详情</label>
+           <div class="form-group" id='pub_SQL_detail_div'>
+               <label for="pub_content" class="col-sm-3 control-label">SQL详情</label>
                <div class="col-sm-8">
                    <textarea name='pub_SQL_detail' id='pub_SQL_detail_audit' class="form-control" rows="10" readonly="readonly" placeholder="适用于少于SQL少于10行 ; 超过10行请以下面附件的形式上传......"></textarea>
                </div>
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group">
-               <label for="pub_attach" class="col-sm-2 control-label">SQL附件</label>
+               <label for="pub_attach" class="col-sm-3 control-label">SQL附件</label>
                <div class="col-sm-8">
                    <input type="file" name="pub_attach" id="exampleInputFile_audit">
+               </div>
+           </div>
+           <div class="hr-line-dashed"></div>
+           <div class="form-group">
+               <label for="QA_audit" class="col-sm-3 control-label">经理/QA审批意见<span class="red-fonts">*</span></label>
+               <div class="col-sm-8">
+                   <textarea name='QA_audit' id='QA_audit' class="form-control" rows="3"></textarea>
+               </div>
+           </div> 
+           <div class="hr-line-dashed"></div>
+           <div class="form-group">
+               <label class="col-sm-3 control-label">经理/QA审批结果<span class="red-fonts">*</span></label>
+               <div class="col-sm-8">
+                   <div class="col-sm-3">
+                        <div class="radio i-checks">
+                            <label><input type="radio" id="audit_yes" value="YES" name="qa_audit_result">允许发布</label>
+                        </div>
+                   </div>
+                                    
+                   <div class="col-sm-3">
+                        <div class="radio i-checks">
+                            <label><input type="radio" id="audit_no" value="NO" name="qa_audit_result">不允许发布</label>
+                        </div>
+                   </div>
                </div>
            </div>
 	</form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>                                                                         
         <button type="button" class="btn btn-warning del-sure" data-id=''>确认</button>
+	<button class="btn btn-info btn_reset" type="reset">重置</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>                                                                         
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -410,7 +435,31 @@ $("#pub_submit").click(function(){
    return false;
 });
 
-$(document).on('click','.audit_btn',function(){$("#auditModal").modal('show')})
+$(document).on('click','.audit_btn',function(){
+    $("#auditModal").modal('show')
+    var url="/workform/pub_info?id="+$(this).attr('data-id')
+    $.getJSON(url,function(data){
+        $("#pub_title_audit").val(data['pub_title'])
+	if(data['pub_level']=='emergency'){
+	    $("#pub_level_emergency").attr({checked:'checked'})
+	    $("#pub_level_non_emergency").attr('disabled','disabled')
+        }else{
+	    $("#pub_level_non_emergency").attr('checked','checked')
+	    $("#pub_level_emergency").attr({disabled:'disabled'})
+        };
+        $("#pub_module_audit").val(data['pub_module'])
+        $("#pub_content_audit").val(data['pub_content'])
+	if(data['pub_SQL']=='YES'){
+            $("#SQL_yes").attr('checked','checked')
+	    $("#SQL_no").attr('disabled','disabled')
+            $("#pub_SQL_detail_audit").val(data['pub_SQL_detail'])
+        }else{
+	    $("#SQL_no").attr('checked','checked')
+            $("#SQL_yes").attr('disabled','disabled')
+            $("#pub_SQL_detail_div").attr('style','display:none')
+        };
+    })
+})
 
 
 

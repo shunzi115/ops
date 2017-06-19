@@ -75,7 +75,7 @@ def pub_my():
 @app.route("/workform/pub_audit",methods=['GET','POST'])
 def pub_audit():
         if request.method == 'GET':
-                fields_1 = ['id','pub_title','pub_level','pub_module','pub_content','pub_SQL','pub_SQL_detail']
+                fields_1 = ['id','pub_title','pub_level','pub_module','pub_SQL']
                 fields_2 = ['pub_application','pub_status','pub_submit_time']
                 fields = fields_1 + fields_2
 		audit_conditon = {}
@@ -86,6 +86,21 @@ def pub_audit():
                 print "**** pub_my_audit ****"
                 print pub_audit_list
                 return json.dumps({'pub_audit':pub_audit_list})
+
+@app.route("/workform/pub_info",methods=['GET','POST'])
+def pub_info():
+        if request.method == 'GET':
+                fields_1 = ['id','pub_title','pub_level','pub_module','pub_content','pub_SQL','pub_SQL_detail']
+                fields_2 = ['pub_application','pub_status','pub_submit_time']
+                fields = fields_1 + fields_2
+                pub_info_conditon = {}
+                pub_info_conditon['id'] = request.args.get('id',None)
+                pub_info_tuple = mysql_exec.select_sql('publish_online',fields,pub_info_conditon)
+                pub_info_dict = [dict(zip(fields,i)) for i in pub_info_tuple][0]
+                woops_log.log_write('publish').debug('pub_info_dict : %s' % pub_info_dict)
+                print "**** pub_info_dict ****"
+                print pub_info_dict
+                return json.dumps(pub_info_dict)
 
 @app.route("/test",methods=['GET','POST'])
 def test():
