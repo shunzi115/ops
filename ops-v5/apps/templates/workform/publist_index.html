@@ -278,13 +278,13 @@
                <div class="col-sm-8">
                    <div class="col-sm-3">
                         <div class="radio i-checks">
-                            <label><input type="radio" id="audit_yes" value="YES" name="qa_audit_result">允许发布</label>
+                            <label><input type="radio" id="audit_yes" value="YES" name="QA_audit_result" checked='checked'>允许发布</label>
                         </div>
                    </div>
                                     
                    <div class="col-sm-3">
                         <div class="radio i-checks">
-                            <label><input type="radio" id="audit_no" value="NO" name="qa_audit_result">不允许发布</label>
+                            <label><input type="radio" id="audit_no" value="NO" name="QA_audit_result">不允许发布</label>
                         </div>
                    </div>
                </div>
@@ -292,7 +292,7 @@
 	</form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-warning del-sure" data-id=''>确认</button>
+        <button type="button" class="btn btn-warning audit-sure" data-id=''>确认</button>
 	<button class="btn btn-info btn_reset" type="reset">重置</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>                                                                         
       </div>
@@ -329,10 +329,14 @@ $.getJSON("/workform/pub_list",function(data){
           str += '<td class="text-center" style="color:blue">待经理审批...</td>'
       }else if(v['pub_status']== 5){
           str += '<td class="text-center" style="color:green">处理完成</td>'
+      }else if(v['pub_status']== 6){
+          str += '<td class="text-center" style="color:red">经理/QA不同意发布</td>'
+      }else if(v['pub_status']== 7){
+          str += '<td class="text-center" style="color:red">OPS不同意发布</td>'
       };
-      str += '<td class="text-center">'+v['pub_application']+'</td>'
-      str += '<td class="text-center">'+v['pub_audit']+'</td>'
-      str += '<td class="text-center">'+v['pub_operation']+'</td>'
+      str += '<td class="text-center">'+v['pub_application_people']+'</td>'
+      str += '<td class="text-center">'+v['pub_audit_people']+'</td>'
+      str += '<td class="text-center">'+v['pub_operation_people']+'</td>'
       str += '<td class="text-center">'+v['pub_submit_time']+'</td>'
       str += '<td class="text-center">'+v['pub_done_time']+'</td>'
       str += '<td class="text-center">'+'<button class="btn btn-xs btn-primary" data-id="'+v['id']+'">申请详情</button>&nbsp'+'<button class="btn btn-xs btn-info" data-id="'+v['id']+'">发布详情</button>'+'</td>'
@@ -367,10 +371,14 @@ $.getJSON("/workform/pub_my",function(data){
           str += '<td class="text-center" style="color:blue">待经理审批...</td>'
       }else if(v['pub_status']== 5){
           str += '<td class="text-center" style="color:green">处理完成</td>'
+      }else if(v['pub_status']== 6){
+          str += '<td class="text-center" style="color:red">经理/QA不同意发布</td>'
+      }else if(v['pub_status']== 7){
+          str += '<td class="text-center" style="color:red">OPS不同意发布</td>'
       };
-      str += '<td class="text-center">'+v['pub_application']+'</td>'
-      str += '<td class="text-center">'+v['pub_audit']+'</td>'
-      str += '<td class="text-center">'+v['pub_operation']+'</td>'
+      str += '<td class="text-center">'+v['pub_application_people']+'</td>'
+      str += '<td class="text-center">'+v['pub_audit_people']+'</td>'
+      str += '<td class="text-center">'+v['pub_operation_people']+'</td>'
       str += '<td class="text-center">'+v['pub_submit_time']+'</td>'
       str += '<td class="text-center">'+v['pub_done_time']+'</td>'
       str += '<td class="text-center">'+'<button class="btn btn-xs btn-primary" data-id="'+v['id']+'">编辑</button>&nbsp'+'<button class="btn btn-xs btn-success" data-id="'+v['id']+'">申请详情</button>&nbsp'+'<button class="btn btn-xs btn-info" data-id="'+v['id']+'">发布详情</button>&nbsp'+'<button class="btn btn-xs btn-warning" data-id="'+v['id']+'">回滚</button>'+'</td>'
@@ -405,8 +413,12 @@ $.getJSON("/workform/pub_audit",function(data){
           str += '<td class="text-center" style="color:blue">待经理审批...</td>'
       }else if(v['pub_status']== 5){
           str += '<td class="text-center" style="color:green">处理完成</td>'
+      }else if(v['pub_status']== 6){
+          str += '<td class="text-center" style="color:red">经理/QA不同意发布</td>'
+      }else if(v['pub_status']== 7){
+          str += '<td class="text-center" style="color:red">OPS不同意发布</td>'
       };
-      str += '<td class="text-center">'+v['pub_application']+'</td>'
+      str += '<td class="text-center">'+v['pub_application_people']+'</td>'
       str += '<td class="text-center">'+v['pub_submit_time']+'</td>'
       str += '<td class="text-center"><button class="btn btn-xs btn-primary audit_btn" data-id="'+v['id']+'">审批</button></td>'
       str += '</tr>'
@@ -437,7 +449,9 @@ $("#pub_submit").click(function(){
 
 $(document).on('click','.audit_btn',function(){
     $("#auditModal").modal('show')
-    var url="/workform/pub_info?id="+$(this).attr('data-id')
+    var id=$(this).attr('data-id')
+    var url="/workform/pub_info?id="+id
+    $(".audit-sure").attr('data-id',id)
     $.getJSON(url,function(data){
         $("#pub_title_audit").val(data['pub_title'])
 	if(data['pub_level']=='emergency'){
@@ -462,7 +476,30 @@ $(document).on('click','.audit_btn',function(){
 })
 
 
-
+$(".audit-sure").click(function(){
+   var id=$(this).attr('data-id')
+   var QA_audit=$("#QA_audit").val()
+   var QA_audit_result=$('input:radio[name="QA_audit_result"]:checked').val()
+   var str='id='+id+'&QA_audit='+QA_audit+'&QA_audit_result='+QA_audit_result
+   console.log(str)
+   $.post('/workform/pub_audit',str,function(data){
+      data=JSON.parse(data)
+      if(data['result']==0){
+           swal({
+              title:"Good",
+              text:'Audit Success',
+              type:'success',
+              confirmButtonText:"确定"
+              },
+              function(){
+              location.reload()
+           })
+         }else{
+          swal("OH,My God",data['msg'],'error')
+        }
+   });
+   return false;
+})
 
 
 
