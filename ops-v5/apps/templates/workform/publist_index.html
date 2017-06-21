@@ -12,7 +12,9 @@
       </li>
       <li role="presentation" class="active"><a href="#publish_list" role="tab" id="pub_list-tab" data-toggle="tab" aria-controls="publish_list" aria-expanded="true">发布历史</a></li>
       <li role="presentation" class=""><a href="#publish_my" role="tab" id="pub_my-tab" data-toggle="tab" aria-controls="publish_my" aria-expanded="false">我的发布</a></li>
+      {% if session.role == 0 or session.role == 1 or session.role == 3 %}
       <li role="presentation" class=""><a href="#publish_audit" role="tab" id="pub_audit-tab" data-toggle="tab" aria-controls="publish_audit" aria-expanded="false">发布审批</a></li>
+      {% endif %}
     </ul>
     <div id="myTabContent" class="tab-content">
       <div role="tabpanel" class="tab-pane fade" id="publish_application" aria-labelledby="home-tab">
@@ -130,7 +132,7 @@
                 <th class="text-center">状态</th>
                 <th class="text-center">申请人</th>
                 <th class="text-center">审批人</th>
-                <th class="text-center">操作人</th>
+                <th class="text-center">上线人</th>
                 <th class="text-center">申请时间</th>
                 <th class="text-center">完成时间</th>
                 <th class="text-center">详情</th>
@@ -153,8 +155,9 @@
                 <th class="text-center">状态</th>
                 <th class="text-center">申请人</th>
                 <th class="text-center">审批人</th>
-                <th class="text-center">操作人</th>
+                <th class="text-center">上线人</th>
                 <th class="text-center">申请时间</th>
+                <th class="text-center">审批时间</th>
                 <th class="text-center">完成时间</th>
                 <th class="text-center">操作</th>
              </tr>
@@ -177,6 +180,10 @@
                 <th class="text-center">状态</th>
                 <th class="text-center">申请人</th>
                 <th class="text-center">申请时间</th>
+		{% if session.role == 1 %}
+		<th class="text-center">审批人</th>
+                <th class="text-center">审批时间</th>
+		{% endif %}
                 <th class="text-center">操作</th>
              </tr>
           </thead>
@@ -278,21 +285,51 @@
                <div class="col-sm-8">
                    <div class="col-sm-3">
                         <div class="radio i-checks">
-                            <label><input type="radio" id="audit_yes" value="YES" name="QA_audit_result" checked='checked'>允许发布</label>
+                            <label><input type="radio" id="QA_audit_yes" value="YES" name="QA_audit_result" checked='checked'>允许发布</label>
                         </div>
                    </div>
                                     
                    <div class="col-sm-3">
                         <div class="radio i-checks">
-                            <label><input type="radio" id="audit_no" value="NO" name="QA_audit_result">不允许发布</label>
+                            <label><input type="radio" id="QA_audit_no" value="NO" name="QA_audit_result">不允许发布</label>
                         </div>
                    </div>
                </div>
            </div>
+	   {% if session.role == 1 %}
+	   <div class="hr-line-dashed"></div>
+           <div class="form-group">
+               <label for="OPS_audit" class="col-sm-3 control-label">OPS 发布备注<span class="red-fonts">*</span></label>
+               <div class="col-sm-8">
+                   <textarea name='OPS_audit' id='OPS_audit' class="form-control" rows="3"></textarea>
+               </div>
+           </div>
+           <div class="hr-line-dashed"></div>
+           <div class="form-group">
+               <label class="col-sm-3 control-label">OPS 发布结果<span class="red-fonts">*</span></label>
+               <div class="col-sm-8">
+                   <div class="col-sm-3">
+                        <div class="radio i-checks">
+                            <label><input type="radio" id="OPS_pub_ok" value="YES" name="OPS_pub_result" checked=''>发布正常</label>
+                        </div>
+                   </div>
+
+                   <div class="col-sm-3">
+                        <div class="radio i-checks">
+                            <label><input type="radio" id="OPS_pub_fail" value="NO" name="OPS_pub_result">发布异常</label>
+                        </div>
+                   </div>
+               </div>
+           </div>
+	   {% endif %}
 	</form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-warning audit-sure" data-id=''>确认</button>
+	{% if session.role == 1 %}
+        <button type="button" class="btn btn-warning ops-audit-sure" data-id=''>确认</button>
+	{% else %}
+        <button type="button" class="btn btn-warning qa-audit-sure" data-id=''>确认</button>
+	{% endif %}
 	<button class="btn btn-info btn_reset" type="reset">重置</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>                                                                         
       </div>
@@ -332,7 +369,7 @@ $.getJSON("/workform/pub_list",function(data){
       }else if(v['pub_status']== 6){
           str += '<td class="text-center" style="color:red">经理/QA不同意发布</td>'
       }else if(v['pub_status']== 7){
-          str += '<td class="text-center" style="color:red">OPS不同意发布</td>'
+          str += '<td class="text-center" style="color:red">OPS发布异常</td>'
       };
       str += '<td class="text-center">'+v['pub_application_people']+'</td>'
       str += '<td class="text-center">'+v['pub_audit_people']+'</td>'
@@ -374,12 +411,13 @@ $.getJSON("/workform/pub_my",function(data){
       }else if(v['pub_status']== 6){
           str += '<td class="text-center" style="color:red">经理/QA不同意发布</td>'
       }else if(v['pub_status']== 7){
-          str += '<td class="text-center" style="color:red">OPS不同意发布</td>'
+          str += '<td class="text-center" style="color:red">OPS发布异常</td>'
       };
       str += '<td class="text-center">'+v['pub_application_people']+'</td>'
       str += '<td class="text-center">'+v['pub_audit_people']+'</td>'
       str += '<td class="text-center">'+v['pub_operation_people']+'</td>'
       str += '<td class="text-center">'+v['pub_submit_time']+'</td>'
+      str += '<td class="text-center">'+v['audit_time']+'</td>'
       str += '<td class="text-center">'+v['pub_done_time']+'</td>'
       str += '<td class="text-center">'+'<button class="btn btn-xs btn-primary" data-id="'+v['id']+'">编辑</button>&nbsp'+'<button class="btn btn-xs btn-success" data-id="'+v['id']+'">申请详情</button>&nbsp'+'<button class="btn btn-xs btn-info" data-id="'+v['id']+'">发布详情</button>&nbsp'+'<button class="btn btn-xs btn-warning" data-id="'+v['id']+'">回滚</button>'+'</td>'
       str += '</tr>'      
@@ -411,16 +449,16 @@ $.getJSON("/workform/pub_audit",function(data){
           str += '<td class="text-center" style="color:blue">待 OPS 处理...</td>'
       }else if(v['pub_status']== 0){
           str += '<td class="text-center" style="color:blue">待经理审批...</td>'
-      }else if(v['pub_status']== 5){
-          str += '<td class="text-center" style="color:green">处理完成</td>'
-      }else if(v['pub_status']== 6){
-          str += '<td class="text-center" style="color:red">经理/QA不同意发布</td>'
-      }else if(v['pub_status']== 7){
-          str += '<td class="text-center" style="color:red">OPS不同意发布</td>'
       };
       str += '<td class="text-center">'+v['pub_application_people']+'</td>'
       str += '<td class="text-center">'+v['pub_submit_time']+'</td>'
-      str += '<td class="text-center"><button class="btn btn-xs btn-primary audit_btn" data-id="'+v['id']+'">审批</button></td>'
+      if(v['pub_status']== 3 || v['pub_status']== 0){
+         str += '<td class="text-center"><button class="btn btn-xs btn-primary QA_audit_btn" data-id="'+v['id']+'">经理/QA审批</button></td>'
+      }else if(v['pub_status']== 1){
+	 str += '<td class="text-center">'+v['pub_audit_people']+'</td>'
+         str += '<td class="text-center">'+v['audit_time']+'</td>'
+	 str += '<td class="text-center"><button class="btn btn-xs btn-primary OPS_audit_btn" data-id="'+v['id']+'">OPS审批</button></td>'
+      };
       str += '</tr>'
    });
    $("#audit_tbody").html(str)
@@ -447,11 +485,11 @@ $("#pub_submit").click(function(){
    return false;
 });
 
-$(document).on('click','.audit_btn',function(){
+$(document).on('click','.QA_audit_btn',function(){
     $("#auditModal").modal('show')
     var id=$(this).attr('data-id')
     var url="/workform/pub_info?id="+id
-    $(".audit-sure").attr('data-id',id)
+    $(".qa-audit-sure").attr('data-id',id)
     $.getJSON(url,function(data){
         $("#pub_title_audit").val(data['pub_title'])
 	if(data['pub_level']=='emergency'){
@@ -475,8 +513,7 @@ $(document).on('click','.audit_btn',function(){
     })
 })
 
-
-$(".audit-sure").click(function(){
+$(".qa-audit-sure").click(function(){
    var id=$(this).attr('data-id')
    var QA_audit=$("#QA_audit").val()
    var QA_audit_result=$('input:radio[name="QA_audit_result"]:checked').val()
@@ -501,9 +538,66 @@ $(".audit-sure").click(function(){
    return false;
 })
 
+$(document).on('click','.OPS_audit_btn',function(){
+    $("#auditModal").modal('show')
+    var id=$(this).attr('data-id')
+    var url="/workform/pub_info?id="+id
+    $(".ops-audit-sure").attr('data-id',id)
+    $.getJSON(url,function(data){
+        $("#pub_title_audit").val(data['pub_title'])
+        if(data['pub_level']=='emergency'){
+            $("#pub_level_emergency").attr({checked:'checked'})
+            $("#pub_level_non_emergency").attr('disabled','disabled')
+        }else{
+            $("#pub_level_non_emergency").attr('checked','checked')
+            $("#pub_level_emergency").attr({disabled:'disabled'})
+        };
+        $("#pub_module_audit").val(data['pub_module'])
+        $("#pub_content_audit").val(data['pub_content'])
+        if(data['pub_SQL']=='YES'){
+            $("#SQL_yes").attr('checked','checked')
+            $("#SQL_no").attr('disabled','disabled')
+            $("#pub_SQL_detail_audit").val(data['pub_SQL_detail'])
+        }else{
+            $("#SQL_no").attr('checked','checked')
+            $("#SQL_yes").attr('disabled','disabled')
+            $("#pub_SQL_detail_div").attr('style','display:none')
+        };
+	$("#QA_audit").val(data['QA_audit'])
+	if(data['QA_audit_result']=='YES'){
+            $("#QA_audit_yes").attr('checked','checked')
+            $("#QA_audit_no").attr('disabled','disabled')
+        }else{
+            $("#QA_audit_no").attr('checked','checked')
+            $("#QA_audit_yes").attr('disabled','disabled')
+        };
+    })
+})
 
-
-
+$(".ops-audit-sure").click(function(){
+   var id=$(this).attr('data-id')
+   var OPS_audit=$("#OPS_audit").val()
+   var OPS_pub_result=$('input:radio[name="OPS_pub_result"]:checked').val()
+   var str='id='+id+'&OPS_audit='+OPS_audit+'&OPS_pub_result='+OPS_pub_result
+   console.log(str)
+   $.post('/workform/pub_audit',str,function(data){
+      data=JSON.parse(data)
+      if(data['result']==0){
+           swal({
+              title:"Good",
+              text:'Audit Success',
+              type:'success',
+              confirmButtonText:"确定"
+              },
+              function(){
+              location.reload()
+           })
+         }else{
+          swal("OH,My God",data['msg'],'error')
+        }
+   });
+   return false;
+})
 
 </script>
 {% endblock %}

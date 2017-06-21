@@ -60,8 +60,8 @@ def pub_list():
 @app.route("/workform/pub_my",methods=['GET','POST'])
 def pub_my():
 	if request.method == 'GET':
-       		fields_1 = ['id','pub_title','pub_level','pub_module','pub_content','pub_SQL','pub_SQL_detail']
-        	fields_2 = ['pub_application_people','pub_status','pub_audit_people','pub_submit_time','pub_done_time','pub_operation_people']
+       		fields_1 = ['id','pub_title','pub_level','pub_module','pub_content','pub_SQL','pub_SQL_detail','pub_application_people']
+        	fields_2 = ['pub_status','pub_audit_people','pub_submit_time','audit_time','pub_done_time','pub_operation_people']
         	fields = fields_1 + fields_2
 		my_conditon = {}
 		my_conditon['pub_application_people'] = session.get('login_name',None)
@@ -75,8 +75,8 @@ def pub_my():
 @app.route("/workform/pub_audit",methods=['GET','POST'])
 def pub_audit():
         if request.method == 'GET':
-                fields_1 = ['id','pub_title','pub_level','pub_module','pub_SQL']
-                fields_2 = ['pub_application_people','pub_status','pub_submit_time']
+                fields_1 = ['id','pub_title','pub_level','pub_module','pub_SQL','pub_application_people']
+                fields_2 = ['pub_status','pub_submit_time','pub_audit_people','audit_time']
                 fields = fields_1 + fields_2
 		audit_conditon = {}
 		audit_conditon['pub_status'] = session.get('role',None)
@@ -89,21 +89,30 @@ def pub_audit():
 	if request.method == 'POST':
 		audit_msg_condation = {}
 		audit_msg =  dict((i,j[0]) for i,j in dict(request.form).items())
-		audit_msg['pub_audit_people'] = session.get('login_name',None)
-		if not audit_msg['pub_audit_people']:
-			return json.dumps({'result':1,'msg':'Please log in again...'})
-		print "**** audit_msg ****"
-		print audit_msg
 		audit_msg_condation['id'] = audit_msg.get('id',None)
 		if not audit_msg_condation['id']:
                         return json.dumps({'result':1,'msg':'Please contact the OPS...'})
 		del audit_msg['id']
-		if audit_msg['QA_audit_result'] == 'YES':
-			audit_msg['pub_status'] = '1'
-			audit_msg['audit_time'] = datetime.now().strftime("%Y-%m-%d %X")
-		else:
-			audit_msg['pub_status'] = '6'
-			audit_msg['pub_done_time'] = datetime.now().strftime("%Y-%m-%d %X")
+		if session['role'] == 0 or session['role'] == 3:
+			audit_msg['pub_audit_people'] = session.get('login_name',None)
+			if not audit_msg['pub_audit_people']:
+				return json.dumps({'result':1,'msg':'Please log in again...'})
+			if audit_msg['QA_audit_result'] == 'YES':
+				audit_msg['pub_status'] = '1'
+				audit_msg['audit_time'] = datetime.now().strftime("%Y-%m-%d %X")
+			else:
+				audit_msg['pub_status'] = '6'
+				audit_msg['pub_done_time'] = datetime.now().strftime("%Y-%m-%d %X")
+		elif session['role'] == 1:
+			audit_msg['pub_operation_people'] = session.get('login_name',None)
+                        if not audit_msg['pub_operation_people']:
+                                return json.dumps({'result':1,'msg':'Please log in again...'})
+                        if audit_msg['OPS_pub_result'] == 'YES':
+                                audit_msg['pub_status'] = '5'
+                                audit_msg['pub_done_time'] = datetime.now().strftime("%Y-%m-%d %X")
+                        else:
+                                audit_msg['pub_status'] = '7'
+                                audit_msg['pub_done_time'] = datetime.now().strftime("%Y-%m-%d %X")
 		mysql_exec.update_sql('publish_online',audit_msg,audit_msg_condation)
 		return json.dumps({'result':0,'msg':'ok'})
 
@@ -111,7 +120,7 @@ def pub_audit():
 def pub_info():
         if request.method == 'GET':
                 fields_1 = ['id','pub_title','pub_level','pub_module','pub_content','pub_SQL','pub_SQL_detail']
-                fields_2 = ['pub_application_people','pub_status','pub_submit_time']
+                fields_2 = ['pub_application_people','pub_status','pub_submit_time','QA_audit','QA_audit_result']
                 fields = fields_1 + fields_2
                 pub_info_conditon = {}
                 pub_info_conditon['id'] = request.args.get('id',None)
