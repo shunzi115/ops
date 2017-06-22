@@ -99,7 +99,7 @@ CREATE TABLE `publish_online` (
   `pub_SQL` varchar(10) NOT NULL COMMENT '是否有SQL',
   `pub_SQL_detail` varchar(1000) DEFAULT NULL COMMENT 'SQL详情',
   `pub_application_people` varchar(50) NOT NULL COMMENT '申请人',
-  `pub_status` tinyint(2) NOT NULL COMMENT '状态-跟用户表角色相关联:3-QA审批中；1-OPS处理中；0-经理审批中；5-处理完成；6-经理/QA不同意发布；7-OPS不同意发布;',
+  `pub_status` tinyint(2) NOT NULL COMMENT '状态-跟用户表角色相关联:3-QA审批中；1-OPS处理中；0-经理审批中；5-处理完成；6-经理/QA不同意发布；7-OPS发布异常;',
   `pub_audit_people` varchar(50) DEFAULT NULL COMMENT '上线审批人',
   `pub_submit_time` varchar(30) NOT NULL COMMENT '发布申请时间',
   `pub_done_time` varchar(30) DEFAULT NULL COMMENT '发布完成时间',
@@ -107,6 +107,8 @@ CREATE TABLE `publish_online` (
   `QA_audit` varchar(1000) DEFAULT NULL COMMENT '经理/QA审批意见',
   `QA_audit_result` varchar(10) DEFAULT NULL COMMENT '经理/QA审批结果',
   `audit_time` varchar(30) DEFAULT NULL COMMENT '经理/QA审批时间',
+  `OPS_audit` varchar(1000) DEFAULT NULL COMMENT 'OPS发布备注',
+  `OPS_pub_result` varchar(10) DEFAULT NULL COMMENT 'OPS发布结果',
   PRIMARY KEY (`id`),
   UNIQUE KEY `pub_title` (`pub_title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='模块发布表';

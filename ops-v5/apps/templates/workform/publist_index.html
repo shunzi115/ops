@@ -64,7 +64,8 @@
                             <div class="form-group">
                                     <label for="pub_module" class="col-sm-2 control-label">发布模块名<span class="red-fonts ">*</span></label>
                                 <div class="col-sm-8">
-                                    <input id="pub_module" name="pub_module" placeholder="模块名1 ; 模块名2;......" type="text" class="form-control" aria-required="true">
+				    <select name="pub_module" id="pub_module" multiple="multiple" class="form-control">
+                                    </select>
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
@@ -340,6 +341,31 @@
 
 
 <script>
+
+$.getJSON("/workform/pub_add",function(data){
+   data=data['module_name']
+   console.log(data)
+   var str=''
+   $.each(data,function(k,v){
+      str += '<option value="'+v["app_name"]+'">'+v["app_name"]+'</option>'
+   });
+   console.log(str)
+   $("#pub_module").append(str)
+});
+
+$(document).on('click','#pub_add-tab',function(){
+  $("#pub_module").multiselect({
+     enableFiltering: true,
+     maxHeight: 200,
+     buttonWidth: '100%',
+     numberDisplayed: 6,
+     nonSelectedText: '请选择模块名称',
+     delimiterText: ' ; ',
+     selectedClass: 'multiselect-selected',
+     enableCaseInsensitiveFiltering: true,
+  });
+});
+
 $.getJSON("/workform/pub_list",function(data){
    console.log(data)
    data = data['pub_info']

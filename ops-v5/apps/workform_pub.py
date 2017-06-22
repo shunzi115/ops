@@ -13,10 +13,17 @@ from utils import woops_log,mysql_exec
 def publish():
 	return render_template("/workform/publist_index.html")
 
-@app.route("/workform/pub_add",methods=['POST'])
+@app.route("/workform/pub_add",methods=['GET','POST'])
 def pub_add():
+	if request.method == 'GET':
+		fields = ['app_name']
+		module_name_tuple = mysql_exec.select_sql('cmdb_online',fields)
+		module_name_list = [dict(zip(fields,i)) for i in module_name_tuple]
+		woops_log.log_write('publish').debug('module_name_list : %s' % module_name_list)
+		return json.dumps({'module_name':module_name_list})
+
 	if request.method == 'POST':
-		pub_info = dict((i,j[0]) for i,j in dict(request.form).items())
+		pub_info = dict((i,' ; '.join(j)) for i,j in dict(request.form).items())
 		print "**** pub_info ****"
 		print pub_info
 		woops_log.log_write('publish').debug('pub_info:%s' % pub_info)
