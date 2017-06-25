@@ -109,6 +109,7 @@ def pub_audit():
 				audit_msg['audit_time'] = datetime.now().strftime("%Y-%m-%d %X")
 			else:
 				audit_msg['pub_status'] = '6'
+				audit_msg['audit_time'] = datetime.now().strftime("%Y-%m-%d %X")
 				audit_msg['pub_done_time'] = datetime.now().strftime("%Y-%m-%d %X")
 		elif session['role'] == 1:
 			audit_msg['pub_operation_people'] = session.get('login_name',None)
@@ -126,8 +127,8 @@ def pub_audit():
 @app.route("/workform/pub_info",methods=['GET','POST'])
 def pub_info():
         if request.method == 'GET':
-                fields_1 = ['id','pub_title','pub_level','pub_module','pub_content','pub_SQL','pub_SQL_detail']
-                fields_2 = ['pub_application_people','pub_status','pub_submit_time','QA_audit','QA_audit_result']
+                fields_1 = ['id','pub_title','pub_level','pub_module','pub_content','pub_SQL','pub_SQL_detail','pub_application_people']
+                fields_2 = ['pub_status','pub_submit_time','QA_audit','QA_audit_result','OPS_audit','OPS_pub_result']
                 fields = fields_1 + fields_2
                 pub_info_conditon = {}
                 pub_info_conditon['id'] = request.args.get('id',None)
