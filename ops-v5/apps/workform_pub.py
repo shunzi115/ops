@@ -39,7 +39,7 @@ def pub_add():
 			msg = 'Please choose correct if there were any SQL'
                         woops_log.log_write('publish').error(msg)
                         return json.dumps({'result':1,'msg':msg})
-		if pub_info['pub_level'].strip('') == 'emergency':
+		if pub_info['pub_level'].strip('') == 'emergency' or pub_info['workform_type'].strip('') == 'rollback':
 			pub_info['pub_status'] = '0'
 		else:
 			pub_info['pub_status'] = '3'
@@ -54,7 +54,7 @@ def pub_add():
 
 @app.route("/workform/pub_list",methods=['GET'])
 def pub_list():
-	fields_1 = ['id','pub_title','pub_level','pub_module','pub_content','pub_SQL','pub_SQL_detail']
+	fields_1 = ['id','pub_title','workform_type','pub_level','pub_module','pub_content','pub_SQL','pub_SQL_detail']
 	fields_2 = ['pub_application_people','pub_status','pub_audit_people','pub_submit_time','pub_done_time','pub_operation_people']
 	fields = fields_1 + fields_2
 	pub_info_tuple = mysql_exec.select_sql('publish_online',fields)
@@ -68,7 +68,7 @@ def pub_list():
 def pub_my():
 	if request.method == 'GET':
        		fields_1 = ['id','pub_title','pub_level','pub_module','pub_content','pub_SQL','pub_SQL_detail','pub_application_people']
-        	fields_2 = ['pub_status','pub_audit_people','pub_submit_time','audit_time','pub_done_time','pub_operation_people']
+        	fields_2 = ['workform_type','pub_status','pub_audit_people','pub_submit_time','audit_time','pub_done_time','pub_operation_people']
         	fields = fields_1 + fields_2
 		my_conditon = {}
 		my_conditon['pub_application_people'] = session.get('login_name',None)
@@ -83,7 +83,7 @@ def pub_my():
 def pub_audit():
         if request.method == 'GET':
                 fields_1 = ['id','pub_title','pub_level','pub_module','pub_SQL','pub_application_people']
-                fields_2 = ['pub_status','pub_submit_time','pub_audit_people','audit_time']
+                fields_2 = ['workform_type','pub_status','pub_submit_time','pub_audit_people','audit_time']
                 fields = fields_1 + fields_2
 		audit_conditon = {}
 		audit_conditon['pub_status'] = session.get('role',None)
@@ -128,7 +128,7 @@ def pub_audit():
 def pub_info():
         if request.method == 'GET':
                 fields_1 = ['id','pub_title','pub_level','pub_module','pub_content','pub_SQL','pub_SQL_detail','pub_application_people']
-                fields_2 = ['pub_status','pub_submit_time','QA_audit','QA_audit_result','OPS_audit','OPS_pub_result']
+                fields_2 = ['workform_type','pub_status','pub_submit_time','QA_audit','QA_audit_result','OPS_audit','OPS_pub_result']
                 fields = fields_1 + fields_2
                 pub_info_conditon = {}
                 pub_info_conditon['id'] = request.args.get('id',None)

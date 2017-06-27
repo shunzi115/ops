@@ -8,12 +8,13 @@
 
 <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
     <ul id="myTabs" class="nav nav-tabs" role="tablist">
-      <li role="presentation" class=""><a href="#publish_application" id="pub_add-tab" role="tab" data-toggle="tab" aria-controls="publish_application" aria-expanded="false">发布申请</a>
+      <li role="presentation" class="">
+          <a href="#publish_application" id="pub_add-tab" role="tab" data-toggle="tab" aria-controls="publish_application" aria-expanded="false">发布 / 回滚申请</a>
       </li>
-      <li role="presentation" class="active"><a href="#publish_list" role="tab" id="pub_list-tab" data-toggle="tab" aria-controls="publish_list" aria-expanded="true">发布历史</a></li>
-      <li role="presentation" class=""><a href="#publish_my" role="tab" id="pub_my-tab" data-toggle="tab" aria-controls="publish_my" aria-expanded="false">我的发布</a></li>
+      <li role="presentation" class="active"><a href="#publish_list" role="tab" id="pub_list-tab" data-toggle="tab" aria-controls="publish_list" aria-expanded="true">发布 / 回滚历史</a></li>
+      <li role="presentation" class=""><a href="#publish_my" role="tab" id="pub_my-tab" data-toggle="tab" aria-controls="publish_my" aria-expanded="false">我的发布 / 回滚</a></li>
       {% if session.role == 0 or session.role == 1 or session.role == 3 %}
-      <li role="presentation" class=""><a href="#publish_audit" role="tab" id="pub_audit-tab" data-toggle="tab" aria-controls="publish_audit" aria-expanded="false">发布审批</a></li>
+      <li role="presentation" class=""><a href="#publish_audit" role="tab" id="pub_audit-tab" data-toggle="tab" aria-controls="publish_audit" aria-expanded="false">审批</a></li>
       {% endif %}
     </ul>
     <div id="myTabContent" class="tab-content">
@@ -139,10 +140,11 @@
 
       <div role="tabpanel" class="tab-pane fade active in" id="publish_list" aria-labelledby="profile-tab">
 	<br>
-	<table class="table table-striped table-bordered">
+	<table id="list_table" class="table table-striped table-bordered">
           <thead>
              <tr>
                 <th class="text-center">主题</th>
+                <th class="text-center">类型</th>
                 <th class="text-center">优先级</th>
                 <th class="text-center">模块名</th>
                 <th class="text-center">SQL有无</th>
@@ -162,10 +164,11 @@
 
       <div role="tabpanel" class="tab-pane fade" id="publish_my" aria-labelledby="profile-tab">
 	<br>
-        <table class="table table-striped table-bordered">
+        <table id="my_table" class="table table-striped table-bordered">
           <thead>
              <tr>
                 <th class="text-center">主题</th>
+                <th class="text-center">类型</th>
                 <th class="text-center">优先级</th>
                 <th class="text-center">模块名</th>
                 <th class="text-center">SQL有无</th>
@@ -187,10 +190,11 @@
 
       <div role="tabpanel" class="tab-pane fade" id="publish_audit" aria-labelledby="profile-tab">
         <br>
-        <table class="table table-striped table-bordered">
+        <table id="audit_table" class="table table-striped table-bordered">
           <thead>
              <tr>
                 <th class="text-center">主题</th>
+                <th class="text-center">类型</th>
                 <th class="text-center">优先级</th>
                 <th class="text-center">模块名</th>
                 <th class="text-center">SQL有无</th>
@@ -228,6 +232,21 @@
                   <input id="pub_title_audit" name="pub_title" placeholder="工单主题" type="text" class="form-control" aria-required="true" readonly="readonly">
               </div>
            </div>
+	   <div class="hr-line-dashed"></div>
+           <div class="form-group"><label class="col-sm-3 control-label">类型<span class="red-fonts">*</span></label>
+              <div class="col-sm-8">
+                  <div class="col-sm-2">
+                        <div class="radio i-checks">
+                            <label><input type="radio" id="workform_type_publish" value="publish" name="workform_type">发布</label>
+                        </div>
+                  </div>                   
+                  <div class="col-sm-2">
+                        <div class="radio i-checks">
+                            <label><input type="radio" id="workform_type_rollback" value="rollback" name="workform_type">回滚</label>
+                        </div>
+                  </div>
+               </div>
+           </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group"><label class="col-sm-3 control-label">优先级<span class="red-fonts">*</span></label>
               <div class="col-sm-8">
@@ -246,14 +265,14 @@
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group">
-               <label for="pub_module" class="col-sm-3 control-label">发布模块名<span class="red-fonts ">*</span></label>
+               <label for="pub_module" class="col-sm-3 control-label">模块名<span class="red-fonts ">*</span></label>
                <div class="col-sm-8">
                    <input id="pub_module_audit" name="pub_module" type="text" class="form-control" aria-required="true" readonly="readonly">
                </div>
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group">
-               <label for="pub_content" class="col-sm-3 control-label">发布说明<span class="red-fonts">*</span></label>
+               <label for="pub_content" class="col-sm-3 control-label">说明<span class="red-fonts">*</span></label>
                <div class="col-sm-8">
                    <textarea name='pub_content' id='pub_content_audit' class="form-control" rows="5" readonly="readonly"></textarea>
                </div>
@@ -302,13 +321,13 @@
                <div class="col-sm-8">
                    <div class="col-sm-3">
                         <div class="radio i-checks">
-                            <label><input type="radio" id="QA_audit_yes" value="YES" name="QA_audit_result" checked='checked'>允许发布</label>
+                            <label><input type="radio" id="QA_audit_yes" value="YES" name="QA_audit_result" checked='checked'>允许</label>
                         </div>
                    </div>
                                     
                    <div class="col-sm-3">
                         <div class="radio i-checks">
-                            <label><input type="radio" id="QA_audit_no" value="NO" name="QA_audit_result">不允许发布</label>
+                            <label><input type="radio" id="QA_audit_no" value="NO" name="QA_audit_result">不允许</label>
                         </div>
                    </div>
                </div>
@@ -316,24 +335,24 @@
 	   {% if session.role == 1 %}
 	   <div class="hr-line-dashed"></div>
            <div class="form-group">
-               <label for="OPS_audit" class="col-sm-3 control-label">OPS 发布备注<span class="red-fonts">*</span></label>
+               <label for="OPS_audit" class="col-sm-3 control-label">OPS 备注<span class="red-fonts">*</span></label>
                <div class="col-sm-8">
                    <textarea name='OPS_audit' id='OPS_audit' class="form-control" rows="3"></textarea>
                </div>
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group">
-               <label class="col-sm-3 control-label">OPS 发布结果<span class="red-fonts">*</span></label>
+               <label class="col-sm-3 control-label">OPS 操作结果<span class="red-fonts">*</span></label>
                <div class="col-sm-8">
                    <div class="col-sm-3">
                         <div class="radio i-checks">
-                            <label><input type="radio" id="OPS_pub_ok" value="YES" name="OPS_pub_result" checked=''>发布正常</label>
+                            <label><input type="radio" id="OPS_pub_ok" value="YES" name="OPS_pub_result" checked=''>正常</label>
                         </div>
                    </div>
 
                    <div class="col-sm-3">
                         <div class="radio i-checks">
-                            <label><input type="radio" id="OPS_pub_fail" value="NO" name="OPS_pub_result">发布异常</label>
+                            <label><input type="radio" id="OPS_pub_fail" value="NO" name="OPS_pub_result">有异常</label>
                         </div>
                    </div>
                </div>
@@ -371,6 +390,21 @@
                   <input id="pub_title_detail" name="pub_title" placeholder="工单主题" type="text" class="form-control" aria-required="true" readonly="readonly">
               </div>
            </div>
+	   <div class="hr-line-dashed"></div>
+           <div class="form-group"><label class="col-sm-3 control-label">类型<span class="red-fonts">*</span></label>
+              <div class="col-sm-8">
+                  <div class="col-sm-2">
+                        <div class="radio i-checks">
+                            <label><input type="radio" id="workform_type_publish_detail" value="publish" name="workform_type">发布</label>
+                        </div>
+                  </div>
+                  <div class="col-sm-2">
+                        <div class="radio i-checks">
+                            <label><input type="radio" id="workform_type_rollback_detail" value="rollback" name="workform_type">回滚</label>
+                        </div>
+                  </div>
+               </div>
+           </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group"><label class="col-sm-3 control-label">优先级<span class="red-fonts">*</span></label>
               <div class="col-sm-8">
@@ -389,14 +423,14 @@
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group">
-               <label for="pub_module" class="col-sm-3 control-label">发布模块名<span class="red-fonts ">*</span></label>
+               <label for="pub_module" class="col-sm-3 control-label">模块名<span class="red-fonts ">*</span></label>
                <div class="col-sm-8">
                    <input id="pub_module_detail" name="pub_module" type="text" class="form-control" aria-required="true" readonly="readonly">
                </div>
            </div>
 	   <div class="hr-line-dashed"></div>
            <div class="form-group">
-               <label for="pub_content" class="col-sm-3 control-label">发布说明<span class="red-fonts">*</span></label>
+               <label for="pub_content" class="col-sm-3 control-label">说明<span class="red-fonts">*</span></label>
                <div class="col-sm-8">
                    <textarea name='pub_content' id='pub_content_detail' class="form-control" rows="5" readonly="readonly"></textarea>
                </div>
@@ -445,37 +479,37 @@
                <div class="col-sm-8">
                    <div class="col-sm-3">
                         <div class="radio i-checks">
-                            <label><input type="radio" id="QA_audit_yes_detail" value="YES" name="QA_audit_result">允许发布</label>
+                            <label><input type="radio" id="QA_audit_yes_detail" value="YES" name="QA_audit_result">允许</label>
                         </div>
                    </div>
                                     
                    <div class="col-sm-3">
                         <div class="radio i-checks">
-                            <label><input type="radio" id="QA_audit_no_detail" value="NO" name="QA_audit_result">不允许发布</label>
+                            <label><input type="radio" id="QA_audit_no_detail" value="NO" name="QA_audit_result">不允许</label>
                         </div>
                    </div>
                </div>
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group" id="OPS_audit_detail_div">
-               <label for="OPS_audit" class="col-sm-3 control-label">OPS 发布备注<span class="red-fonts">*</span></label>
+               <label for="OPS_audit" class="col-sm-3 control-label">OPS 备注<span class="red-fonts">*</span></label>
                <div class="col-sm-8">
                    <textarea name='OPS_audit' id='OPS_audit_detail' class="form-control" rows="3"></textarea>
                </div>
            </div>
 	   <div class="hr-line-dashed"></div>
            <div class="form-group" id="OPS_pub_result_detail_div">
-               <label class="col-sm-3 control-label">OPS 发布结果<span class="red-fonts">*</span></label>
+               <label class="col-sm-3 control-label">OPS 操作结果<span class="red-fonts">*</span></label>
                <div class="col-sm-8">
                    <div class="col-sm-3">
                         <div class="radio i-checks">
-                            <label><input type="radio" id="OPS_pub_ok_detail" value="YES" name="OPS_pub_result">发布正常</label>
+                            <label><input type="radio" id="OPS_pub_ok_detail" value="YES" name="OPS_pub_result">正常</label>
                         </div>
                    </div>
 
                    <div class="col-sm-3">
                         <div class="radio i-checks">
-                            <label><input type="radio" id="OPS_pub_fail_detail" value="NO" name="OPS_pub_result">发布异常</label>
+                            <label><input type="radio" id="OPS_pub_fail_detail" value="NO" name="OPS_pub_result">有异常</label>
                         </div>
                    </div>
                </div>
@@ -524,6 +558,11 @@ $.getJSON("/workform/pub_list",function(data){
    $.each(data,function(k,v){
       str += '<tr>'
       str += '<td>'+v['pub_title']+'</td>'
+      if(v['workform_type']=='publish'){
+	 str += '<td class="text-center" style="color:green">发布</td>'
+      }else{
+         str += '<td class="text-center" style="color:red">回滚</td>'
+      };
       if(v['pub_level']=='emergency'){
           str += '<td class="text-center" style="color:red">紧急</td>'
       }else{
@@ -544,16 +583,16 @@ $.getJSON("/workform/pub_list",function(data){
       }else if(v['pub_status']== 5){
           str += '<td class="text-center" style="color:green">处理完成</td>'
       }else if(v['pub_status']== 6){
-          str += '<td class="text-center" style="color:red">经理/QA不同意发布</td>'
+          str += '<td class="text-center" style="color:red">经理/QA不允许操作</td>'
       }else if(v['pub_status']== 7){
-          str += '<td class="text-center" style="color:red">OPS发布异常</td>'
+          str += '<td class="text-center" style="color:red">OPS 操作有异常</td>'
       };
       str += '<td class="text-center">'+v['pub_application_people']+'</td>'
       str += '<td class="text-center">'+v['pub_audit_people']+'</td>'
       str += '<td class="text-center">'+v['pub_operation_people']+'</td>'
       str += '<td class="text-center">'+v['pub_submit_time']+'</td>'
       str += '<td class="text-center">'+v['pub_done_time']+'</td>'
-      str += '<td class="text-center">'+'<button class="btn btn-xs btn-primary pub_detail_btn" data-id="'+v['id']+'">申请详情</button></td>'
+      str += '<td class="text-center">'+'<button class="btn btn-xs btn-primary pub_detail_btn" data-id="'+v['id']+'">详情</button></td>'
       str += '</tr>'      
    });
    $("#list_tbody").html(str)
@@ -566,6 +605,11 @@ $.getJSON("/workform/pub_my",function(data){
    $.each(data,function(k,v){
       str += '<tr>'
       str += '<td>'+v['pub_title']+'</td>'
+      if(v['workform_type']=='publish'){
+         str += '<td class="text-center" style="color:green">发布</td>'
+      }else{
+         str += '<td class="text-center" style="color:red">回滚</td>'
+      };
       if(v['pub_level']=='emergency'){
           str += '<td class="text-center" style="color:red">紧急</td>'
       }else{
@@ -586,9 +630,9 @@ $.getJSON("/workform/pub_my",function(data){
       }else if(v['pub_status']== 5){
           str += '<td class="text-center" style="color:green">处理完成</td>'
       }else if(v['pub_status']== 6){
-          str += '<td class="text-center" style="color:red">经理/QA不同意发布</td>'
+          str += '<td class="text-center" style="color:red">经理/QA不允许操作</td>'
       }else if(v['pub_status']== 7){
-          str += '<td class="text-center" style="color:red">OPS发布异常</td>'
+          str += '<td class="text-center" style="color:red">OPS操作异常</td>'
       };
       str += '<td class="text-center">'+v['pub_application_people']+'</td>'
       str += '<td class="text-center">'+v['pub_audit_people']+'</td>'
@@ -596,7 +640,7 @@ $.getJSON("/workform/pub_my",function(data){
       str += '<td class="text-center">'+v['pub_submit_time']+'</td>'
       str += '<td class="text-center">'+v['audit_time']+'</td>'
       str += '<td class="text-center">'+v['pub_done_time']+'</td>'
-      str += '<td class="text-center">'+'<button class="btn btn-xs btn-info pub_detail_btn" data-id="'+v['id']+'">发布详情</button>&nbsp'+'<button class="btn btn-xs btn-warning rollback_btn" data-id="'+v['id']+'">申请回滚</button>'+'</td>'
+      str += '<td class="text-center">'+'<button class="btn btn-xs btn-info pub_detail_btn" data-id="'+v['id']+'">详情</button>'+'</td>'
       str += '</tr>'      
    });
    $("#my_tbody").html(str)
@@ -609,6 +653,11 @@ $.getJSON("/workform/pub_audit",function(data){
    $.each(data,function(k,v){
       str += '<tr>'
       str += '<td>'+v['pub_title']+'</td>'
+      if(v['workform_type']=='publish'){
+         str += '<td class="text-center" style="color:green">发布</td>'
+      }else{
+         str += '<td class="text-center" style="color:red">回滚</td>'
+      };
       if(v['pub_level']=='emergency'){
           str += '<td class="text-center" style="color:red">紧急</td>'
       }else{
@@ -634,7 +683,7 @@ $.getJSON("/workform/pub_audit",function(data){
       }else if(v['pub_status']== 1){
 	 str += '<td class="text-center">'+v['pub_audit_people']+'</td>'
          str += '<td class="text-center">'+v['audit_time']+'</td>'
-	 str += '<td class="text-center"><button class="btn btn-xs btn-primary OPS_audit_btn" data-id="'+v['id']+'">OPS审批</button></td>'
+	 str += '<td class="text-center"><button class="btn btn-xs btn-primary OPS_audit_btn" data-id="'+v['id']+'">OPS 处理</button></td>'
       };
       str += '</tr>'
    });
@@ -675,6 +724,13 @@ $(document).on('click','.pub_detail_btn',function(){
     $.getJSON(url,function(data){
 	console.log(data)
         $("#pub_title_detail").val(data['pub_title'])
+	if(data['workform_type']=="publish"){
+            $("#workform_type_publish_detail").attr({checked:'checked'})
+            $("#workform_type_rollback_detail").attr('disabled','disabled')
+        }else {
+            $("#workform_type_rollback_detail").attr('checked','checked')
+            $("#workform_type_publish_detail").attr({disabled:'disabled'})
+        };
         if(data['pub_level']=="emergency"){
             $("#emergency_detail").attr({checked:'checked'})
             $("#non_emergency_detail").attr('disabled','disabled')
@@ -732,8 +788,16 @@ $(document).on('click','.QA_audit_btn',function(){
     var id=$(this).attr('data-id')
     var url="/workform/pub_info?id="+id
     $(".qa-audit-sure").attr('data-id',id)
+    $("#pub_auditForm [type='radio']").removeAttr('checked')
     $.getJSON(url,function(data){
         $("#pub_title_audit").val(data['pub_title'])
+	if(data['workform_type']=='publish'){
+            $("#workform_type_publish").attr({checked:'checked'})
+            $("#workform_type_rollback").attr('disabled','disabled')
+        }else{
+            $("#workform_type_rollback").attr('checked','checked')
+            $("#workform_type_publish").attr({disabled:'disabled'})
+        };
 	if(data['pub_level']=='emergency'){
 	    $("#pub_level_emergency").attr({checked:'checked'})
 	    $("#pub_level_non_emergency").attr('disabled','disabled')
@@ -785,8 +849,16 @@ $(document).on('click','.OPS_audit_btn',function(){
     var id=$(this).attr('data-id')
     var url="/workform/pub_info?id="+id
     $(".ops-audit-sure").attr('data-id',id)
+    $("#pub_auditForm [type='radio']").removeAttr('checked')
     $.getJSON(url,function(data){
         $("#pub_title_audit").val(data['pub_title'])
+	if(data['workform_type']=='publish'){
+            $("#workform_type_publish").attr({checked:'checked'})
+            $("#workform_type_rollback").attr('disabled','disabled')
+        }else{
+            $("#workform_type_rollback").attr('checked','checked')
+            $("#workform_type_publish").attr({disabled:'disabled'})
+        };
         if(data['pub_level']=='emergency'){
             $("#pub_level_emergency").attr({checked:'checked'})
             $("#pub_level_non_emergency").attr('disabled','disabled')
@@ -841,5 +913,70 @@ $(".ops-audit-sure").click(function(){
    return false;
 })
 
+$("#list_table").dataTable({
+      "autoWidth":true,
+      "bDestroy":true,
+      "order": [[ 9, "desc" ]],
+      "bStateSave": true,
+      "sPaginationType": "full_numbers",
+      "language":{
+            "lengthMenu":"每页 _MENU_ 条记录",
+            "zeroRecords":"没有找到记录",
+            "sInfo": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 ),显示第 _START_ 至 _END_ 项(总共 _TOTAL_ 项)",
+            "infoEmpty": "无记录",
+            "infoFiltered": "(从 _MAX_ 条记录过滤)",
+            "sSearch": "搜索:",
+            "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上一页",
+                    "sNext": "下一页",
+                    "sLast": "末页"
+            }
+      }
+});
+
+$("#my_table").dataTable({
+      "autoWidth":true,
+      "bDestroy":true,
+      "order": [[ 9, "desc" ]],
+      "bStateSave": true,
+      "sPaginationType": "full_numbers",
+      "language":{
+            "lengthMenu":"每页 _MENU_ 条记录",
+            "zeroRecords":"没有找到记录",
+            "sInfo": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 ),显示第 _START_ 至 _END_ 项(总共 _TOTAL_ 项)",
+            "infoEmpty": "无记录",
+            "infoFiltered": "(从 _MAX_ 条记录过滤)",
+            "sSearch": "搜索:",
+            "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上一页",
+                    "sNext": "下一页",
+                    "sLast": "末页"
+            }
+      }
+});
+
+$("#audit_table").dataTable({
+      "autoWidth":true,
+      "bDestroy":true,
+      "order": [[ 7, "desc" ]],
+      "bStateSave": true,
+      "sPaginationType": "full_numbers",
+      "language":{
+            "lengthMenu":"每页 _MENU_ 条记录",
+            "zeroRecords":"没有找到记录",
+            "sInfo": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 ),显示第 _START_ 至 _END_ 项(总共 _TOTAL_ 项)",
+            "infoEmpty": "无记录",
+            "infoFiltered": "(从 _MAX_ 条记录过滤)",
+            "sSearch": "搜索:",
+            "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上一页",
+                    "sNext": "下一页",
+                    "sLast": "末页"
+            }
+      }
+});
 </script>
 {% endblock %}

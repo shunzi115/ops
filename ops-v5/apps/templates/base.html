@@ -100,16 +100,24 @@
 <a href="#"><i class="fa fa-eye-slash"></i> <span class="nav-label">工单系统</span><span class="fa arrow"></span></a>
   <ul class="nav nav-second-level collapse">
     <li>
-	<a href="/workform/publish">发布系统</a>
+	<a href="/workform/publish">发布工单</a>
     </li>
     <li> 
-	<a href="/test">SQL 操作</a>
+	<a href="/test">发布操作</a>
     </li>
   </ul>
 </li>
          
 <li id="database" class="updown">
 <a href="#"><i class="fa fa-database"></i> <span class="nav-label">数据库管理</span><span class="label label-info pull-right"></span></a>
+  <ul class="nav nav-second-level collapse">
+    <li>
+	<a href="/workform/publish">数据库工单</a>
+    </li>
+    <li> 
+	<a href="/test">数据库操作</a>
+    </li>
+  </ul>
 </li>
 
 <li id="monitor" class="updown">
@@ -166,7 +174,9 @@ $('#api-interface').click(function(){
             </div>
        </form> 
     </div>
+
     <div id='data-haha' class='col-md-offset-4 col-md-2 text-success' style='height:60px;vertical-align:middle;line-height:60px' role='alert'>欢迎回来...</div>
+
     <ul class="nav navbar-top-links navbar-right">
         <li>
             <span class="m-r-sm text-muted welcome-message">莴笋运维管理平台</span>
@@ -183,17 +193,11 @@ $('#api-interface').click(function(){
 
 <!--右边第二层面包导航-->
 <div class="row wrapper border-bottom white-bg page-heading">
-    <div class="col-sm-12">
+    <div class="col-sm-12" style="height:20px;line-height:20px;">
         <ol class="breadcrumb">
-            <li>
-                <a href="/">仪表盘</a>
-            </li>
-            <li>
-                <a href="/">
-                {% block breadcrumb %}
-                {% endblock %}
-          
-                </a>
+            <li style="margin:8px">
+                   {% block breadcrumb %}
+                   {% endblock %}
             </li>
         </ol>
     </div>
