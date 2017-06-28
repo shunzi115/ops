@@ -93,6 +93,7 @@ CREATE TABLE `cmdb_online` (
 CREATE TABLE `publish_online` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `pub_title` varchar(100) NOT NULL COMMENT '发布主题',
+  `workform_type` varchar(50) NOT NULL COMMENT '工单类型',
   `pub_level` varchar(50) NOT NULL COMMENT '发布优先级',
   `pub_module` varchar(100) NOT NULL COMMENT '发布的模块名',
   `pub_content` varchar(1000) NOT NULL COMMENT '发布详情',
