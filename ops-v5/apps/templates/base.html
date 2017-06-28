@@ -97,7 +97,7 @@
 </li> <!-- 资产管理 -->     
             
 <li id="order" class="updown">
-<a href="#"><i class="fa fa-eye-slash"></i> <span class="nav-label">工单系统</span><span class="fa arrow"></span></a>
+<a href="#"><i class="fa fa-eye-slash"></i> <span class="nav-label">发布系统</span><span class="fa arrow"></span></a>
   <ul class="nav nav-second-level collapse">
     <li>
 	<a href="/workform/publish">发布工单</a>
@@ -109,7 +109,7 @@
 </li>
          
 <li id="database" class="updown">
-<a href="#"><i class="fa fa-database"></i> <span class="nav-label">数据库管理</span><span class="label label-info pull-right"></span></a>
+<a href="#"><i class="fa fa-database"></i> <span class="nav-label">数据库管理</span><span class="fa arrow"></span></a>
   <ul class="nav nav-second-level collapse">
     <li>
 	<a href="/workform/publish">数据库工单</a>
@@ -153,6 +153,9 @@ $('#juser').click(function(){
     $(this).children("ul").toggleClass("collapse");   
 })
 $('#order').click(function(){
+    $(this).children("ul").toggleClass("collapse");   
+})
+$('#database').click(function(){
     $(this).children("ul").toggleClass("collapse");   
 })
 $('#api-interface').click(function(){

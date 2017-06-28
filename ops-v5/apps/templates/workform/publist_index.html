@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block breadcrumb %} 
-工单系统 / 发布系统
+发布系统 / 发布工单
 {% endblock %}
 
 {% block main %}
@@ -596,6 +596,7 @@ $.getJSON("/workform/pub_list",function(data){
       str += '</tr>'      
    });
    $("#list_tbody").html(str)
+   datatable_list()
 });
 
 $.getJSON("/workform/pub_my",function(data){
@@ -644,6 +645,7 @@ $.getJSON("/workform/pub_my",function(data){
       str += '</tr>'      
    });
    $("#my_tbody").html(str)
+   datatable_my()
 });
 
 $.getJSON("/workform/pub_audit",function(data){
@@ -688,6 +690,7 @@ $.getJSON("/workform/pub_audit",function(data){
       str += '</tr>'
    });
    $("#audit_tbody").html(str)
+   datatable_audit()
 });
 
 $("#pub_submit").click(function(){
@@ -913,7 +916,8 @@ $(".ops-audit-sure").click(function(){
    return false;
 })
 
-$("#list_table").dataTable({
+function datatable_list(){
+  $("#list_table").dataTable({
       "autoWidth":true,
       "bDestroy":true,
       "order": [[ 9, "desc" ]],
@@ -933,9 +937,11 @@ $("#list_table").dataTable({
                     "sLast": "末页"
             }
       }
-});
+  })
+};
 
-$("#my_table").dataTable({
+function datatable_my(){
+  $("#my_table").dataTable({
       "autoWidth":true,
       "bDestroy":true,
       "order": [[ 9, "desc" ]],
@@ -955,9 +961,11 @@ $("#my_table").dataTable({
                     "sLast": "末页"
             }
       }
-});
+  })
+};
 
-$("#audit_table").dataTable({
+function datatable_audit(){
+  $("#audit_table").dataTable({
       "autoWidth":true,
       "bDestroy":true,
       "order": [[ 7, "desc" ]],
@@ -977,6 +985,8 @@ $("#audit_table").dataTable({
                     "sLast": "末页"
             }
       }
-});
+  })
+};
+
 </script>
 {% endblock %}
