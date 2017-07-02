@@ -1,24 +1,24 @@
 {% extends "base.html" %}
 
 {% block breadcrumb %} 
-服务器管理
+资产管理 / 服务器管理
 {% endblock %}
 
 {% block main %} 
 
 <div class="col-sm-12">
-<a href="/cmdb/server_add" class="btn btn-sm btn-primary "> 添加服务器</a> 
+<a href="/cmdb/server_add" class="btn btn-sm btn-primary ">添加服务器</a> 
 </br>
 </br>
 <table class="table table-striped table-bordered table-hover " id="editable">
 <thead>
     <tr>
-        <th class="text-center">主机名</th>
         <th class="text-center">私网 IP</th>
+        <th class="text-center">SSH 端口</th>
+        <th class="text-center">主机名</th>
         <th class="text-center">公网 IP</th>
         <th class="text-center">所属环境</th>
         <th class="text-center">系统版本</th>
-        <th class="text-center">内核版本</th>
         <th class="text-center">CPU 数量</th>
         <th class="text-center">内存(GB)</th>
         <th class="text-center">物理磁盘</th>
@@ -32,12 +32,12 @@
 <tbody>
    {% for server in server_list %}
         <tr class="gradeX">
-                <td class="text-center"><strong>{{server.HostName}}</strong></td>
-                <td class="text-center">{{server.PrivateIP}}</td>
+                <td class="text-center"><strong>{{server.PrivateIP}}</strong></td>
+                <td class="text-center">{{server.SSH_port}}</td>
+                <td class="text-center">{{server.HostName}}</td>
                 <td class="text-center">{{server.PublicIP}}</td>
                 <td class="text-center">{{server.ENV}}</td>
                 <td class="text-center">{{server.OS}}</td>
-                <td class="text-center">{{server.Kernel}}</td>
                 <td class="text-center">{{server.CpuCount}}</td>
                 <td class="text-center">{{server.RAM_GB}}</td>
                 <td class="text-center">{{server.PhyDiskSize}}</td>
@@ -49,7 +49,7 @@
                 {% endif %}
 		{% if session.role == 0 or session.role == 1 %}
                 <td class="text-center">
-                    <button data-id="{{server.id}}" class="btn btn-xs btn-Primary server_refresh">刷新</button>
+                    <button data-id="{{server.PrivateIP}}" data-port="{{server.SSH_port}}" class="btn btn-xs btn-Primary server_refresh">刷新</button>
                     <button data-id="{{server.id}}" class="btn btn-xs btn-info server_update">编辑&详情</button>
                     <button data-id="{{server.id}}" class="btn btn-xs btn-danger del ">删除</button>
                 </td>
@@ -70,24 +70,7 @@
       </div>
       <div class="modal-body">
 	 <form id="updateForm" class="Formvalid form-horizontal nice-validator n-yellow" novalidate="novalidate">
-	      <input type="hidden" name="id" id='id'>
-              <div class="form-inline row">
-                  <div class="form-group col-sm-6">
-                     <label for="HostName" class="col-sm-4 control-label text-right ">主机名<span class="red-fonts ">*</span></label>
-                     <input id="HostName" name="HostName" placeholder="HostName" type="text" datatype="*3-100" class="form-control" aria-required="true" nullmsg="请输入主机名" errormsg="必须输入3-100个任意字符">
-                  </div>
-		  <div class="form-group col-sm-6">
-		     <label for="ENV" class="col-sm-4 control-label text-right">所属环境<span class="red-fonts">*</span></label>
-		     <select name="ENV" id="ENV" class="form-control">
-                           <option value="online">线上环境-online</option>
-                           <option value="test">测试环境-test</option>
-                           <option value="dev">开发环境-dev</option>
-                           <option value="ops">运维环境-ops</option>
-                     </select>
-		  </div>
-	       </div>
-
-	       <div class="hr-line-dashed"></div>
+	       <input type="hidden" name="id" id='id'>
 	       <div class="form-inline row">
 	          <div class="form-group col-sm-6">
 	             <label for="PrivateIP" class="col-sm-4 control-label text-right">私网 IP<span class="red-fonts">*</span></label>
@@ -99,6 +82,41 @@
 	             <input id="PublicIP" name="PublicIP" placeholder="PublicIP" type="text" class="form-control" aria-required="true">
 	          </div>
 	       </div>
+
+	       <div class="hr-line-dashed"></div>
+               <div class="form-inline row">
+                  <div class="form-group col-sm-6">
+                     <label for="HostName" class="col-sm-4 control-label text-right ">主机名</label>
+                     <input id="HostName" name="HostName" placeholder="HostName" type="text" class="form-control" aria-required="true">
+                  </div>
+		  <div class="form-group col-sm-6">
+                     <label for="SSH_port" class="col-sm-4 control-label text-right ">SSH 端口<span class="red-fonts ">*</span></label>
+                     <input id="SSH_port" name="SSH_port" placeholder="SSH_port" type="text" class="form-control" aria-required="true">
+                  </div>
+	       </div>
+
+	       <div class="hr-line-dashed"></div>
+	       <div class="form-inline row">
+	          <div class="form-group col-sm-6">
+	             <label for="IDC" class="col-sm-4 control-label text-right">机房<span class="red-fonts">*</span></label>
+		     <select name="IDC" id="IDC" class="form-control">
+                           <option value="阿里云华东1区">阿里云华东1区</option>
+                           <option value="阿里云华北1区">阿里云华北1区</option>
+                           <option value="北京IDC">北京IDC</option>
+                           <option value="佛山IDC">佛山IDC</option>
+                           <option value="丽丰中心33楼">丽丰中心33楼</option>
+                     </select>
+	          </div>
+                  <div class="form-group col-sm-6">
+                     <label for="ENV" class="col-sm-4 control-label text-right">所属环境<span class="red-fonts">*</span></label>
+                     <select name="ENV" id="ENV" class="form-control">
+                           <option value='online'>线上环境-online</option>
+                           <option value='test'>测试环境-test</option>
+                           <option value='dev'>开发环境-dev</option>
+                           <option value='ops' selected='selected'>运维环境-ops</option>
+                     </select>
+                  </div>
+               </div>
 
 	       <div class="hr-line-dashed"></div>
 	       <div class="form-inline row">
@@ -116,66 +134,64 @@
 	       <div class="hr-line-dashed"></div>
 	       <div class="form-inline row">  
 	          <div class="form-group col-sm-6">
-	              <label for="OS" class="col-sm-4 control-label text-right">系统版本<span class="red-fonts">*</span></label>
-	              <input id="OS" name="OS" placeholder="OS" type="text" datatype="*2-50" class="form-control" aria-required="true" nullmsg="请输入系统版本" errormsg="请输入2-50个任意字符">
+	              <label for="OS" class="col-sm-4 control-label text-right">系统版本</label>
+	              <input id="OS" name="OS" placeholder="OS" type="text" class="form-control" aria-required="true">
 	          </div>
 
 	          <div class="form-group col-sm-6">
-	              <label for="Kernel" class="col-sm-4 control-label text-right">内核版本<span class="red-fonts">*</span></label>
-	              <input id="Kernel" name="Kernel" placeholder="Kernel" type="text" datatype="*3-50" class="form-control" aria-required="true" nullmsg="请输入内核版本" errormsg="必须是3-50个字符">
+	              <label for="Kernel" class="col-sm-4 control-label text-right">内核版本</label>
+	              <input id="Kernel" name="Kernel" placeholder="Kernel" type="text" class="form-control" aria-required="true">
 	          </div>
 	       </div>
 
 	       <div class="hr-line-dashed"></div>
 	       <div class="form-inline row">
 	          <div class="form-group col-sm-6">
-	              <label for="CpuType" class="col-sm-4 control-label text-right">CPU 类型<span class="red-fonts">*</span></label>
-	              <input id="CpuType" name="CpuType" placeholder="CpuType" type="text" datatype="*3-50" class="form-control" aria-required="true" nullmsg="请输入CPU类型" errormsg="必须是3-50个字符">
+	              <label for="CpuType" class="col-sm-4 control-label text-right">CPU 类型</label>
+	              <input id="CpuType" name="CpuType" placeholder="CpuType" type="text" class="form-control" aria-required="true">
 	          </div>
 
 	          <div class="form-group col-sm-6">
-	              <label for="CpuCount" class="col-sm-4 control-label text-right">CPU 数量<span class="red-fonts">*</span></label>
-	              <input id="CpuCount" name="CpuCount" placeholder="CpuCount" type="text" datatype="n1-2" class="form-control" aria-required="true" nullmsg="请输入CPU数量" errormsg="必须是1-2位数字">
+	              <label for="CpuCount" class="col-sm-4 control-label text-right">CPU 数量</label>
+	              <input id="CpuCount" name="CpuCount" placeholder="CpuCount" type="text" class="form-control" aria-required="true">
 	          </div>
 	       </div>
 
 	       <div class="hr-line-dashed"></div>
 	       <div class="form-inline row">
 	          <div class="form-group col-sm-6">
-	             <label for="RAM_GB" class="col-sm-4 control-label text-right">内存(GB)<span class="red-fonts">*</span></label>
-	             <input id="RAM_GB" name="RAM_GB" placeholder="RAM_GB" type="text" datatype="*1-4" class="form-control" aria-required="true" nullmsg="请输入内存大小" errormsg="必须是1-4位字符">
+	             <label for="RAM_GB" class="col-sm-4 control-label text-right">内存(GB)</label>
+	             <input id="RAM_GB" name="RAM_GB" placeholder="RAM_GB" type="text" class="form-control" aria-required="true">
 	          </div>
-	          <div class="form-group col-sm-6">
-	             <label for="PhyDiskSize" class="col-sm-4 control-label text-right">物理磁盘<span class="red-fonts">*</span></label>
-	             <input id="PhyDiskSize" name="PhyDiskSize" placeholder="PhyDiskSize" type="text" datatype="*1-50" class="form-control" aria-required="true" nullmsg="请输入磁盘大小" errormsg="必须是1-50位字符">
-	          </div>
+		  <div class="form-group col-sm-6">
+                     <label for="SWAP_size" class="col-sm-4 control-label text-right">SWAP</label>
+                     <input id="SWAP_size" name="SWAP_size" placeholder="SWAP_size" type="text" class="form-control" aria-required="true">
+                  </div>
 	       </div>
+
+	       <div class="hr-line-dashed"></div>
+                  <div class="form-inline row">
+                     <div class="form-group col-sm-6">
+                         <label for="PhyDiskSize" class="col-sm-4 control-label text-right">物理磁盘</label>
+                         <textarea id="PhyDiskSize" name="PhyDiskSize" placeholder="PhyDiskSize" class="form-control" aria-required="true" rows="2"></textarea>
+                     </div>
+                     <div class="form-group col-sm-6">
+                         <label for="Part_mount" class="col-sm-4 control-label text-right">分区挂载</label>
+                         <textarea id="Part_mount" name="Part_mount" placeholder="Part_mount" class="form-control" aria-required="true" rows="2"></textarea>
+                     </div>
+               </div>
 
 	       <div class="hr-line-dashed"></div>
 	       <div class="form-inline row">
 	          <div class="form-group col-sm-6">
-	             <label for="OnlineTime" class="col-sm-4 control-label text-right">上线时间<span class="red-fonts">*</span></label>
+	             <label for="OnlineTime" class="col-sm-4 control-label text-right">上线时间</label>
 	             <input id="OnlineTime" name="OnlineTime" placeholder="OnlineTime" type="text" class="form-control" aria-required="true" readonly>
 	          </div>
 	          <div class="form-group col-sm-6">
-	             <label for="OfflineTime" class="col-sm-4 control-label text-right">下线时间<span class="red-fonts">*</span></label>
+	             <label for="OfflineTime" class="col-sm-4 control-label text-right">下线时间</label>
 	             <input id="OfflineTime" name="OfflineTime" placeholder="YYYY-mm-dd HH:MM:SS" type="text" class="form-control" aria-required="true" readonly>
 	          </div>
 	       </div>
-
-	       <div class="hr-line-dashed"></div>
-	       <div class="form-inline row">
-	          <div class="form-group col-sm-6">
-	             <label for="IDC" class="col-sm-4 control-label text-right">机房<span class="red-fonts">*</span></label>
-		     <select name="IDC" id="IDC" class="form-control">
-                           <option value="阿里云华东1区">阿里云华东1区</option>
-                           <option value="阿里云华北1区">阿里云华北1区</option>
-                           <option value="北京IDC">北京IDC</option>
-                           <option value="佛山IDC">佛山IDC</option>
-                           <option value="丽丰中心33楼">丽丰中心33楼</option>
-                     </select>
-	          </div>
-               </div>
 
 	       <div class="hr-line-dashed"></div>
 	       <div class="form-inline row">
@@ -231,6 +247,29 @@
 
 <script>
 
+<!-- 刷新 -->
+$(".server_refresh").click(function(){
+    var str='"PrivateIP=' + $(this).attr('data-id') + '&SSH_port=' + $(this).attr('data-port') + '"'
+    console.log(str)
+    $.post("/cmdb/server_list",{PrivateIP:$(this).attr('data-id'),SSH_port:$(this).attr('data-port')},function(data){
+	data=JSON.parse(data)
+        if(data['result']==0){
+             swal({
+                       title:"Good",
+                       text:"刷新成功",
+                       type:"success",
+                       confirmButtonText:"确定"
+                       },
+                       function(){
+                       location.reload()
+             })
+        }else{
+                 swal("OH,My God",data['msg'],"error")
+        }
+    })
+    return false;
+});
+
 $("#updateForm").Validform({
 	tiptype:3,
 	datatype:{
@@ -247,6 +286,7 @@ $(".server_update").click(function(){
       console.log(data)
       $("#id").val(data['id'])
       $("#HostName").val(data['HostName'])
+      $("#SSH_port").val(data['SSH_port'])
       $("#PrivateIP").val(data['PrivateIP'])
       $("#PublicIP").val(data['PublicIP'])
       $("#ServerBrand").val(data['ServerBrand'])
@@ -256,7 +296,9 @@ $(".server_update").click(function(){
       $("#CpuType").val(data['CpuType'])
       $("#CpuCount").val(data['CpuCount'])
       $("#RAM_GB").val(data['RAM_GB'])
+      $("#SWAP_size").val(data['SWAP_size'])
       $("#PhyDiskSize").val(data['PhyDiskSize'])
+      $("#Part_mount").val(data['Part_mount'])
       $("#OnlineTime").val(data['OnlineTime'])
       $("#OfflineTime").val(data['OfflineTime'])
       $("#ENV option[value='"+data['ENV']+"']").attr("selected","selected")

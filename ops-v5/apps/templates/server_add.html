@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block breadcrumb %} 
-添加服务器
+资产管理 / 添加服务器
 {% endblock %}
 
 {% block main %}
@@ -27,20 +27,14 @@
                         <form id="serverForm" class="Formvalid form-horizontal nice-validator n-yellow" novalidate="novalidate">
 			  <div class="form-inline row">
                             <div class="form-group col-sm-6">
-                                <label for="HostName" class="col-sm-4 control-label text-right ">主机名<span class="red-fonts ">*</span></label>
-                                    <input name="HostName" placeholder="HostName" type="text" datatype="*3-100" class="form-control" aria-required="true" nullmsg="请输入主机名" errormsg="必须输入3-100个任意字符">
+                                <label for="HostName" class="col-sm-4 control-label text-right ">主机名</label>
+                                    <input name="HostName" placeholder="HostName" type="text" class="form-control" aria-required="true">
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="ENV" class="col-sm-4 control-label text-right">所属环境<span class="red-fonts">*</span></label>
-				<select name="ENV" id="ENV" class="form-control">
-					<option value='online'>线上环境-online</option>
-					<option value='test'>测试环境-test</option>
-					<option value='dev'>开发环境-dev</option>
-					<option value='ops' selected='selected'>运维环境-ops</option>
-                        	</select>
+                                <label for="SSH_port" class="col-sm-4 control-label text-right ">SSH 端口<span class="red-fonts ">*</span></label>
+                                    <input name="SSH_port" placeholder="SSH_port" type="text" class="form-control" aria-required="true">
                             </div>
                           </div>
-
                           <div class="hr-line-dashed"></div>
 			  <div class="form-inline row">
                             <div class="form-group col-sm-6">
@@ -70,38 +64,50 @@
                           <div class="hr-line-dashed"></div>
 			  <div class="form-inline row">  
                             <div class="form-group col-sm-6">
-                                <label for="OS" class="col-sm-4 control-label text-right">系统版本<span class="red-fonts">*</span></label>
-                                     <input name="OS" placeholder="OS" type="text" datatype="*2-50" class="form-control" aria-required="true" nullmsg="请输入系统版本" errormsg="请输入2-50个任意字符">
+                                <label for="OS" class="col-sm-4 control-label text-right">系统版本</label>
+                                     <input name="OS" placeholder="OS" type="text" class="form-control" aria-required="true">
                             </div>
                             
                             <div class="form-group col-sm-6">
-                                <label for="Kernel" class="col-sm-4 control-label text-right">内核版本<span class="red-fonts">*</span></label>
-                                     <input name="Kernel" placeholder="Kernel" type="text" datatype="*3-50" class="form-control" aria-required="true" nullmsg="请输入内核版本" errormsg="必须是3-50个字符">
+                                <label for="Kernel" class="col-sm-4 control-label text-right">内核版本</label>
+                                     <input name="Kernel" placeholder="Kernel" type="text" class="form-control" aria-required="true">
                             </div>
 			  </div>
 
                           <div class="hr-line-dashed"></div>
 			  <div class="form-inline row">
                             <div class="form-group col-sm-6">
-                                <label for="CpuType" class="col-sm-4 control-label text-right">CPU 类型<span class="red-fonts">*</span></label>
-                                     <input name="CpuType" placeholder="CpuType" type="text" datatype="*3-50" class="form-control" aria-required="true" nullmsg="请输入CPU类型" errormsg="必须是3-50个字符">
+                                <label for="CpuType" class="col-sm-4 control-label text-right">CPU 类型</label>
+                                     <input name="CpuType" placeholder="CpuType" type="text" class="form-control" aria-required="true">
                             </div>
 
                             <div class="form-group col-sm-6">
-                                <label for="CpuCount" class="col-sm-4 control-label text-right">CPU 核数<span class="red-fonts">*</span></label>
-                                     <input name="CpuCount" placeholder="CpuCount" type="text" datatype="n1-2" class="form-control" aria-required="true" nullmsg="请输入CPU数量" errormsg="必须是1-2位数字">
+                                <label for="CpuCount" class="col-sm-4 control-label text-right">CPU 核数</label>
+                                     <input name="CpuCount" placeholder="CpuCount" type="text" class="form-control" aria-required="true">
                             </div>
 			  </div>
 
                           <div class="hr-line-dashed"></div>
 			  <div class="form-inline row">
                             <div class="form-group col-sm-6">
-                                <label for="RAM_GB" class="col-sm-4 control-label text-right">内存<span class="red-fonts">*</span></label>
-                                     <input name="RAM_GB" placeholder="RAM_GB" type="text" datatype="*1-4" class="form-control" aria-required="true" nullmsg="请输入内存大小" errormsg="必须是1-4位字符">
+                                <label for="RAM_GB" class="col-sm-4 control-label text-right">内存</label>
+                                     <input name="RAM_GB" placeholder="RAM_GB" type="text" class="form-control" aria-required="true">
 			    </div>
                             <div class="form-group col-sm-6">
-                                <label for="PhyDiskSize" class="col-sm-4 control-label text-right">物理磁盘<span class="red-fonts">*</span></label>
-                                <input name="PhyDiskSize" placeholder="PhyDiskSize" type="text" datatype="*1-50" class="form-control" aria-required="true" nullmsg="请输入磁盘大小" errormsg="必须是1-50位字符">
+                                <label for="SWAP_Size" class="col-sm-4 control-label text-right">SWAP</label>
+                                <input name="SWAP_Size" placeholder="SWAP_Size" type="text" class="form-control" aria-required="true">
+                            </div>
+			  </div>
+
+                          <div class="hr-line-dashed"></div>
+			  <div class="form-inline row">
+                            <div class="form-group col-sm-6">
+                                <label for="PhyDiskSize" class="col-sm-4 control-label text-right">物理磁盘</label>
+                                     <input name="PhyDiskSize" placeholder="PhyDiskSize" type="text" class="form-control" aria-required="true">
+			    </div>
+                            <div class="form-group col-sm-6">
+                                <label for="Part_mount" class="col-sm-4 control-label text-right">分区挂载</label>
+                                <input name="Part_mount" placeholder="Part_mount" type="text" class="form-control" aria-required="true">
                             </div>
 			  </div>
 
@@ -117,7 +123,16 @@
                                         <option value="丽丰中心33楼">丽丰中心33楼</option>
                                 </select>
                             </div>
-			  </div>
+                            <div class="form-group col-sm-6">
+                                <label for="ENV" class="col-sm-4 control-label text-right">所属环境<span class="red-fonts">*</span></label>
+				<select name="ENV" id="ENV" class="form-control">
+					<option value='online'>线上环境-online</option>
+					<option value='test'>测试环境-test</option>
+					<option value='dev'>开发环境-dev</option>
+					<option value='ops' selected='selected'>运维环境-ops</option>
+                        	</select>
+                            </div>
+                          </div>
                           <div class="hr-line-dashed"></div>
 			  <div class="form-inline row">
                             <div class="form-group col-sm-6">

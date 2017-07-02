@@ -27,7 +27,7 @@ def cmdb_online_add():
                 woops_log.log_write('cmdb_online').debug('server_ip_list: %s' % server_ip_list)
                 return render_template("cmdb_online_add.html",server_ip_info=server_ip_list)
         if request.method == 'POST':
-                cmdb_add_dict = dict((i,' ; '.join(j)) for i,j in dict(request.form).items())
+                cmdb_add_dict = dict((i,';'.join(j)) for i,j in dict(request.form).items())
                 if not cmdb_add_dict['app_name'].strip() or not cmdb_add_dict['app_ip'].strip():
                         woops_log.log_write('cmdb_online').error('The * symbol part of the input cannot be empty')
                         msg = "The * symbol part of the input cannot be empty"

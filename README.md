@@ -46,21 +46,23 @@ CREATE TABLE `users` (
 
 INSERT INTO `dev_ops`.`users` (`login_name`, `name_cn`, `password`, `mobile`, `email`, `role`, `status`, `update_time`, `last_login_time`) VALUES ( 'admin', '诸葛孔明', '4bfd3be6dbd0c6888250de0640ec5905', '15811110333', '111@111.com', '0', '0', '2017-05-07 22:20:13', '2017-05-14 16:03:42');
 
-
 CREATE TABLE `serverinfo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `HostName` varchar(20) NOT NULL COMMENT '主机名',
+  `HostName` varchar(20) DEFAULT NULL COMMENT '主机名',
+  `SSH_port` varchar(5) NOT NULL COMMENT 'SSH 端口号',
   `PrivateIP` varchar(15) NOT NULL COMMENT '私网IP',
   `PublicIP` varchar(15) DEFAULT NULL COMMENT '公网IP',
   `ENV` varchar(50) NOT NULL COMMENT '所属环境',
   `ServerBrand` varchar(50) DEFAULT NULL COMMENT '服务器品牌',
   `ServerModel` varchar(50) DEFAULT NULL COMMENT '服务器型号',
-  `OS` varchar(50) NOT NULL COMMENT '系统版本',
-  `Kernel` varchar(50) NOT NULL COMMENT '内核版本',
-  `CpuType` varchar(50) NOT NULL COMMENT 'CPU类型',
-  `CpuCount` tinyint(2) NOT NULL COMMENT 'CPU数量',
-  `RAM_GB` tinyint(3) NOT NULL COMMENT '内存',
-  `PhyDiskSize` varchar(50) NOT NULL COMMENT '物理磁盘',
+  `OS` varchar(50) DEFAULT NULL COMMENT '系统版本',
+  `Kernel` varchar(50) DEFAULT NULL COMMENT '内核版本',
+  `CpuType` varchar(50) DEFAULT NULL COMMENT 'CPU类型',
+  `CpuCount` varchar(5) DEFAULT NULL COMMENT 'CPU数量',
+  `RAM_GB` varchar(20) DEFAULT NULL COMMENT '内存',
+  `SWAP_size` varchar(10) DEFAULT NULL COMMENT 'SWAP 空间',
+  `PhyDiskSize` varchar(50) DEFAULT NULL COMMENT '物理磁盘',
+  `Part_mount` varchar(100) DEFAULT NULL COMMENT '分区挂载情况',
   `IDC` varchar(50) NOT NULL COMMENT '归属机房',
   `status` tinyint(2) NOT NULL COMMENT '服务器状态：0-在线,1-下线',
   `OnlineTime` varchar(30) NOT NULL COMMENT '上线时间',

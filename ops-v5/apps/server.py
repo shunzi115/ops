@@ -7,6 +7,7 @@ from common_func import session_check,role_check
 from datetime import *
 import json
 from utils import woops_log,mysql_exec
+from api.ansible_exec import ansible_exec
 
 def server_list():
 	select_fields = ['PrivateIP']
@@ -22,15 +23,11 @@ def server_add():
                 return render_template("server_add.html")
         if request.method == 'POST':
                 server_add_dict = dict((i,j[0]) for i,j in dict(request.form).items())
-                if not server_add_dict['HostName'].strip() or not server_add_dict['ENV'].strip() or not server_add_dict['PrivateIP']:
+                if not server_add_dict['ENV'].strip() or not server_add_dict['PrivateIP'] or not server_add_dict['IDC']:
                         woops_log.log_write('server').error('The * symbol part of the input cannot be empty')
                         msg = "The * symbol part of the input cannot be empty"
                         return json.dumps({'result':1,'msg':msg})
-                if not server_add_dict['OS'] or not server_add_dict['Kernel'] or not server_add_dict['CpuType']:
-                        woops_log.log_write('server').error('The * symbol part of the input cannot be empty')
-                        msg = "The * symbol part of the input cannot be empty"
-                        return json.dumps({'result':1,'msg':msg})
-                if not server_add_dict['CpuCount'] or not server_add_dict['RAM_GB'] or not server_add_dict['PhyDiskSize'] or not server_add_dict['IDC']:
+                if not server_add_dict['SSH_port'].strip() or not server_add_dict['status']:
                         woops_log.log_write('server').error('The * symbol part of the input cannot be empty')
                         msg = "The * symbol part of the input cannot be empty"
                         return json.dumps({'result':1,'msg':msg})
@@ -63,8 +60,8 @@ def server_update():
         if request.method == 'GET':
                 select_condition = {}
                 select_condition['id'] = request.args.get('id')
-                fields_1 = ['id','HostName','PrivateIP','PublicIP','ENV','ServerBrand','ServerModel','OS','Kernel']
-                fields_2 = ['CpuType','CpuCount','RAM_GB','PhyDiskSize','IDC','status','OnlineTime','OfflineTime']
+                fields_1 = ['id','HostName','PrivateIP','PublicIP','ENV','ServerBrand','ServerModel','OS','Kernel','SSH_port']
+                fields_2 = ['CpuType','CpuCount','RAM_GB','SWAP_size','PhyDiskSize','Part_mount','IDC','status','OnlineTime','OfflineTime']
                 fields = fields_1 + fields_2
                 server_info = mysql_exec.select_sql('serverinfo',fields,select_condition)
                 server_info_dict = [dict(zip(fields,i)) for i in server_info][0]
@@ -72,15 +69,7 @@ def server_update():
                 return json.dumps(server_info_dict)
         if request.method == 'POST':
                 server_update_dict = dict((i,j[0]) for i,j in dict(request.form).items())
-                if not server_update_dict['HostName'].strip() or not server_update_dict['ENV'].strip() or not server_update_dict['OS']:
-                        woops_log.log_write('server').error('The * symbol part of the input cannot be empty')
-                        msg = "The * symbol part of the input cannot be empty"
-                        return json.dumps({'result':1,'msg':msg})
-                if  not server_update_dict['Kernel'] or not server_update_dict['CpuType'] or not server_update_dict['CpuCount']:
-                        woops_log.log_write('server').error('The * symbol part of the input cannot be empty')
-                        msg = "The * symbol part of the input cannot be empty"
-                        return json.dumps({'result':1,'msg':msg})
-                if not server_update_dict['RAM_GB'] or not server_update_dict['PhyDiskSize'] or not server_update_dict['IDC']:
+                if not server_update_dict['ENV'].strip() or not server_update_dict['IDC'] or not server_update_dict['SSH_port']:
                         woops_log.log_write('server').error('The * symbol part of the input cannot be empty')
                         msg = "The * symbol part of the input cannot be empty"
                         return json.dumps({'result':1,'msg':msg})
@@ -105,17 +94,46 @@ def server_update():
                 woops_log.log_write('server').info('The server "%s" update successfully' % update_conditions['PrivateIP'])
                 return json.dumps({'result':0,'msg':'ok'})
 
-@app.route("/cmdb/server_list",methods=['GET'])
+@app.route("/cmdb/server_list",methods=['GET','POST'])
 @session_check
 def server_list():
-        fields_1 = ['id','HostName','PrivateIP','PublicIP','ENV','OS','Kernel']
-        fields_2 = ['CpuCount','RAM_GB','PhyDiskSize','IDC','status']
-        fields = fields_1 + fields_2
-        server_list = mysql_exec.select_sql('serverinfo',fields)
-        server_list_list = [dict(zip(fields,i)) for i in server_list]
-        woops_log.log_write('server').debug('server_list_list: %s' % server_list_list)
-        return render_template("server_list.html",server_list=server_list_list)
-
+	if request.method == 'GET':
+        	fields_1 = ['id','HostName','PrivateIP','PublicIP','ENV','OS','Kernel','SSH_port']
+        	fields_2 = ['CpuCount','RAM_GB','SWAP_size','PhyDiskSize','Part_mount','IDC','status']
+        	fields = fields_1 + fields_2
+        	server_list = mysql_exec.select_sql('serverinfo',fields)
+        	server_list_list = [dict(zip(fields,i)) for i in server_list]
+        	woops_log.log_write('server').debug('server_list_list: %s' % server_list_list)
+        	return render_template("server_list.html",server_list=server_list_list)
+	if request.method == 'POST':
+		res_PrivateIP = request.form.get('PrivateIP')
+		res_SSH_port = request.form.get('SSH_port')
+		print "**** res_PrivateIP ****"
+		print res_PrivateIP
+		server_info_data = ansible_exec('setup','gather_subset=hardware',res_PrivateIP)[res_PrivateIP]['ansible_facts']
+		woops_log.log_write('server').info('server_info_data: %s' % server_info_data)
+		print "***** server_info_data *****"
+		print server_info_data
+		server_refresh_info = {}
+		server_refresh_info['HostName'] = server_info_data['ansible_hostname']
+		server_refresh_info['OS'] = ' '.join((server_info_data['ansible_distribution'],server_info_data['ansible_distribution_version']))
+		server_refresh_info['ServerBrand'] = server_info_data['ansible_system_vendor']
+		server_refresh_info['ServerModel'] = server_info_data['ansible_product_name']
+		server_refresh_info['Kernel'] = server_info_data['ansible_kernel']
+		server_refresh_info['CpuCount'] = server_info_data['ansible_processor_vcpus']
+		server_refresh_info['CpuType'] = server_info_data["ansible_processor"][1]
+		server_refresh_info['RAM_GB'] = '%.2f GB' %(server_info_data['ansible_memtotal_mb']/1024.0) 
+		server_refresh_info['SWAP_size'] = '%.2f GB' %(server_info_data['ansible_swaptotal_mb']/1024.0) 
+		server_refresh_info['PhyDiskSize'] = '\n'.join(['['+i+']'+':'+server_info_data['ansible_devices'][i]['size'] for i in server_info_data['ansible_devices'] if 'ss' in i or 'sd' in i]) 
+		server_refresh_info['Part_mount'] = '\n'.join(['['+i['mount']+']'+': %.2f GB' %(i['size_total']/1024.0/1024.0/1024.0) for i in server_info_data['ansible_mounts']])
+		woops_log.log_write('server').info('server_refresh_info: %s' % server_refresh_info)
+		print "***** server_refresh_info *****"
+                print server_refresh_info
+                refresh_condition = {}
+		refresh_condition['PrivateIP'] = res_PrivateIP
+		mysql_exec.update_sql('serverinfo',server_refresh_info,refresh_condition)
+		return json.dumps({'result':0,'msg':'ok'})
+		
 @app.route("/cmdb/server_delete",methods=["GET"])
 @session_check
 def server_delete():

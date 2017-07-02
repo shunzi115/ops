@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block breadcrumb %} 
-服务器管理
+资产管理 / 线上CMDB
 {% endblock %}
 
 {% block main %} 
@@ -31,7 +31,7 @@
    {% for cmdb in cmdb_online_list %}
         <tr class="gradeX">
                 <td class="text-center"><strong>{{cmdb.app_name}}</strong></td>
-		<td class="text-center">{{cmdb.app_ip}}</td>
+		<td class="text-center" class="app_ip_row">{{cmdb.app_ip}}</td>
                 <td class="text-center">{{cmdb.app_describe}}</td>
                 <td class="text-center">{{cmdb.app_way}}</td>
                 <td class="text-center">{{cmdb.domain}}</td>
@@ -45,8 +45,8 @@
                 {% endif %}
 		{% if session.role == 0 or session.role == 1 %}
                 <td class="text-center">
-                    <button data-id="{{cmdb.id}}" class="btn btn-xs btn-Primary cmdb_refresh">刷新</button>
-                    <button data-id="{{cmdb.id}}" class="btn btn-xs btn-info cmdb_update">编辑&详情</button>
+                    <button data-id="{{cmdb.id}}" class="btn btn-xs btn-Primary cmdb_update">编辑</button>
+                    <button data-id="{{cmdb.id}}" class="btn btn-xs btn-info cmdb_detail">详情</button>
                     <button data-id="{{cmdb.id}}" class="btn btn-xs btn-danger del ">删除</button>
                 </td>
 	        {% endif %}
