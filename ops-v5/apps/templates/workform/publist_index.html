@@ -517,7 +517,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-info detail-sure" data-id=''>确认</button>
+        <button type="button" class="btn btn-info detail-sure" data-id=''>退出</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -557,7 +557,7 @@ $.getJSON("/workform/pub_list",function(data){
    var str = ''
    $.each(data,function(k,v){
       str += '<tr>'
-      str += '<td>'+v['pub_title']+'</td>'
+      str += '<td valign="middle">'+v['pub_title']+'</td>'
       if(v['workform_type']=='publish'){
 	 str += '<td class="text-center" style="color:green">发布</td>'
       }else{

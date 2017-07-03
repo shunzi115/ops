@@ -27,7 +27,7 @@ def cmdb_online_add():
                 woops_log.log_write('cmdb_online').debug('server_ip_list: %s' % server_ip_list)
                 return render_template("cmdb_online_add.html",server_ip_info=server_ip_list)
         if request.method == 'POST':
-                cmdb_add_dict = dict((i,';'.join(j)) for i,j in dict(request.form).items())
+                cmdb_add_dict = dict((i,'<br>'.join(j)) for i,j in dict(request.form).items())
                 if not cmdb_add_dict['app_name'].strip() or not cmdb_add_dict['app_ip'].strip():
                         woops_log.log_write('cmdb_online').error('The * symbol part of the input cannot be empty')
                         msg = "The * symbol part of the input cannot be empty"
@@ -62,14 +62,14 @@ def cmdb_online_update():
                 server_ip_list = [i[0] for i in mysql_exec.select_sql('serverinfo',ip_list_fields,ip_list_condition)]
                 cmdb_info = mysql_exec.select_sql('cmdb_online',fields,select_condition)
                 cmdb_info_dict = [dict(zip(fields,i)) for i in cmdb_info][0]
-                server_ip_select_list = cmdb_info_dict['app_ip'].split(' ; ')
+                server_ip_select_list = cmdb_info_dict['app_ip'].split('<br>')
                 del cmdb_info_dict['app_ip']
                 woops_log.log_write('cmdb_online').debug('server_ip_list: %s' % server_ip_list)
                 woops_log.log_write('cmdb_online').debug('server_ip_select_list: %s' % server_ip_select_list)
                 woops_log.log_write('cmdb_online').debug('cmdb_info_dict: %s' % cmdb_info_dict)
                 return json.dumps({'cmdb_info':cmdb_info_dict,'server_ip_list':server_ip_list,'server_ip_select':server_ip_select_list})
         if request.method == 'POST':
-                cmdb_update_dict = dict((i,' ; '.join(j)) for i,j in dict(request.form).items())
+                cmdb_update_dict = dict((i,'<br>'.join(j)) for i,j in dict(request.form).items())
                 if not cmdb_update_dict['app_name'].strip() or not cmdb_update_dict['app_ip'].strip():
                         woops_log.log_write('cmdb_online').error('The * symbol part of the input cannot be empty')
                         msg = "The * symbol part of the input cannot be empty"

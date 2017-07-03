@@ -23,7 +23,7 @@ def pub_add():
 		return json.dumps({'module_name':module_name_list})
 
 	if request.method == 'POST':
-		pub_info = dict((i,' ; '.join(j)) for i,j in dict(request.form).items())
+		pub_info = dict((i,'<br>'.join(j)) for i,j in dict(request.form).items())
 		print "**** pub_info ****"
 		print pub_info
 		woops_log.log_write('publish').debug('pub_info:%s' % pub_info)
