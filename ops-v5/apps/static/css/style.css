@@ -2826,7 +2826,7 @@ body.body-small .footer.fixed {
   border-top: none;
   line-height: 1.42857;
   padding: 8px;
-  vertical-align: top;
+  vertical-align: middle;
 }
 /* PANELS */
 .panel.blank-panel {

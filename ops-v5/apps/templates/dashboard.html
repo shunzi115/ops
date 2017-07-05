@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %} 
+  Dashboard
+{% endblock %}
+
+{% block main %} 
+
+<div class="col-sm-12">
+<table class="table table-striped table-bordered table-hover " id="editable">
+<caption class="text-center"><strong>线上数据库表行数统计</strong></caption>
+<thead>
+    <tr>
+        <th class="text-center">数据库</th>
+        <th class="text-center">表名</th>
+        <th class="text-center">前天</th>
+        <th class="text-center">昨天</th>
+        <th class="text-center">增长的行数</th>
+        <th class="text-center">增加的百分比</th>
+    </tr>
+</thead>
+<tbody>
+   {% for k,v in table_rows_result.items() %}
+	{% for i,j in v.items() %}
+        <tr class="gradeX">
+                <td class="text-center"><strong>{{k}}</strong></td>
+                <td class="text-center">{{i}}</td>
+                <td class="text-center">{{j[0]}}</td>
+                <td class="text-center">{{j[1]}}</td>
+                <td class="text-center">{{j[2]}}</td>
+                <td class="text-center">{{j[3]}}</td>
+         </tr>
+	{% endfor %}
+    {% endfor %}
+ </tbody>
+</table>
+</div> <!--col-sm-12-->
+{% endblock %}

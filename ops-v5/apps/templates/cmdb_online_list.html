@@ -28,24 +28,24 @@
 <tbody>
    {% for cmdb in cmdb_online_list %}
         <tr class="gradeX">
-                <td class="text-center"><strong>{{cmdb.app_name}}</strong></td>
+                <td class="text-center" style="vertical-align: middle"><strong>{{cmdb.app_name}}</strong></td>
 		<td class="text-center" class="app_ip_row">{{cmdb.app_ip|safe}}</td>
-                <td class="text-center">{{cmdb.app_describe}}</td>
-                <td class="text-center">{{cmdb.app_way}}</td>
-                <td class="text-center">{{cmdb.domain}}</td>
-                <td class="text-center">{{cmdb.app_path}}</td>
-                <td class="text-center">{{cmdb.app_shell}}</td>
-                <td class="text-center">{{cmdb.app_ports}}</td>
+                <td class="text-center" style="vertical-align: middle">{{cmdb.app_describe}}</td>
+                <td class="text-center" style="vertical-align: middle">{{cmdb.app_way}}</td>
+                <td class="text-center" style="vertical-align: middle">{{cmdb.domain}}</td>
+                <td class="text-center" style="vertical-align: middle">{{cmdb.app_path}}</td>
+                <td class="text-center" style="vertical-align: middle">{{cmdb.app_shell}}</td>
+                <td class="text-center" style="vertical-align: middle">{{cmdb.app_ports}}</td>
                 {% if cmdb.status == 0 %}
-                    <td class="text-center" style="color:green">在线</td>
+                    <td class="text-center" style="color:green;vertical-align: middle">在线</td>
                 {% else%}
-                    <td class="text-center" style="color:red">已下线</td>
+                    <td class="text-center" style="color:red;vertical-align: middle">已下线</td>
                 {% endif %}
-                <td class="text-center">
-                    <button data-id="{{cmdb.id}}" class="btn btn-xs btn-info cmdb_detail">详情</button>
+                <td class="text-center" style="vertical-align: middle">
+                    <button data-id="{{cmdb.id}}" class="btn btn-sm btn-info cmdb_detail">详情</button>
 		    {% if session.role == 0 or session.role == 1 %}
-                    <button data-id="{{cmdb.id}}" class="btn btn-xs btn-Primary cmdb_update">编辑</button>
-                    <button data-id="{{cmdb.id}}" class="btn btn-xs btn-danger del ">删除</button>
+                    <button data-id="{{cmdb.id}}" class="btn btn-sm btn-Primary cmdb_update">编辑</button>
+                    <button data-id="{{cmdb.id}}" class="btn btn-sm btn-danger del">删除</button>
 	            {% endif %}
                 </td>
             </td>

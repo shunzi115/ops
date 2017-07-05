@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <form id="serverForm" class="Formvalid form-horizontal nice-validator n-yellow" novalidate="novalidate">
+                        <form id="server_addForm" class="Formvalid form-horizontal nice-validator n-yellow" novalidate="novalidate">
 			  <div class="form-inline row">
                             <div class="form-group col-sm-6">
                                 <label for="HostName" class="col-sm-4 control-label text-right ">主机名</label>
@@ -154,7 +154,7 @@
                           <div class="hr-line-dashed"></div>
                             <div class="form-group">
                                 <div class="col-sm-4 col-sm-offset-4">
-                                    <button id="submit_button" class="btn btn-primary">添加</button>
+                                    <button id="server_add_button" class="btn btn-primary">添加</button>
                                     <button class="btn btn-warning" type="reset">取消</button>
 				    <button class="btn btn-info" type="reset">重置</button>
                                 </div>
@@ -168,7 +168,7 @@
 
     <script>
 
-        $("#serverForm").Validform({
+        $("#server_addForm").Validform({
             tiptype:3,
             datatype:{
                 "zh2-4" : /^[\u4E00-\u9FA5\uf900-\ufa2d]{2,4}$/,
@@ -187,10 +187,10 @@
             nonSelectedText: '请选择机房',
         });
 
-        $("#submit_button").click(function(){
+        $("#server_add_button").click(function(){
    	    var str_err=$('.Validform_wrong').text()
    	    if(!str_err){
-               var str = $("#serverForm").serialize();
+               var str = $("#server_addForm").serialize();
                $.post("/cmdb/server_add",str,function(data){
                    data=JSON.parse(data);
                    if(data["result"] == 0){

@@ -5,7 +5,7 @@ from flask import request,render_template,session,redirect
 from . import app
 from common_func import session_check,role_check
 from datetime import *
-import json
+import json,traceback
 from utils import woops_log,mysql_exec
 from api.ansible_exec import ansible_exec
 
@@ -14,6 +14,20 @@ def server_list():
         svr_list = [x[0] for x in mysql_exec.select_sql('serverinfo',select_fields)]
         woops_log.log_write('server').debug('server_list:%s' % svr_list)
 	return svr_list
+
+## 在修改 服务器 状态时 先查询这个 IP 是否在 cmdb 中使用,如果在使用则禁止修改该状态 ##
+def app_ip_detail(mysql_table):
+        app_ip_fields = ['app_ip']
+        app_ip_select = mysql_exec.select_sql('%s' %(mysql_table),app_ip_fields)
+        if app_ip_select:
+                app_ip_list_pre = [i[0].split('<br>') for i in app_ip_select]
+                app_ip_list = []
+                for i in app_ip_list_pre:
+                        app_ip_list = app_ip_list + i
+                app_ip_list = list(set(app_ip_list))
+                woops_log.log_write('server').debug('app_ip_list: %s' % app_ip_list)
+                return app_ip_list
+
 
 @app.route("/cmdb/server_add",methods=['GET','POST'])
 @session_check
@@ -34,6 +48,9 @@ def server_add():
 		if server_add_dict['PrivateIP'] in server_list():
 			woops_log.log_write('server').error('IP "%s" already exists' % server_add_dict['PrivateIP'])
 			return json.dumps({'result':1,'msg':'IP already exists'})
+		with open("/etc/ansible/hosts",'a+') as f:
+			if "%s\n" %(server_add_dict['PrivateIP']) not in f.readlines():
+				f.write("%s:%s\n" %(server_add_dict['PrivateIP'],server_add_dict['SSH_port']))
                 server_add_dict['OnlineTime'] = datetime.now().strftime("%Y-%m-%d %X")
                 woops_log.log_write('server').debug('server_add_dict: %s' % server_add_dict)
                 insert_fields = [x for x in server_add_dict.keys()]
@@ -41,18 +58,6 @@ def server_add():
                 woops_log.log_write('server').info('The server "%s" added successfully' % server_add_dict['PrivateIP'])
                 return json.dumps({'result':0,'msg':'ok'})
 
-## 在修改 服务器 状态时 先查询这个 IP 是否在 cmdb 中使用,如果在使用则禁止修改该状态 ##
-def app_ip_detail(mysql_table):
-        app_ip_fields = ['app_ip']
-        app_ip_select = mysql_exec.select_sql('%s' %(mysql_table),app_ip_fields)
-        if app_ip_select:
-                app_ip_list_pre = [i[0].split(' ; ') for i in app_ip_select]
-                app_ip_list = []
-                for i in app_ip_list_pre:
-                        app_ip_list = app_ip_list + i
-                app_ip_list = list(set(app_ip_list))
-                woops_log.log_write('server').debug('app_ip_list: %s' % app_ip_list)
-                return app_ip_list
 
 @app.route("/cmdb/server_update",methods=['GET','POST'])
 @session_check
@@ -75,7 +80,7 @@ def server_update():
                         return json.dumps({'result':1,'msg':msg})
                 if server_update_dict['status'] == '1' or server_update_dict['ENV'] != 'online':
                         app_ip_list = app_ip_detail('cmdb_online')
-                        if server_update_dict['PrivateIP'] in app_ip_list:
+                        if app_ip_list and server_update_dict['PrivateIP'] in app_ip_list:
                                 woops_log.log_write('server').error('Server update failure,because of he ip has been in cmdb_online ; Please delete if from cmdb_online first!')
                                 msg = 'The ip has been in cmdb_online ; Please delete if from cmdb_online first!'
                                 return json.dumps({'result':1,'msg':msg})
@@ -96,7 +101,7 @@ def server_update():
 
 @app.route("/cmdb/server_list",methods=['GET','POST'])
 @session_check
-def server_list():
+def server_list_detail():
 	if request.method == 'GET':
         	fields_1 = ['id','HostName','PrivateIP','PublicIP','ENV','OS','Kernel','SSH_port']
         	fields_2 = ['CpuCount','RAM_GB','SWAP_size','PhyDiskSize','Part_mount','IDC','status']
@@ -110,8 +115,13 @@ def server_list():
 		res_SSH_port = request.form.get('SSH_port')
 		print "**** res_PrivateIP ****"
 		print res_PrivateIP
-		server_info_data = ansible_exec('setup','gather_subset=hardware',res_PrivateIP)[res_PrivateIP]['ansible_facts']
-		woops_log.log_write('server').info('server_info_data: %s' % server_info_data)
+		try:
+			server_info_data = ansible_exec('setup','gather_subset=hardware',res_PrivateIP)[res_PrivateIP]['ansible_facts']
+			woops_log.log_write('server').info('server_info_data: %s' % server_info_data)
+		except:
+			woops_log.log_write('server').error('ansible api revoke faild,please check the IP is or not in /etc/ansible/hosts file; error: %s' %(traceback.format_exc()))
+			return json.dumps({'result':1,'msg':'ansible api revoke error,please check log'})
+
 		print "***** server_info_data *****"
 		print server_info_data
 		server_refresh_info = {}
@@ -124,7 +134,7 @@ def server_list():
 		server_refresh_info['CpuType'] = server_info_data["ansible_processor"][1]
 		server_refresh_info['RAM_GB'] = '%.2f GB' %(server_info_data['ansible_memtotal_mb']/1024.0) 
 		server_refresh_info['SWAP_size'] = '%.2f GB' %(server_info_data['ansible_swaptotal_mb']/1024.0) 
-		server_refresh_info['PhyDiskSize'] = '\n'.join(['['+i+']'+':'+server_info_data['ansible_devices'][i]['size'] for i in server_info_data['ansible_devices'] if 'ss' in i or 'sd' in i]) 
+		server_refresh_info['PhyDiskSize'] = '\n'.join(['['+i+']'+':'+server_info_data['ansible_devices'][i]['size'] for i in server_info_data['ansible_devices'] if 'ss' in i or 'sd' in i or 'vd' in i]) 
 		server_refresh_info['Part_mount'] = '\n'.join(['['+i['mount']+']'+': %.2f GB' %(i['size_total']/1024.0/1024.0/1024.0) for i in server_info_data['ansible_mounts']])
 		woops_log.log_write('server').info('server_refresh_info: %s' % server_refresh_info)
 		print "***** server_refresh_info *****"
@@ -139,9 +149,13 @@ def server_list():
 def server_delete():
         delete_condition = {}
         delete_server = {}
-        delete_condition['id'] = request.args.get('id')
-        delete_server = [dict(zip(['PrivateIP'],i)) for i in mysql_exec.select_sql('serverinfo',['PrivateIP'],delete_condition)][0]
-        mysql_exec.delete_sql('serverinfo',delete_condition)
-        woops_log.log_write('server').info('Delete server "%s" success' % delete_server)
+        delete_condition['PrivateIP'] = request.args.get('id')
+	server_delete_list = app_ip_detail('cmdb_online')
+	if server_delete_list and delete_condition['PrivateIP'] in server_delete_list:
+		woops_log.log_write('server').error('Delete server "%s" failed,because the ip is in use,please delete it from cmdb' %(delete_condition['PrivateIP']))
+		return json.dumps({'result':1,'msg':'The ip is in use,please delete it from cmdb'})
+        
+	mysql_exec.delete_sql('serverinfo',delete_condition)
+        woops_log.log_write('server').info('Delete server "%s" success' %(delete_condition['PrivateIP']))
         return json.dumps({'result':0,'msg':'ok'})
 

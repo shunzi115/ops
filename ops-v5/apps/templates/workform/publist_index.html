@@ -592,7 +592,7 @@ $.getJSON("/workform/pub_list",function(data){
       str += '<td class="text-center">'+v['pub_operation_people']+'</td>'
       str += '<td class="text-center">'+v['pub_submit_time']+'</td>'
       str += '<td class="text-center">'+v['pub_done_time']+'</td>'
-      str += '<td class="text-center">'+'<button class="btn btn-xs btn-primary pub_detail_btn" data-id="'+v['id']+'">详情</button></td>'
+      str += '<td class="text-center">'+'<button class="btn btn-sm btn-primary pub_detail_btn" data-id="'+v['id']+'">详情</button></td>'
       str += '</tr>'      
    });
    $("#list_tbody").html(str)
@@ -641,7 +641,7 @@ $.getJSON("/workform/pub_my",function(data){
       str += '<td class="text-center">'+v['pub_submit_time']+'</td>'
       str += '<td class="text-center">'+v['audit_time']+'</td>'
       str += '<td class="text-center">'+v['pub_done_time']+'</td>'
-      str += '<td class="text-center">'+'<button class="btn btn-xs btn-info pub_detail_btn" data-id="'+v['id']+'">详情</button>'+'</td>'
+      str += '<td class="text-center">'+'<button class="btn btn-sm btn-info pub_detail_btn" data-id="'+v['id']+'">详情</button>'+'</td>'
       str += '</tr>'      
    });
    $("#my_tbody").html(str)
@@ -681,11 +681,11 @@ $.getJSON("/workform/pub_audit",function(data){
       str += '<td class="text-center">'+v['pub_application_people']+'</td>'
       str += '<td class="text-center">'+v['pub_submit_time']+'</td>'
       if(v['pub_status']== 3 || v['pub_status']== 0){
-         str += '<td class="text-center"><button class="btn btn-xs btn-primary QA_audit_btn" data-id="'+v['id']+'">经理/QA审批</button></td>'
+         str += '<td class="text-center"><button class="btn btn-sm btn-primary QA_audit_btn" data-id="'+v['id']+'">经理/QA审批</button></td>'
       }else if(v['pub_status']== 1){
 	 str += '<td class="text-center">'+v['pub_audit_people']+'</td>'
          str += '<td class="text-center">'+v['audit_time']+'</td>'
-	 str += '<td class="text-center"><button class="btn btn-xs btn-primary OPS_audit_btn" data-id="'+v['id']+'">OPS 处理</button></td>'
+	 str += '<td class="text-center"><button class="btn btn-sm btn-primary OPS_audit_btn" data-id="'+v['id']+'">OPS 处理</button></td>'
       };
       str += '</tr>'
    });
