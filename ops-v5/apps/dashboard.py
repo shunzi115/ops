@@ -37,8 +37,11 @@ def haha(time_str):
 
 @app.route("/",methods=['GET','POST'])
 def dashboard():
-	aa = haha('2017-07-02')
-	bb = haha('2017-07-03')
+	time_today_str = datetime.now().strftime("%Y-%m-%d")
+	oneday_str = timedelta(days=1)
+	time_yesterday_str = (datetime.now()-oneday_str).strftime("%Y-%m-%d")
+	aa = haha(time_yesterday_str)
+	bb = haha(time_today_str)
 	for k,v in bb.items():
 		if k in aa:
 			for ki,vi in v.items():

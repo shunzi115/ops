@@ -20,6 +20,7 @@
   .Validform_right {color:green} 
   .Validform_wrong {color:red}
   .multiselect-selected {color:red}
+  .nav-label {font-size: 16px}
 </style>
 
 <script src="/static/js/jquery-3.2.1.min.js"></script>
@@ -164,7 +165,7 @@ $('#api-interface').click(function(){
 </script>
 
 <!--右边的整体-->
-<div id="page-wrapper" class="gray-bg">
+<div id="page-wrapper" class="gray-bg" style="min-height:100%">
 
 <!--右边导航第一层-->
 <div class="row border-botto">
@@ -182,10 +183,10 @@ $('#api-interface').click(function(){
 
     <ul class="nav navbar-top-links navbar-right">
         <li>
-            <span class="m-r-sm text-muted welcome-message">莴笋运维管理平台</span>
+            <span class="m-r-sm text-muted welcome-message" style="font-size:18px">莴笋运维管理平台</span>
         </li>
         <li>
-            <a href="/users/logout">
+            <a href="/users/logout" style="font-size:18px">
                 <i class="fa fa-sign-out"></i> Log out
             </a>
         </li> 
@@ -210,7 +211,7 @@ $('#api-interface').click(function(){
 <div class="wrapper wrapper-content">
 
     <div class="row">
-         <div class="col-sm-12 border-bottom white-bg dashboard-header" style="margin-left:15px;height:100%">
+         <div class="col-sm-12 border-bottom white-bg dashboard-header" style="margin-left:15px;">
                 {% block main %}
                 {% endblock %}
 
