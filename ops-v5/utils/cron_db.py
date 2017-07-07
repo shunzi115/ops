@@ -5,7 +5,7 @@ import mysql_exec,mysql_online
 import woops_log
 from datetime import *
 import sys
-from apscheduler.schedulers.background import BackgroundScheduler
+#from apscheduler.schedulers.background import BackgroundScheduler
 
 def cron_job():
 	time_now_str = datetime.now().strftime("%Y-%m-%d %X")
@@ -28,7 +28,8 @@ def cron_job():
 			i['TABLE_ROWS'] = 0
 		mysql_exec.insert_sql('online_table_rows',insert_column,i)
 
+cron_job()
 
-scheduler = BackgroundScheduler(daemonic = False)
-scheduler.add_job(cron_job,'cron',minute=59,hour=6, day='*',month='*',week='*')
-scheduler.start()
+#scheduler = BackgroundScheduler(daemonic = False)
+#scheduler.add_job(cron_job,'cron',minute=59,hour=6, day='*',month='*',week='*')
+#scheduler.start()

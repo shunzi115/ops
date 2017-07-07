@@ -111,3 +111,21 @@ CREATE TABLE `online_table_rows` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uni_id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='表数据行数统计';
+
+### 记录线上版本状态: 打包-上线-使用中-回滚-使用过 
+
+CREATE TABLE `pub_version_status` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pub_app_name` varchar(50) NOT NULL COMMENT '应用名',
+  `pub_app_ip` varchar(100) DEFAULT NULL COMMENT '已发布的 IP 地址',
+  `pub_app_version` varchar(100) NOT NULL COMMENT '版本',
+  `pub_app_version_status` varchar(20) DEFAULT NULL COMMENT '版本的状态：当前在用-using,曾经使用过的-used,回滚过的-rollbacked,刚打包的-packaged,正在发布中的-publishing,正在回滚中的-rollbacking',
+  `rollback_to_version` varchar(100) DEFAULT NULL COMMENT '回滚到的版本',
+  `package_time` varchar(30) DEFAULT NULL COMMENT '打包时间',
+  `pub_time` varchar(30) DEFAULT NULL COMMENT '发布上线时间',
+  `rollback_time` varchar(30) DEFAULT NULL COMMENT '回滚时间',
+  `pub_detail_path` varchar(100) DEFAULT NULL COMMENT '发布详情文件路径',
+  `rollback_detail_path` varchar(100) DEFAULT NULL COMMENT '回滚详情文件路径',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uni_app_version` (`pub_app_version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='线上版本状态';

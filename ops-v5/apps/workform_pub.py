@@ -3,7 +3,7 @@
 
 from flask import request,render_template,redirect,session
 from . import app
-from common_func import session_check,role_check
+from common_func import session_check,role_check,online_app_list
 from datetime import *
 import json
 from utils import woops_log,mysql_exec
@@ -16,10 +16,7 @@ def publish():
 @app.route("/workform/pub_add",methods=['GET','POST'])
 def pub_add():
 	if request.method == 'GET':
-		fields = ['app_name']
-		module_name_tuple = mysql_exec.select_sql('cmdb_online',fields)
-		module_name_list = [dict(zip(fields,i)) for i in module_name_tuple]
-		woops_log.log_write('publish').debug('module_name_list : %s' % module_name_list)
+		module_name_list = online_app_list()
 		return json.dumps({'module_name':module_name_list})
 
 	if request.method == 'POST':

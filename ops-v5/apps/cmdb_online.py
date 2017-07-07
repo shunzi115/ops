@@ -3,16 +3,12 @@
 
 from flask import request,render_template,session,redirect
 from . import app
-from common_func import session_check,role_check
+from common_func import session_check,role_check,online_app_list
 from datetime import *
 import json
 from utils import woops_log,mysql_exec
 
-def apps():
-        select_fields = ['app_name']
-        app_list = [x[0] for x in mysql_exec.select_sql('cmdb_online',select_fields)]
-        woops_log.log_write('server').debug('app_list:%s' % app_list)
-        return app_list
+apps=[i['app_name'] for i in online_app_list()]
 
 @app.route("/cmdb/cmdb_online_add",methods=['GET','POST'])
 @session_check
@@ -28,7 +24,9 @@ def cmdb_online_add():
                 return render_template("cmdb_online_add.html",server_ip_info=server_ip_list)
         if request.method == 'POST':
                 cmdb_add_dict = dict((i,'<br>'.join(j)) for i,j in dict(request.form).items())
-                if not cmdb_add_dict['app_name'].strip() or not cmdb_add_dict['app_ip'].strip():
+		print "**** cmdb_add_dict *****"
+		print cmdb_add_dict
+                if not cmdb_add_dict['app_name'].strip() or not cmdb_add_dict.get('app_ip',None):
                         woops_log.log_write('cmdb_online').error('The * symbol part of the input cannot be empty')
                         msg = "The * symbol part of the input cannot be empty"
                         return json.dumps({'result':1,'msg':msg})
@@ -36,7 +34,7 @@ def cmdb_online_add():
                         woops_log.log_write('cmdb_online').error('The * symbol part of the input cannot be empty')
                         msg = "The * symbol part of the input cannot be empty"
                         return json.dumps({'result':1,'msg':msg})
-		if cmdb_add_dict['app_name'].strip() in apps():
+		if cmdb_add_dict['app_name'].strip() in apps:
 			woops_log.log_write('server').error('APP "%s" already exists' % cmdb_add_dict['app_name'])
                         return json.dumps({'result':1,'msg':'APP already exists'})
                 cmdb_add_dict['online_time'] = datetime.now().strftime("%Y-%m-%d %X")

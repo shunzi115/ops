@@ -11,23 +11,30 @@
       <div class="col-sm-2" style="width:15%">
           <label for="opera_type" class="control-label text-right ">操作类型<span class="red-fonts ">*</span></label>
 	  <select name="opera_type" id="opera_type" class="form-control" style="width:100px">
+	      <option value='no_select' selected="selected">请选择......</option>
               <option value='publish'>发布</option>
               <option value='rollback'>回滚</option>
           </select>
       </div>
       <div class="col-sm-3" style="width:20%">
-          <label for="appname" class="control-label text-right ">模块名<span class="red-fonts ">*</span></label>
-	  <select name="app_name" id="app_name" class="form-control" style="width:200px">
+          <label for="apps_name" class="control-label text-right ">模块名<span class="red-fonts ">*</span></label>
+	  <select name="apps_name" id="apps_name" class="form-control" style="width:200px">
+	     <option value='no_select' selected="selected">请选择......</option>
+	     {% for k in online_apps %}
+		<option value={{k.app_name}}>{{k.app_name}}</option>
+	     {% endfor %}
           </select>
       </div>
       <div class="col-sm-3" style="width:30%">
           <label for="app_version" class="control-label text-right ">版本号<span class="red-fonts ">*</span></label>
 	  <select name="app_version" id="app_version" class="form-control" style="width:300px">
+	     <option value='no_select' selected="selected">请选择......</option>
           </select>
       </div>
       <div class="col-sm-3" style="width:20%">
           <label for="app_addr" class="control-label text-right ">IP 地址<span class="red-fonts ">*</span></label>
 	  <select name="app_addr" id="app_addr" class="form-control" style="width:200px">
+	     <option value='no_select' selected="selected">请选择......</option>
           </select>
       </div>
       <div class="col-sm-3" style="width:10%;text-align:center">
@@ -44,8 +51,31 @@
 </div>
 
 
+<script>
+
+$("#apps_name").change(function(){
+    var app_name=$("#apps_name").val()
+    var str='/get/apps_ip?app_name=' + app_name
+    $.getJSON(str,function(data){
+	if(data['result']==0){
+	    var html_str='<option value="no_select" selected="selected">请选择......</option>'
+	    $.each(data['msg'],function(k,v){
+		html_str += '<option value='+v+'>'+v+'</option>'
+            });
+	    $("#app_addr").html(html_str)
+	}else{
+	    swal("OH My God",data['msg'],"error")
+	};
+    });
+});
 
 
 
+
+
+
+
+
+</script>
 
 {% endblock %}

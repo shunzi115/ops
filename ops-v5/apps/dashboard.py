@@ -51,16 +51,18 @@ def dashboard():
 					if aa[k][ki][0] != 0:
 						aa[k][ki].append('%.2f%%' %((aa[k][ki][2]+0.0)/aa[k][ki][0]*100))
 						print type(aa[k][ki][0])
+					elif aa[k][ki][0] == 0 and aa[k][ki][1] == 0:
+						aa[k][ki].append('0.00%')
 					else:
-						aa[k][ki].append('100%')
+						aa[k][ki].append('100.00%')
 				else:
 					aa[k][ki].insert(0,'null')
-					aa[k][ki].append('100%')
+					aa[k][ki].append('100.00%')
 		else:
 			aa[k]=v
 			for kj,vj in aa[k].items():
 				vj.insert(0,'null')
 				vj.append(vj[1])
-				vj.append('100%')
+				vj.append('100.00%')
 
-	return render_template("/dashboard.html",table_rows_result=aa)
+	return render_template("/dashboard.html",time_1=time_yesterday_str,time_2=time_today_str,table_rows_result=aa)

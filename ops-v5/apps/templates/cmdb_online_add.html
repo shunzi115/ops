@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block breadcrumb %} 
-添加CMDB
+资产管理 / 添加CMDB
 {% endblock %}
 
 {% block main %}
@@ -35,7 +35,7 @@
                                 <label for="app_ip" class="col-sm-4 control-label text-right">IP 地址<span class="red-fonts">*</span></label>
                                  <select name="app_ip" id="app_ip" multiple="multiple" class="form-control">
 				     {% for server_ip in server_ip_info %}
-				        <option name='haha' value="{{server_ip.PrivateIP}}">{{server_ip.PrivateIP}}</option>
+				        <option value="{{server_ip.PrivateIP}}">{{server_ip.PrivateIP}}</option>
 				     {% endfor %}
 			         </select>
                             </div>
