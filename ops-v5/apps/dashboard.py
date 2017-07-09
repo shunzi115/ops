@@ -10,7 +10,6 @@ import json
 
 def haha(time_str):
 	fields = ['TABLE_SCHEMA','TABLE_NAME','TABLE_ROWS']
-#	sql = "SELECT TABLE_SCHEMA,TABLE_NAME,TABLE_ROWS FROM INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA != 'performance_schema' AND TABLE_SCHEMA != 'information_schema' ORDER BY TABLE_SCHEMA;"
 	sql = "SELECT TABLE_SCHEMA,TABLE_NAME,TABLE_ROWS FROM online_table_rows where UpdateTime like '%s';" %(time_str+'%')
 	print sql
 	table_row = mysql_exec.general_sql(sql)
@@ -24,18 +23,12 @@ def haha(time_str):
 				table_rows = []
 				table_rows.append(int(j['TABLE_ROWS']))
 				table_info[j['TABLE_NAME']]=table_rows
-		print "***** table_info *****"
-		print table_info
 		table_row_info[i]=table_info
-	print "***** table_row_info *****"
-	print table_row_info
-	table_row_info_json = json.dumps(table_row_info)
-	print "***** table_row_info_json *****"	
-	print table_row_info_json
 	return table_row_info
 
 
 @app.route("/",methods=['GET','POST'])
+@session_check
 def dashboard():
 	time_today_str = datetime.now().strftime("%Y-%m-%d")
 	oneday_str = timedelta(days=1)
@@ -50,7 +43,6 @@ def dashboard():
 					aa[k][ki].append(aa[k][ki][1]-aa[k][ki][0])
 					if aa[k][ki][0] != 0:
 						aa[k][ki].append('%.2f%%' %((aa[k][ki][2]+0.0)/aa[k][ki][0]*100))
-						print type(aa[k][ki][0])
 					elif aa[k][ki][0] == 0 and aa[k][ki][1] == 0:
 						aa[k][ki].append('0.00%')
 					else:

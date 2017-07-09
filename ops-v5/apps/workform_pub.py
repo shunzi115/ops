@@ -10,10 +10,12 @@ from utils import woops_log,mysql_exec
 
 
 @app.route("/workform/publish",methods=['GET'])
+@session_check
 def publish():
 	return render_template("/workform/publist_index.html")
 
 @app.route("/workform/pub_add",methods=['GET','POST'])
+@session_check
 def pub_add():
 	if request.method == 'GET':
 		module_name_list = online_app_list()
@@ -50,6 +52,7 @@ def pub_add():
 		return json.dumps({'result':0,'msg':'ok'})
 
 @app.route("/workform/pub_list",methods=['GET'])
+@session_check
 def pub_list():
 	fields_1 = ['id','pub_title','workform_type','pub_level','pub_module','pub_content','pub_SQL','pub_SQL_detail']
 	fields_2 = ['pub_application_people','pub_status','pub_audit_people','pub_submit_time','pub_done_time','pub_operation_people']
@@ -62,6 +65,7 @@ def pub_list():
         return json.dumps({'pub_info':pub_info_list})
 
 @app.route("/workform/pub_my",methods=['GET','POST'])
+@session_check
 def pub_my():
 	if request.method == 'GET':
        		fields_1 = ['id','pub_title','pub_level','pub_module','pub_content','pub_SQL','pub_SQL_detail','pub_application_people']
@@ -77,6 +81,7 @@ def pub_my():
         	return json.dumps({'pub_my':pub_my_list})
 
 @app.route("/workform/pub_audit",methods=['GET','POST'])
+@session_check
 def pub_audit():
         if request.method == 'GET':
                 fields_1 = ['id','pub_title','pub_level','pub_module','pub_SQL','pub_application_people']
@@ -122,6 +127,7 @@ def pub_audit():
 		return json.dumps({'result':0,'msg':'ok'})
 
 @app.route("/workform/pub_info",methods=['GET','POST'])
+@session_check
 def pub_info():
         if request.method == 'GET':
                 fields_1 = ['id','pub_title','pub_level','pub_module','pub_content','pub_SQL','pub_SQL_detail','pub_application_people']
@@ -137,6 +143,7 @@ def pub_info():
                 return json.dumps(pub_info_dict)
 
 @app.route("/test",methods=['GET','POST'])
+@session_check
 def test():
         if request.method == 'GET':
                 return render_template("test.html")
