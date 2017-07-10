@@ -1,1 +1,0 @@
-/bin/sh: /opt/ops-v5/apps/../scripts/pub.sh: No such file or directory

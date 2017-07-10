@@ -575,3 +575,112 @@
 2017-07-10 17:29:25,876-[DEBUG]-pub_opera-pub_operation.py[line:43/apps_ip_version]-select_version: [u'mop-20170707160256.war']
 2017-07-10 17:29:28,988-[DEBUG]-pub_opera-pub_operation.py[line:66/pub_opera_shell]-pub command: /opt/ops-v5/apps/../scripts/pub.sh mop 172.16.82.136 mop-20170707160256.war
 2017-07-10 18:05:16,303-[INFO]-users-users.py[line:182/user_logout]-User "admin" logout success
+2017-07-10 22:07:27,230-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:07:27,284-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:07:27,739-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:07:27,742-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:12:20,963-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select id,login_name,name_cn,password,mobile,email,role,status,last_login_time from users where login_name="admin";"
+2017-07-10 22:12:20,967-[DEBUG]-users-users.py[line:63/user_login]-select_login_info:(11L, u'admin', u'\u8bf8\u845b\u5b54\u660e', u'4bfd3be6dbd0c6888250de0640ec5905', u'15811110333', u'111@111.com', 0, 0, u'2017-07-08 22:20:11')
+2017-07-10 22:12:20,968-[DEBUG]-users-users.py[line:68/user_login]-select_login_info_dict:{'status': 0, 'login_name': u'admin', 'last_login_time': u'2017-07-08 22:20:11', 'mobile': u'15811110333', 'name_cn': u'\u8bf8\u845b\u5b54\u660e', 'id': 11L, 'role': 0, 'password': u'4bfd3be6dbd0c6888250de0640ec5905', 'email': u'111@111.com'}
+2017-07-10 22:12:20,968-[DEBUG]-DB_mysql-mysql_exec.py[line:53/update_sql]-update_sql : "update users set last_login_time='2017-07-10 22:12:20' where login_name='admin';"
+2017-07-10 22:12:20,990-[INFO]-users-users.py[line:79/user_login]-"admin" login success
+2017-07-10 22:12:21,925-[DEBUG]-DB_mysql-mysql_exec.py[line:94/general_sql]-select_sql : "SELECT TABLE_SCHEMA,TABLE_NAME,TABLE_ROWS FROM online_table_rows where UpdateTime like '2017-07-09%';"
+2017-07-10 22:12:21,929-[DEBUG]-DB_mysql-mysql_exec.py[line:94/general_sql]-select_sql : "SELECT TABLE_SCHEMA,TABLE_NAME,TABLE_ROWS FROM online_table_rows where UpdateTime like '2017-07-10%';"
+2017-07-10 22:12:27,412-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:12:27,416-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:12:30,305-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:12:30,319-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:12:30,502-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:12:30,504-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:12:46,999-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_ip from cmdb_online where app_name="app";"
+2017-07-10 22:12:47,001-[DEBUG]-pub_opera-pub_operation.py[line:33/apps_ip_version]-select_ips: [u'10.66.48.158', u'10.66.48.78']
+2017-07-10 22:12:47,001-[DEBUG]-DB_mysql-mysql_exec.py[line:94/general_sql]-select_sql : "select pub_app_version from pub_version_status where pub_app_name="app" and pub_app_version_status in ("packaged","publishing") order by package_time DESC limit 5;"
+2017-07-10 22:12:47,010-[DEBUG]-pub_opera-pub_operation.py[line:43/apps_ip_version]-select_version: [u'app-20170507212222.war', u'app-20170706212222.war']
+2017-07-10 22:12:51,739-[DEBUG]-pub_opera-pub_operation.py[line:66/pub_opera_shell]-pub command: /home/ops-v5/apps/../scripts/pub.sh app 10.66.48.158 app-20170507212222.war
+2017-07-10 22:19:49,400-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:19:49,402-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:38:20,962-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:38:20,966-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:39:38,862-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:39:38,865-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:39:39,104-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:39:39,106-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:39:41,758-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:39:41,766-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:39:48,716-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_ip from cmdb_online where app_name="mop";"
+2017-07-10 22:39:48,718-[DEBUG]-pub_opera-pub_operation.py[line:33/apps_ip_version]-select_ips: [u'10.66.48.158', u'10.66.48.87']
+2017-07-10 22:39:48,718-[DEBUG]-DB_mysql-mysql_exec.py[line:94/general_sql]-select_sql : "select pub_app_version from pub_version_status where pub_app_name="mop" and pub_app_version_status in ("packaged","publishing") order by package_time DESC limit 5;"
+2017-07-10 22:39:48,731-[DEBUG]-pub_opera-pub_operation.py[line:43/apps_ip_version]-select_version: [u'mop-20170807212222.war', u'mop-20170707212222.war']
+2017-07-10 22:39:55,617-[DEBUG]-pub_opera-pub_operation.py[line:72/pub_opera_shell]-pub command: /home/ops-v5/apps/../scripts/pub.sh mop 10.66.48.158 mop-20170707212222.war
+2017-07-10 22:43:49,332-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:43:49,335-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:43:54,368-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:43:54,371-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:43:55,603-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:43:55,605-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:43:58,958-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_ip from cmdb_online where app_name="mop";"
+2017-07-10 22:43:58,968-[DEBUG]-pub_opera-pub_operation.py[line:33/apps_ip_version]-select_ips: [u'10.66.48.158', u'10.66.48.87']
+2017-07-10 22:43:58,969-[DEBUG]-DB_mysql-mysql_exec.py[line:94/general_sql]-select_sql : "select pub_app_version from pub_version_status where pub_app_name="mop" and pub_app_version_status in ("packaged","publishing") order by package_time DESC limit 5;"
+2017-07-10 22:43:58,972-[DEBUG]-pub_opera-pub_operation.py[line:43/apps_ip_version]-select_version: [u'mop-20170807212222.war', u'mop-20170707212222.war']
+2017-07-10 22:44:04,364-[DEBUG]-pub_opera-pub_operation.py[line:72/pub_opera_shell]-pub command: /home/ops-v5/apps/../scripts/pub.sh mop 10.66.48.87 mop-20170707212222.war
+2017-07-10 22:45:42,870-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:45:42,873-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:45:44,963-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:45:44,965-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:45:45,797-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:45:45,800-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:45:45,970-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:45:45,972-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:45:52,520-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_ip from cmdb_online where app_name="app";"
+2017-07-10 22:45:52,522-[DEBUG]-pub_opera-pub_operation.py[line:33/apps_ip_version]-select_ips: [u'10.66.48.158', u'10.66.48.78']
+2017-07-10 22:45:52,522-[DEBUG]-DB_mysql-mysql_exec.py[line:94/general_sql]-select_sql : "select pub_app_version from pub_version_status where pub_app_name="app" and pub_app_version_status in ("packaged","publishing") order by package_time DESC limit 5;"
+2017-07-10 22:45:52,525-[DEBUG]-pub_opera-pub_operation.py[line:43/apps_ip_version]-select_version: [u'app-20170507212222.war', u'app-20170706212222.war']
+2017-07-10 22:45:56,823-[DEBUG]-pub_opera-pub_operation.py[line:74/pub_opera_shell]-pub command: /home/ops-v5/apps/../scripts/pub.sh app 10.66.48.78 app-20170706212222.war
+2017-07-10 22:50:31,104-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:50:31,107-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:50:31,338-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:50:31,340-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:50:36,659-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:50:36,664-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:50:39,735-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_ip from cmdb_online where app_name="app";"
+2017-07-10 22:50:39,796-[DEBUG]-pub_opera-pub_operation.py[line:33/apps_ip_version]-select_ips: [u'10.66.48.158', u'10.66.48.78']
+2017-07-10 22:50:39,797-[DEBUG]-DB_mysql-mysql_exec.py[line:94/general_sql]-select_sql : "select pub_app_version from pub_version_status where pub_app_name="app" and pub_app_version_status in ("packaged","publishing") order by package_time DESC limit 5;"
+2017-07-10 22:50:39,799-[DEBUG]-pub_opera-pub_operation.py[line:43/apps_ip_version]-select_version: [u'app-20170507212222.war', u'app-20170706212222.war']
+2017-07-10 22:50:43,822-[DEBUG]-pub_opera-pub_operation.py[line:74/pub_opera_shell]-pub command: /home/ops-v5/apps/../scripts/pub.sh app 10.66.48.158 app-20170507212222.war
+2017-07-10 22:55:39,034-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:55:39,037-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:56:25,180-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:56:25,185-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:56:25,417-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:56:25,419-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:56:38,172-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:56:38,175-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:56:42,493-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 22:56:42,495-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 22:56:49,597-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_ip from cmdb_online where app_name="mop";"
+2017-07-10 22:56:49,600-[DEBUG]-pub_opera-pub_operation.py[line:33/apps_ip_version]-select_ips: [u'10.66.48.158', u'10.66.48.87']
+2017-07-10 22:56:49,600-[DEBUG]-DB_mysql-mysql_exec.py[line:94/general_sql]-select_sql : "select pub_app_version from pub_version_status where pub_app_name="mop" and pub_app_version_status in ("packaged","publishing") order by package_time DESC limit 5;"
+2017-07-10 22:56:49,603-[DEBUG]-pub_opera-pub_operation.py[line:43/apps_ip_version]-select_version: [u'mop-20170807212222.war', u'mop-20170707212222.war']
+2017-07-10 22:57:02,939-[DEBUG]-pub_opera-pub_operation.py[line:74/pub_opera_shell]-pub command: /home/ops-v5/apps/../scripts/pub.sh mop 10.66.48.87 mop-20170807212222.war
+2017-07-10 23:11:15,762-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 23:11:15,765-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 23:11:16,106-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 23:11:16,110-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 23:11:36,187-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 23:11:36,197-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 23:11:41,937-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_ip from cmdb_online where app_name="app";"
+2017-07-10 23:11:41,940-[DEBUG]-pub_opera-pub_operation.py[line:33/apps_ip_version]-select_ips: [u'10.66.48.158', u'10.66.48.78']
+2017-07-10 23:11:41,940-[DEBUG]-DB_mysql-mysql_exec.py[line:94/general_sql]-select_sql : "select pub_app_version from pub_version_status where pub_app_name="app" and pub_app_version_status in ("packaged","publishing") order by package_time DESC limit 5;"
+2017-07-10 23:11:41,942-[DEBUG]-pub_opera-pub_operation.py[line:43/apps_ip_version]-select_version: [u'app-20170507212222.war', u'app-20170706212222.war']
+2017-07-10 23:12:14,044-[DEBUG]-pub_opera-pub_operation.py[line:74/pub_opera_shell]-pub command: /home/ops-v5/apps/../scripts/pub.sh app 10.66.48.158 app-20170507212222.war
+2017-07-10 23:22:47,249-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_name from cmdb_online ;"
+2017-07-10 23:22:47,253-[DEBUG]-common_func-common_func.py[line:41/online_app_list]-module_name_list : [{'app_name': u'app'}, {'app_name': u'mop'}]
+2017-07-10 23:31:42,096-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_ip from cmdb_online where app_name="app";"
+2017-07-10 23:31:42,100-[DEBUG]-pub_opera-pub_operation.py[line:33/apps_ip_version]-select_ips: [u'10.66.48.158', u'10.66.48.78']
+2017-07-10 23:31:42,101-[DEBUG]-DB_mysql-mysql_exec.py[line:94/general_sql]-select_sql : "select pub_app_version from pub_version_status where pub_app_name="app" and pub_app_version_status in ("packaged","publishing") order by package_time DESC limit 5;"
+2017-07-10 23:31:42,104-[DEBUG]-pub_opera-pub_operation.py[line:43/apps_ip_version]-select_version: [u'app-20170507212222.war', u'app-20170706212222.war']
+2017-07-10 23:31:44,290-[DEBUG]-DB_mysql-mysql_exec.py[line:81/select_sql]-select_sql : "select app_ip from cmdb_online where app_name="mop";"
+2017-07-10 23:31:44,291-[DEBUG]-pub_opera-pub_operation.py[line:33/apps_ip_version]-select_ips: [u'10.66.48.158', u'10.66.48.87']
+2017-07-10 23:31:44,292-[DEBUG]-DB_mysql-mysql_exec.py[line:94/general_sql]-select_sql : "select pub_app_version from pub_version_status where pub_app_name="mop" and pub_app_version_status in ("packaged","publishing") order by package_time DESC limit 5;"
+2017-07-10 23:31:44,297-[DEBUG]-pub_opera-pub_operation.py[line:43/apps_ip_version]-select_version: [u'mop-20170807212222.war', u'mop-20170707212222.war']
+2017-07-10 23:31:47,828-[DEBUG]-pub_opera-pub_operation.py[line:74/pub_opera_shell]-pub command: /home/ops-v5/apps/../scripts/pub.sh mop 10.66.48.158 mop-20170807212222.war

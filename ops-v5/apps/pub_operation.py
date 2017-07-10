@@ -46,8 +46,14 @@ def apps_ip_version():
 @app.route("/pub/opera_shell",methods=['GET','POST'])
 @session_check
 def pub_opera_shell():
+	shell_dir = os.path.dirname(os.path.realpath(__file__)) + '/../scripts/'
+	history_dir = os.path.dirname(os.path.realpath(__file__)) + '/../history/'
 	if request.method == 'GET':
-		pass
+		file_name_get = request.args.get('file_name_get')
+		history_file = history_dir + file_name_get
+		with open(history_file,'r') as f1:
+			lines_str = f1.read()
+			return json.dumps({'msg':lines_str})
 	if request.method == 'POST':
 		opera_shell_args = dict((i,j[0]) for i,j in dict(request.form).items())
 		if opera_shell_args['opera_type'] == 'no_select' or opera_shell_args['pub_app_name'] == 'no_select':
@@ -61,14 +67,16 @@ def pub_opera_shell():
 		file_name_1 = opera_shell_args['pub_app_version'].split('.')[0]
 		file_name_2 = opera_shell_args['pub_app_addr']
 		file_name = file_name_1 + file_name_2 + file_name_2 + '.txt'
-		shell_file_dir = os.path.dirname(os.path.realpath(__file__)) + '/../scripts/pub.sh'
+		shell_file_dir = shell_dir + 'pub.sh'
 		pub_command = '%s %s %s %s' %(shell_file_dir,opera_shell_args['pub_app_name'],opera_shell_args['pub_app_addr'],opera_shell_args['pub_app_version'])
+		print "***** pub_command *****"
+		print pub_command
 		woops_log.log_write('pub_opera').debug('pub command: %s' % pub_command)
-		history_file = os.path.dirname(os.path.realpath(__file__)) + '/../history/' + file_name
+		history_dir_file = history_dir + file_name
 		try:
-			with open(history_file,'a+') as f_history:
+			with open(history_dir_file,'a+') as f_history:
 				shell_subprocess = subprocess.Popen(pub_command,shell=True,stdout=f_history,stderr=f_history)
-				return json.dumps({'result':0,'msg':"正在执行发布脚本,稍后打印执行过程......"})
+				return json.dumps({'result':0,'msg':"正在执行发布脚本,稍后打印执行过程......",'history_file_name':file_name})
 		except:
-			woops_log.log_write('pub_opera').error('%s : "%s"' %(shell_subprocess,traceback.format_exc()))
+#			woops_log.log_write('pub_opera').error('%s : "%s"' %(shell_subprocess,traceback.format_exc()))
 			return json.dumps({'result':1,'msg':'The shell subprocess exec failed,please check log'})

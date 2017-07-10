@@ -87,6 +87,12 @@ $("#opera_button").click(function(){
       data=JSON.parse(data);
       if(data["result"] == 0){
 	$("#pub_result").val(data['msg'])
+	cron_id=setInterval(function(){
+	    var url_str='/pub/opera_shell?file_name_get=' + data['history_file_name']
+	    $.getJSON(url_str,function(data_1){
+		$("#pub_result").val(data_1['msg']);
+	    });
+        },1000);
       }else{
 	swal("OH My God",data['msg'],"error")
       };
