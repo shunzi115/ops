@@ -5,8 +5,10 @@ from flask import request,render_template,redirect,session
 from . import app
 from common_func import session_check,role_check,online_app_list
 from datetime import *
-import json
+import json,os,traceback
 from utils import woops_log,mysql_exec
+import subprocess
+
 
 @app.route("/pub/operation",methods=['GET','POST'])
 @session_check
@@ -54,4 +56,19 @@ def pub_opera_shell():
 		if opera_shell_args['pub_app_version'] == 'no_select' or opera_shell_args['pub_app_addr'] == 'no_select':
 			woops_log.log_write('pub_opera').error('The "pub_app_version" and "pub_app_addr" part of the selector must select one')
 			return json.dumps({'result':1,'msg':'The * symbol part of the selector must select one'})
-		return json.dumps({'result':0,'msg':'Hello World'})
+		pub_time = datetime.now().strftime("%Y-%m-%d %X")
+		file_name_3 = datetime.strptime(pub_time,"%Y-%m-%d %X").strftime("%Y%m%d%H%M%S")
+		file_name_1 = opera_shell_args['pub_app_version'].split('.')[0]
+		file_name_2 = opera_shell_args['pub_app_addr']
+		file_name = file_name_1 + file_name_2 + file_name_2 + '.txt'
+		shell_file_dir = os.path.dirname(os.path.realpath(__file__)) + '/../scripts/pub.sh'
+		pub_command = '%s %s %s %s' %(shell_file_dir,opera_shell_args['pub_app_name'],opera_shell_args['pub_app_addr'],opera_shell_args['pub_app_version'])
+		woops_log.log_write('pub_opera').debug('pub command: %s' % pub_command)
+		history_file = os.path.dirname(os.path.realpath(__file__)) + '/../history/' + file_name
+		try:
+			with open(history_file,'a+') as f_history:
+				shell_subprocess = subprocess.Popen(pub_command,shell=True,stdout=f_history,stderr=f_history)
+				return json.dumps({'result':0,'msg':"正在执行发布脚本,稍后打印执行过程......"})
+		except:
+			woops_log.log_write('pub_opera').error('%s : "%s"' %(shell_subprocess,traceback.format_exc()))
+			return json.dumps({'result':1,'msg':'The shell subprocess exec failed,please check log'})
