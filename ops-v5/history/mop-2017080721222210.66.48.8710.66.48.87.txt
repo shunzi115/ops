@@ -1,0 +1,32 @@
+[31m[WARNING]: 没有haha.tar.gz,请相关人员排查[37m
+PING www.a.shifen.com (14.215.177.37) 56(84) bytes of data.
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=1 ttl=55 time=4.87 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=2 ttl=55 time=4.75 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=3 ttl=55 time=4.28 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=4 ttl=55 time=5.86 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=5 ttl=55 time=4.94 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=6 ttl=55 time=4.49 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=7 ttl=55 time=4.51 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=8 ttl=55 time=4.64 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=9 ttl=55 time=4.71 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=10 ttl=55 time=4.74 ms
+
+--- www.a.shifen.com ping statistics ---
+10 packets transmitted, 10 received, 0% packet loss, time 9020ms
+rtt min/avg/max/mdev = 4.285/4.783/5.862/0.404 ms
+[31m[WARNING]: 没有haha.tar.gz,请相关人员排查[37m
+PING www.baidu.com (14.215.177.37) 56(84) bytes of data.
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=1 ttl=55 time=4.51 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=2 ttl=55 time=4.60 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=3 ttl=55 time=4.22 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=4 ttl=55 time=4.23 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=5 ttl=55 time=4.94 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=6 ttl=55 time=13.8 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=7 ttl=55 time=12.1 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=8 ttl=55 time=14.4 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=9 ttl=55 time=5.26 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=10 ttl=55 time=4.39 ms
+
+--- www.baidu.com ping statistics ---
+10 packets transmitted, 10 received, 0% packet loss, time 9031ms
+rtt min/avg/max/mdev = 4.229/7.266/14.474/4.124 ms

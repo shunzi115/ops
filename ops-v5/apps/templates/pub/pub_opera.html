@@ -43,13 +43,11 @@
     </div>
   </form>
 
-  <div class="row">
       <div>
         <h5>运行结果......</h5>
       </div>
-      <div id="pub_result" class="form-control col-sm-8" style="background-color:black">
+      <div id="pub_result" style="background-color:black;bottom:36px;height:calc(100vh - 280px);resize:none;overFlow-x:scroll;overFlow-y:scroll">
       </div>
-  </div>
 </div>
 
 
@@ -90,9 +88,13 @@ $("#opera_button").click(function(){
       if(data["result"] == 0){
 	$("#pub_result").val(data['msg'])
 	cron_id=setInterval(function(){
-	    var url_str='/pub/opera_shell?file_name_get=' + data['history_file_name']
+	    var url_str='/pub/opera_shell?file_name_get=' + data['history_file_name'] + '&shell_pid_str=' + data['shell_pid']
 	    $.getJSON(url_str,function(data_1){
-		$("#pub_result").html(data_1['msg']);
+		if(data_1['sehll_returncode']==0){
+		    $("#pub_result").append(data_1['msg']);
+		}else{
+		    clearInterval(cron_id);
+		};
 	    });
         },1000);
       }else{

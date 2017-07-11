@@ -57,9 +57,12 @@ def pub_opera_shell():
 	if request.method == 'GET':
 		file_name_get = request.args.get('file_name_get')
 		history_file = history_dir + file_name_get
+		shell_pid_str = request.args.get('shell_pid_str')
 		with open(history_file,'r') as f1:
 			lines_str = "".join(f1.read())
-			return json.dumps({'msg':conv.convert(lines_str)})
+		process_filter_str = 'ps aux | grep %s' %(shell_pid_str)
+		shell_returncode = subprocess.call(process_filter_str,shell=True,stdout=None,stderr=None)
+		return json.dumps({'shell_returncode':shell_returncode,'msg':conv.convert(lines_str)})
 	if request.method == 'POST':
 		opera_shell_args = dict((i,j[0]) for i,j in dict(request.form).items())
 		if opera_shell_args['opera_type'] == 'no_select' or opera_shell_args['pub_app_name'] == 'no_select':
@@ -82,7 +85,8 @@ def pub_opera_shell():
 		try:
 			with open(history_dir_file,'a+') as f_history:
 				shell_subprocess = subprocess.Popen(pub_command,shell=True,stdout=f_history,stderr=f_history)
-				return json.dumps({'result':0,'msg':"正在执行发布脚本,稍后打印执行过程......",'history_file_name':file_name})
+				shell_pid = shell_subprocess.pid
+				return json.dumps({'result':0,'msg':"正在执行发布脚本,稍后打印执行过程......",'history_file_name':file_name,'shell_pid':shell_pid})
 		except:
 #			woops_log.log_write('pub_opera').error('%s : "%s"' %(shell_subprocess,traceback.format_exc()))
 			return json.dumps({'result':1,'msg':'The shell subprocess exec failed,please check log'})
