@@ -8,7 +8,13 @@ from datetime import *
 import json,os,traceback
 from utils import woops_log,mysql_exec
 import subprocess
+from ansi2html import Ansi2HTMLConverter
+import sys
 
+reload(sys)
+sys.setdefaultencoding('utf8')
+
+conv = Ansi2HTMLConverter()
 
 @app.route("/pub/operation",methods=['GET','POST'])
 @session_check
@@ -52,8 +58,8 @@ def pub_opera_shell():
 		file_name_get = request.args.get('file_name_get')
 		history_file = history_dir + file_name_get
 		with open(history_file,'r') as f1:
-			lines_str = f1.read()
-			return json.dumps({'msg':lines_str})
+			lines_str = "".join(f1.read())
+			return json.dumps({'msg':conv.convert(lines_str)})
 	if request.method == 'POST':
 		opera_shell_args = dict((i,j[0]) for i,j in dict(request.form).items())
 		if opera_shell_args['opera_type'] == 'no_select' or opera_shell_args['pub_app_name'] == 'no_select':

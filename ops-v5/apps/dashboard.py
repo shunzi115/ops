@@ -35,6 +35,9 @@ def dashboard():
 	time_yesterday_str = (datetime.now()-oneday_str).strftime("%Y-%m-%d")
 	aa = haha(time_yesterday_str)
 	bb = haha(time_today_str)
+
+	### aa 和 bb 是{库1:{表1:行数1,表2:行数2,表3:行数3},库2:{表1:行数1,表2:行数2,表3:行数3}}; k 是 库名，v 是{表名:行数};ki 是表名,vi 是表对应的行数
+
 	for k,v in bb.items():
 		if k in aa:
 			for ki,vi in v.items():
@@ -48,13 +51,22 @@ def dashboard():
 					else:
 						aa[k][ki].append('100.00%')
 				else:
-					aa[k][ki].insert(0,'null')
-					aa[k][ki].append('100.00%')
+					aa[k][ki] = []
+					aa[k][ki].insert(0,0)
+					aa[k][ki].insert(1,vi[0])
+					aa[k][ki].insert(2,vi[0])
+					if aa[k][ki][2] == 0:
+						aa[k][ki].append('0.00%')
+					else:
+						aa[k][ki].append('100.00%')
 		else:
 			aa[k]=v
 			for kj,vj in aa[k].items():
-				vj.insert(0,'null')
+				vj.insert(0,0)
 				vj.append(vj[1])
-				vj.append('100.00%')
+				if vj[2] == 0:
+					vj.append('0.00%')
+				else:
+					vj.append('100.00%')
 
 	return render_template("/dashboard.html",time_1=time_yesterday_str,time_2=time_today_str,table_rows_result=aa)
