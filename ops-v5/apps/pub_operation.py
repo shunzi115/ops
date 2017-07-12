@@ -60,8 +60,10 @@ def pub_opera_shell():
 		shell_pid_str = request.args.get('shell_pid_str')
 		with open(history_file,'r') as f1:
 			lines_str = "".join(f1.read())
-		process_filter_str = 'ps aux | grep %s' %(shell_pid_str)
-		shell_returncode = subprocess.call(process_filter_str,shell=True,stdout=None,stderr=None)
+		process_filter_str = 'ps -p %s' %(shell_pid_str)
+		shell_returncode = subprocess.call(process_filter_str,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+		print "***** shell_returncode *****"
+		print shell_returncode
 		return json.dumps({'shell_returncode':shell_returncode,'msg':conv.convert(lines_str)})
 	if request.method == 'POST':
 		opera_shell_args = dict((i,j[0]) for i,j in dict(request.form).items())
@@ -75,7 +77,7 @@ def pub_opera_shell():
 		file_name_3 = datetime.strptime(pub_time,"%Y-%m-%d %X").strftime("%Y%m%d%H%M%S")
 		file_name_1 = opera_shell_args['pub_app_version'].split('.')[0]
 		file_name_2 = opera_shell_args['pub_app_addr']
-		file_name = file_name_1 + file_name_2 + file_name_2 + '.txt'
+		file_name = file_name_1 + '_' + file_name_2 + '_' + file_name_3 + '.txt'
 		shell_file_dir = shell_dir + 'pub.sh'
 		pub_command = '%s %s %s %s' %(shell_file_dir,opera_shell_args['pub_app_name'],opera_shell_args['pub_app_addr'],opera_shell_args['pub_app_version'])
 		print "***** pub_command *****"
@@ -86,6 +88,8 @@ def pub_opera_shell():
 			with open(history_dir_file,'a+') as f_history:
 				shell_subprocess = subprocess.Popen(pub_command,shell=True,stdout=f_history,stderr=f_history)
 				shell_pid = shell_subprocess.pid
+				print "***** shell_pid *****"
+				print shell_pid
 				return json.dumps({'result':0,'msg':"正在执行发布脚本,稍后打印执行过程......",'history_file_name':file_name,'shell_pid':shell_pid})
 		except:
 #			woops_log.log_write('pub_opera').error('%s : "%s"' %(shell_subprocess,traceback.format_exc()))

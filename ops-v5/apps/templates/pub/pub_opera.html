@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block main %}
+
 <div class="ibox-content"> 
   <form id="pub_operaForm" class="Formvalid form-horizontal nice-validator n-yellow" novalidate="novalidate">
     <div class="form-inline row">
@@ -44,6 +45,7 @@
   </form>
 
       <div>
+	</br>
         <h5>运行结果......</h5>
       </div>
       <div id="pub_result" style="background-color:black;bottom:36px;height:calc(100vh - 280px);resize:none;overFlow-x:scroll;overFlow-y:scroll">
@@ -94,8 +96,9 @@ $("#opera_button").click(function(){
 	    var url_str='/pub/opera_shell?file_name_get=' + data['history_file_name'] + '&shell_pid_str=' + data['shell_pid']
 	    $.getJSON(url_str,function(data_1){
 		if(data_1['shell_returncode']==0){
-		    $("#pub_result").append(data_1['msg']);
+		    $("#pub_result").html(data_1['msg']);
 		}else{
+		    $("#pub_result").html(data_1['msg']);
 		    clearInterval(cron_id);
 		};
 	    });
