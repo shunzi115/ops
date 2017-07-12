@@ -81,6 +81,9 @@ function get_ips_version(){
 
 $("#pub_app_name,#opera_type").change(get_ips_version);
 
+
+var cron_id;
+
 $("#opera_button").click(function(){
    var str=$("#pub_operaForm").serialize()
    $.post("/pub/opera_shell",str,function(data){
@@ -90,7 +93,7 @@ $("#opera_button").click(function(){
 	cron_id=setInterval(function(){
 	    var url_str='/pub/opera_shell?file_name_get=' + data['history_file_name'] + '&shell_pid_str=' + data['shell_pid']
 	    $.getJSON(url_str,function(data_1){
-		if(data_1['sehll_returncode']==0){
+		if(data_1['shell_returncode']==0){
 		    $("#pub_result").append(data_1['msg']);
 		}else{
 		    clearInterval(cron_id);
