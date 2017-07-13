@@ -73,24 +73,40 @@ def pub_opera_shell():
 		if opera_shell_args['pub_app_version'] == 'no_select' or opera_shell_args['pub_app_addr'] == 'no_select':
 			woops_log.log_write('pub_opera').error('The "pub_app_version" and "pub_app_addr" part of the selector must select one')
 			return json.dumps({'result':1,'msg':'The * symbol part of the selector must select one'})
+		pub_already_ip_select = dict((k,v) for k,v in opera_shell_args.items() if k == 'pub_app_name' or k == 'pub_app_version')
+		pub_already = mysql_exec.select_sql('pub_version_status',['pub_app_addr'],pub_already_ip_select)[0][0].split(';')
+		pub_already_ips = mysql_exec.select_sql('pub_version_status',['pub_app_addr'],pub_already_ip_select)[0][0].split(';')
+		if opera_shell_args['pub_app_addr'] in pub_already_ips:
+			woops_log.log_write('pub_opera').error('The IP %s and version %s had already Published' % (opera_shell_args['pub_app_addr'],opera_shell_args['pub_app_version']))
+			return json.dumps({'result':1,'msg':'The IP and version had already Published'})
 		pub_time = datetime.now().strftime("%Y-%m-%d %X")
 		file_name_3 = datetime.strptime(pub_time,"%Y-%m-%d %X").strftime("%Y%m%d%H%M%S")
 		file_name_1 = opera_shell_args['pub_app_version'].split('.')[0]
 		file_name_2 = opera_shell_args['pub_app_addr']
-		file_name = file_name_1 + '_' + file_name_2 + '_' + file_name_3 + '.txt'
-		shell_file_dir = shell_dir + 'pub.sh'
+		if opera_shell_args['opera_type'] == 'publish':
+			file_name = 'publish_' + file_name_1 + '_' + file_name_2 + '_' + file_name_3 + '.txt'
+			shell_file_dir = shell_dir + 'pub.sh'
+			pub_status_update = {}
+			pub_status_update['pub_time'] = pub_time
+			pub_already_ips.append(opera_shell_args['pub_app_addr'])
+			app_ips_list = list(mysql_exec.select_sql('cmdb_online',['app_ip'],{'app_name':opera_shell_args['pub_app_name']})[0])[0].split('<br>')
+			if len(pub_already_ips) != len(app_ips_list):
+				pub_status_update['pub_app_version_status'] = 'publishing'
+			else:
+				pub_status_update['pub_app_version_status'] = 'using'
+			pub_status_update['pub_app_addr'] = ';'.join(pub_already_ips)
+			pub_status_update_sql = ''
+			
+		elif opera_shell_args['opera_type'] == 'rollback':
+			file_name = 'rollback_' + file_name_1 + '_' + file_name_2 + '_' + file_name_3 + '.txt'
+                        shell_file_dir = shell_dir + 'rollback.sh'
 		pub_command = '%s %s %s %s' %(shell_file_dir,opera_shell_args['pub_app_name'],opera_shell_args['pub_app_addr'],opera_shell_args['pub_app_version'])
-		print "***** pub_command *****"
-		print pub_command
 		woops_log.log_write('pub_opera').debug('pub command: %s' % pub_command)
 		history_dir_file = history_dir + file_name
 		try:
 			with open(history_dir_file,'a+') as f_history:
 				shell_subprocess = subprocess.Popen(pub_command,shell=True,stdout=f_history,stderr=f_history)
 				shell_pid = shell_subprocess.pid
-				print "***** shell_pid *****"
-				print shell_pid
 				return json.dumps({'result':0,'msg':"正在执行发布脚本,稍后打印执行过程......",'history_file_name':file_name,'shell_pid':shell_pid})
 		except:
-#			woops_log.log_write('pub_opera').error('%s : "%s"' %(shell_subprocess,traceback.format_exc()))
 			return json.dumps({'result':1,'msg':'The shell subprocess exec failed,please check log'})

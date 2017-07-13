@@ -1,0 +1,36 @@
+
+稍等片刻,脚本正在执行中......
+[31m[WARNING]: 没有haha.tar.gz,请相关人员排查[37m
+PING www.a.shifen.com (14.215.177.37) 56(84) bytes of data.
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=1 ttl=55 time=4.16 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=2 ttl=55 time=5.52 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=3 ttl=55 time=4.80 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=4 ttl=55 time=4.39 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=5 ttl=55 time=4.67 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=6 ttl=55 time=5.13 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=7 ttl=55 time=4.62 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=8 ttl=55 time=4.69 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=9 ttl=55 time=4.77 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=10 ttl=55 time=4.39 ms
+
+--- www.a.shifen.com ping statistics ---
+10 packets transmitted, 10 received, 0% packet loss, time 9037ms
+rtt min/avg/max/mdev = 4.163/4.717/5.522/0.379 ms
+
+稍等片刻,脚本正在执行中......
+[31m[WARNING]: 没有haha.tar.gz,请相关人员排查[37m
+PING www.baidu.com (14.215.177.37) 56(84) bytes of data.
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=1 ttl=55 time=4.28 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=2 ttl=55 time=4.80 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=3 ttl=55 time=4.70 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=4 ttl=55 time=4.89 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=5 ttl=55 time=4.18 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=6 ttl=55 time=4.58 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=7 ttl=55 time=4.71 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=8 ttl=55 time=4.13 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=9 ttl=55 time=4.31 ms
+64 bytes from www.baidu.com (14.215.177.37): icmp_seq=10 ttl=55 time=4.47 ms
+
+--- www.baidu.com ping statistics ---
+10 packets transmitted, 10 received, 0% packet loss, time 9025ms
+rtt min/avg/max/mdev = 4.136/4.508/4.891/0.260 ms
