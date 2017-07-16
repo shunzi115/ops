@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %} 
+发布系统 / 发布历史
+{% endblock %}
+
+{% block main %} 
+
+<div class="col-sm-12">
+</br>
+<table class="table table-striped table-bordered table-hover " id="pub_history_table">
+<thead>
+    <tr>
+        <th class="text-center">模块名</th>
+        <th class="text-center">版本</th>
+        <th class="text-center">操作类型</th>
+        <th class="text-center">IP 地址</th>
+        <th class="text-center">操作结果</th>
+        <th class="text-center">开始时间</th>
+        <th class="text-center">结束时间</th>
+        <th class="text-center">操作</th>
+    </tr>
+</thead>
+<tbody>
+   {% for history in history_list_dict %}
+        <tr class="gradeX">
+                <td class="text-center"><strong>{{history.app_name_detail}}</strong></td>
+                <td class="text-center">{{history.app_version_detail}}</td>
+                <td class="text-center">{{history.app_opera_type}}</td>
+                <td class="text-center">{{history.app_ip_detail}}</td>
+                {% if history.app_opera_status == 'publish' %}
+                    <td class="text-center" style="color:blue">发布中......</td>
+		{% elif history.app_opera_status == 'rollback' %}
+                    <td class="text-center" style="color:blue">回滚中......</td>
+		{% elif history.app_opera_status == 'Success' %}
+                    <td class="text-center" style="color:green">操作成功</td>
+		{% elif history.app_opera_status == 'Fail' %}
+                    <td class="text-center" style="color:red">操作失败</td>
+                {% endif %}
+                <td class="text-center">{{history.opera_start_time}}</td>
+                <td class="text-center">{{history.opera_end_time}}</td>
+                <td class="text-center">
+                    <button data-id="{{history.app_opera_detail}}" class="btn btn-sm btn-info history_detail">详情</button>
+                </td>
+            </td>
+         </tr>
+    {% endfor %}
+ </tbody>
+</table>
+
+{% endblock %}

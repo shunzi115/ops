@@ -117,15 +117,28 @@ CREATE TABLE `online_table_rows` (
 CREATE TABLE `pub_version_status` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `pub_app_name` varchar(50) NOT NULL COMMENT '应用名',
-  `pub_app_ip` varchar(100) DEFAULT NULL COMMENT '已发布的 IP 地址',
   `pub_app_version` varchar(100) NOT NULL COMMENT '版本',
-  `pub_app_version_status` varchar(20) DEFAULT NULL COMMENT '版本的状态：当前在用-using,曾经使用过的-used,回滚过的-rollbacked,刚打包的-packaged,正在发布中的-publishing,正在回滚中的-rollbacking',
-  `rollback_to_version` varchar(100) DEFAULT NULL COMMENT '回滚到的版本',
+  `pub_app_version_status` varchar(20) DEFAULT NULL COMMENT '版本的状态：当前在用-using,曾经使用过的-used,回滚过的-rollbacked,刚打包的-packaged,正在发布中的-publishing,正在回滚中的-rollbacking,只上线了部分IP-part_used',
   `package_time` varchar(30) DEFAULT NULL COMMENT '打包时间',
-  `pub_time` varchar(30) DEFAULT NULL COMMENT '发布上线时间',
-  `rollback_time` varchar(30) DEFAULT NULL COMMENT '回滚时间',
-  `pub_detail_path` varchar(100) DEFAULT NULL COMMENT '发布详情文件路径',
-  `rollback_detail_path` varchar(100) DEFAULT NULL COMMENT '回滚详情文件路径',
+  `pub_app_addr` varchar(100) DEFAULT NULL COMMENT '已发布的 IP 地址',
+  `rollback_to_version` varchar(100) DEFAULT NULL COMMENT '回滚到的版本',
+  `rollback_addr` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uni_app_version` (`pub_app_version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='线上版本状态';
+
+### 记录上线的历史记录
+
+CREATE TABLE `pub_history_detail` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `app_name_detail` varchar(20) NOT NULL COMMENT '应用名称',
+  `app_version_detail` varchar(100) NOT NULL COMMENT '应用的版本',
+  `app_opera_type` varchar(50) NOT NULL COMMENT '操作类型',
+  `app_ip_detail` varchar(50) NOT NULL COMMENT '应用IP',
+  `app_opera_detail` varchar(1000) DEFAULT NULL COMMENT '操作详情',
+  `app_opera_status` varchar(50) DEFAULT NULL COMMENT '操作状态:success-正常；fail-失败；publishing-发布中；rollbacking-回滚中',
+  `opera_start_time` varchar(30) DEFAULT NULL COMMENT '操作开始时间',
+  `opera_end_time` varchar(30) DEFAULT NULL COMMENT '操作结束时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_version_type_ip` (`app_name_detail`,`app_version_detail`,`app_opera_type`,`app_ip_detail`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='发布历史记录表';
