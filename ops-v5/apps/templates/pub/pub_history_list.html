@@ -28,9 +28,9 @@
                 <td class="text-center">{{history.app_version_detail}}</td>
                 <td class="text-center">{{history.app_opera_type}}</td>
                 <td class="text-center">{{history.app_ip_detail}}</td>
-                {% if history.app_opera_status == 'publish' %}
+                {% if history.app_opera_status == 'publishing' %}
                     <td class="text-center" style="color:blue">发布中......</td>
-		{% elif history.app_opera_status == 'rollback' %}
+		{% elif history.app_opera_status == 'rollbacking' %}
                     <td class="text-center" style="color:blue">回滚中......</td>
 		{% elif history.app_opera_status == 'Success' %}
                     <td class="text-center" style="color:green">操作成功</td>
@@ -40,12 +40,51 @@
                 <td class="text-center">{{history.opera_start_time}}</td>
                 <td class="text-center">{{history.opera_end_time}}</td>
                 <td class="text-center">
-                    <button data-id="{{history.app_opera_detail}}" class="btn btn-sm btn-info history_detail">详情</button>
+                   <button data-id="{{history.app_opera_detail}}" class="btn btn-sm btn-info history_detail">详情</button>
                 </td>
             </td>
          </tr>
     {% endfor %}
  </tbody>
 </table>
+
+<!-- 详情模态框 -->
+<div class="modal fade" id='history_detail_Modal'>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">详情</h4>
+      </div>
+      <div class="modal-body row">
+	 <div style="background-color:black;bottom:36px;height:calc(100vh - 200px);resize:none;overFlow-x:scroll;overFlow-y:scroll">
+	    <div id="history_detail_id" class="col-sm-offset-1">
+            </div>
+	 </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>                                                                         
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- 模态框结束 -->
+
+<script>
+
+$(".history_detail").click(function(){
+  $.post('/pub/history',{id:$(this).attr('data-id')},function(data){
+     data=JSON.parse(data)
+     if(data['result']==0){
+	$("#history_detail_Modal").modal('show')
+	$("#history_detail_id").html(data['msg'])
+     }else{
+	swal("OH,My God",data['msg'],"error")
+     };
+  });
+  return false;
+});
+
+</script>
 
 {% endblock %}

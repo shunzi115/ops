@@ -218,3 +218,12 @@ def history_list():
                 history_list = mysql_exec.general_sql(history_sql_str)
                 history_list_dict = [dict(zip(fields,i)) for i in history_list]
                 return render_template("/pub/pub_history_list.html",history_list_dict=history_list_dict)
+	
+	if request.method == 'POST':
+		history_file_name = request.form.get('id',None)
+		if not history_file_name or not os.path.exists(history_file_name):
+			return json.dumps({'result':1,'msg':'The history file is not exist'})
+		with open(history_file_name,'r') as f2:
+                        history_strs = "".join(f2.read())
+		return json.dumps({'result':0,'msg':conv.convert(history_strs)})
+		

@@ -6,7 +6,7 @@
 
 {% block main %}
 
-<div class="ibox-content"> 
+<div class="ibox-content row"> 
   <form id="pub_operaForm" class="Formvalid form-horizontal nice-validator n-yellow" novalidate="novalidate">
     <div class="form-inline row">
       <div class="col-sm-2" style="width:15%">
@@ -48,7 +48,9 @@
 	</br>
         <h5>运行结果......</h5>
       </div>
-      <div id="pub_result" style="background-color:black;bottom:36px;height:calc(100vh - 280px);resize:none;overFlow-x:scroll;overFlow-y:scroll">
+      <div style="background-color:black;bottom:36px;height:calc(100vh - 280px);resize:none;overFlow-x:scroll;overFlow-y:scroll">
+	 <div id="pub_result" class="col-sm-offset-1">
+         </div>
       </div>
 </div>
 
