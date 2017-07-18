@@ -26,7 +26,11 @@
         <tr class="gradeX">
                 <td class="text-center"><strong>{{history.app_name_detail}}</strong></td>
                 <td class="text-center">{{history.app_version_detail}}</td>
-                <td class="text-center">{{history.app_opera_type}}</td>
+		{% if history.app_opera_type == 'publish' %}
+                    <td class="text-center" style="color:green">发布</td>
+		{% elif history.app_opera_type == 'rollback' %}
+                    <td class="text-center" style="color:red">回滚</td>
+                {%endif%}
                 <td class="text-center">{{history.app_ip_detail}}</td>
                 {% if history.app_opera_status == 'publishing' %}
                     <td class="text-center" style="color:blue">发布中......</td>
@@ -83,6 +87,28 @@ $(".history_detail").click(function(){
      };
   });
   return false;
+});
+
+$("#pub_history_table").dataTable({
+      "autoWidth":true,
+      "bDestroy":true,
+      "order": [[ 5, "desc" ]],
+      "bStateSave": true,
+      "sPaginationType": "full_numbers",
+      "language":{
+            "lengthMenu":"每页 _MENU_ 条记录",
+            "zeroRecords":"没有找到记录",
+            "sInfo": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 ),显示第 _START_ 至 _END_ 项(总共 _TOTAL_ 项)",
+            "infoEmpty": "无记录",
+            "infoFiltered": "(从 _MAX_ 条记录过滤)",
+            "sSearch": "搜索:",
+            "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上一页",
+                    "sNext": "下一页",
+                    "sLast": "末页"
+            }
+      }
 });
 
 </script>
