@@ -6,11 +6,11 @@ Sorry
 
 {% block main %}
 
-<form action="/test" method="post" enctype="multipart/form-data">
-<p>Pictures:
-<input type="file" name="picture" />
-<input type="submit" value="Send" />
-</p>
-</form>
+<input id="fileupload" type="file" name="files[]" data-url="/file/upload/" multiple>
 
+<script>
+$('#fileupload').fileupload();
+
+
+</script>
 {% endblock %}
