@@ -142,8 +142,3 @@ def pub_info():
                 print pub_info_dict
                 return json.dumps(pub_info_dict)
 
-@app.route("/test",methods=['GET','POST'])
-@session_check
-def test():
-        if request.method == 'GET':
-                return render_template("test.html")

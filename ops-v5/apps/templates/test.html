@@ -6,11 +6,63 @@ Sorry
 
 {% block main %}
 
-<input id="fileupload" type="file" name="files[]" data-url="/file/upload/" multiple>
+<div>
+
+   <input id="fileupload" type="file" name="files" data-url="/test">
+
+</div>
+
+
+<div class="progress" id="progress_file_upload">  
+   <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+   </div>
+</div>
+
+
+<div class="fileupload-buttonbar">
+
+            <span class="fileinput-button"><input type="file" name="files[]" multiple></span>
+
+            <button type="submit" class="start">Start upload</button>
+
+            <button type="reset" class="cancel">Cancel upload</button>
+
+            <button type="button" class="delete">Delete</button>
+
+            <input type="checkbox" class="toggle">
+
+</div>
+
 
 <script>
-$('#fileupload').fileupload();
 
+$('#fileupload').fileupload({
+        dataType: 'json',
+	add: function (e, data) {
+                data.context = $("#fileupload")
+		    .after($('<button/>').text('Upload')
+                    .click(function () {
+                         data.submit();
+                         }));
+        },
+        done: function (e, data) {
+	    console.log(e)
+	    console.log(data)
+            $.each(data.result.files, function (index, file) {
+		console.log(data.result.files)
+		console.log(file)
+                $('#fileupload').after($("<p/>").html(file.name));
+            });
+	},
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress_file_upload .progress-bar').css(
+                 'width',
+                 progress + '%'
+            );
+	    $('#progress_file_upload .progress-bar').text(progress + '%');
+        }
+    });
 
 </script>
 {% endblock %}
