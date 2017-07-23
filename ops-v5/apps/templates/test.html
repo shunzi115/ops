@@ -8,7 +8,7 @@ Sorry
 
 <div>
 
-   <input id="fileupload" type="file" name="files" data-url="/test">
+   <input id="fileupload" type="file" name="files[]" data-url="/test" multiple>
 
 </div>
 
@@ -19,48 +19,33 @@ Sorry
 </div>
 
 
-<div class="fileupload-buttonbar">
-
-            <span class="fileinput-button"><input type="file" name="files[]" multiple></span>
-
-            <button type="submit" class="start">Start upload</button>
-
-            <button type="reset" class="cancel">Cancel upload</button>
-
-            <button type="button" class="delete">Delete</button>
-
-            <input type="checkbox" class="toggle">
-
-</div>
-
-
 <script>
 
 $('#fileupload').fileupload({
         dataType: 'json',
-	add: function (e, data) {
-                data.context = $("#fileupload")
-		    .after($('<button/>').text('Upload')
-                    .click(function () {
-                         data.submit();
-                         }));
-        },
         done: function (e, data) {
-	    console.log(e)
-	    console.log(data)
-            $.each(data.result.files, function (index, file) {
-		console.log(data.result.files)
-		console.log(file)
-                $('#fileupload').after($("<p/>").html(file.name));
-            });
-	},
+	      console.log(data)
+	      if(data.result.result==0){
+                  $.each(data.result.files, function (index, file) {
+		      console.log(data.result.files)
+		      console.log(file)
+                      $('#fileupload').after($("<p/>").html(file.name));
+                 });
+              }else{
+                     $('#fileupload').after($("<p class='error' />").html(data.result.msg))
+		     <!-- swal("OH,My God",data.result.msg,"error") -->
+              }
+	},    
         progressall: function (e, data) {
+	  if($(".error").text()==''){
             var progress = parseInt(data.loaded / data.total * 100, 10);
+	    console.log(data)
             $('#progress_file_upload .progress-bar').css(
                  'width',
                  progress + '%'
             );
 	    $('#progress_file_upload .progress-bar').text(progress + '%');
+	  }
         }
     });
 
