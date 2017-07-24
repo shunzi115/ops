@@ -7,6 +7,7 @@ Sorry
 {% block main %}
 
 <div>
+      <span>仅支持<strong style="color:red">.txt</strong> 和 <strong style="color:red">.sql</strong> 文件;每次上传要选择需要上传的<strong style="color:red">全部</strong>文件</span>
       <input id="fileupload" type="file" name="files[]" data-url="/test" multiple>
 </div>
 
@@ -16,13 +17,8 @@ Sorry
    </div>
 </div>
 
-<div>
-  <a href="/uploads/hhaha.txt">嘎嘎</a>
-</div>
-
 
 <script>
-
 
 $('#fileupload').change(function(){
    console.log($('#fileupload').val())
@@ -36,7 +32,7 @@ $('#fileupload').fileupload({
                   $.each(data.result.files, function (index, file) {
 		      console.log(data.result.files)
 		      console.log(file)
-                      $('#fileupload').after($("<p/>").html(file.name+"&nbsp&nbsp").append($("<a/>").attr("href",data.result.file_url).text("预览")));
+                      $('#fileupload').after($("<p/>").html(file.name+"&nbsp&nbsp").append($("<a target='_blank'/>").attr("href",data.result.file_url).text("预览")));
                  });
               }else{
 		     swal("OH,My God",data.result.msg,"error")

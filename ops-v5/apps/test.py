@@ -17,7 +17,7 @@ from flask import send_from_directory
 
 file_dir = os.path.dirname(os.path.realpath(__file__))
 upload_dir = file_dir + '/../upload/'
-allow_file_type=set(['txt','sql','pdf'])
+allow_file_type=set(['txt','sql','pdf','docx'])
 
 
 @app.route("/test",methods=['GET','POST'])
@@ -35,17 +35,18 @@ def test():
 			filetype = file.content_type
 			print "**** filetype ****"
 			print filetype
-
 			file_url = url_for('uploaded_file',filename=filename)
-
 			print "**** file_url ****"
 			print file_url
-
-			if '.' in filename and filename.rsplit('.',1)[1] in allow_file_type:
-            			file.save(os.path.join(upload_dir, filename))
-            			return json.dumps({"result":0,"files": [{"name": filename, "minetype": filetype}],"file_url":file_url})
-			else:
-				return json.dumps({"result":1,"msg":"haha nibeipianle","files": [{"name": filename, "minetype": filetype}]})
+			if '.' not in filename or  filename.rsplit('.',1)[1] not in allow_file_type:
+				return json.dumps({"result":1,"msg":"The type %s of file %s is not allow" %(filetype,filename)})
+			file_upload_time = datetime.now().strftime("%Y%m%d%H%M%S")
+			file_store_name = filename.rsplit('.',1)[0] + '_' + file_upload_time + '.' + filename.rsplit('.',1)[1]
+			file_url = url_for('uploaded_file',filename=file_store_name)
+			print "**** file_url ****"
+			print file_url
+            		file.save(os.path.join(upload_dir, file_store_name))
+            		return json.dumps({"result":0,"files": [{"name": file_store_name, "minetype": filetype}],"file_url":file_url})
 
 
 @app.route('/uploads/<filename>')
