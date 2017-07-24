@@ -7,9 +7,7 @@ Sorry
 {% block main %}
 
 <div>
-
-   <input id="fileupload" type="file" name="files[]" data-url="/test" multiple>
-
+      <input id="fileupload" type="file" name="files[]" data-url="/test" multiple>
 </div>
 
 
@@ -18,8 +16,17 @@ Sorry
    </div>
 </div>
 
+<div>
+  <a href="/uploads/hhaha.txt">嘎嘎</a>
+</div>
+
 
 <script>
+
+
+$('#fileupload').change(function(){
+   console.log($('#fileupload').val())
+});
 
 $('#fileupload').fileupload({
         dataType: 'json',
@@ -29,15 +36,13 @@ $('#fileupload').fileupload({
                   $.each(data.result.files, function (index, file) {
 		      console.log(data.result.files)
 		      console.log(file)
-                      $('#fileupload').after($("<p/>").html(file.name));
+                      $('#fileupload').after($("<p/>").html(file.name+"&nbsp&nbsp").append($("<a/>").attr("href",data.result.file_url).text("预览")));
                  });
               }else{
-                     $('#fileupload').after($("<p class='error' />").html(data.result.msg))
-		     <!-- swal("OH,My God",data.result.msg,"error") -->
+		     swal("OH,My God",data.result.msg,"error")
               }
 	},    
         progressall: function (e, data) {
-	  if($(".error").text()==''){
             var progress = parseInt(data.loaded / data.total * 100, 10);
 	    console.log(data)
             $('#progress_file_upload .progress-bar').css(
@@ -45,7 +50,6 @@ $('#fileupload').fileupload({
                  progress + '%'
             );
 	    $('#progress_file_upload .progress-bar').text(progress + '%');
-	  }
         }
     });
 
