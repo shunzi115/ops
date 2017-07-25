@@ -45,7 +45,7 @@ $('#fileupload').fileupload({
 			  links.push($(this).attr('href'))
 		      }); 
 	              console.log(links)
-		      $("#file_url_store").val(decodeURIComponent(links.join('\n')))
+		      $("#file_url_store").val(decodeURIComponent(links.join(';')))
                  });
               }else{
 		     swal("OH,My God",data.result.msg,"error")
