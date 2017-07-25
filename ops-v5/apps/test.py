@@ -35,9 +35,6 @@ def test():
 			filetype = file.content_type
 			print "**** filetype ****"
 			print filetype
-			file_url = url_for('uploaded_file',filename=filename)
-			print "**** file_url ****"
-			print file_url
 			if '.' not in filename or  filename.rsplit('.',1)[1] not in allow_file_type:
 				return json.dumps({"result":1,"msg":"The type %s of file %s is not allow" %(filetype,filename)})
 			file_upload_time = datetime.now().strftime("%Y%m%d%H%M%S")

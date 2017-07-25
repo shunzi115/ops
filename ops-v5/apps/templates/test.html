@@ -17,11 +17,18 @@ Sorry
    </div>
 </div>
 
+<div>
+   <textarea id="file_url_store" class="form-control" rows="3"></textarea>
+
+</div>
+
+
 
 <script>
 
-$('#fileupload').change(function(){
-   console.log($('#fileupload').val())
+$('#fileupload').click(function(){
+    $(".haha,.hehe").remove()
+    $("#progress_file_upload .progress-bar").css('width',0).text('0%')
 });
 
 $('#fileupload').fileupload({
@@ -32,7 +39,13 @@ $('#fileupload').fileupload({
                   $.each(data.result.files, function (index, file) {
 		      console.log(data.result.files)
 		      console.log(file)
-                      $('#fileupload').after($("<p/>").html(file.name+"&nbsp&nbsp").append($("<a target='_blank'/>").attr("href",data.result.file_url).text("预览")));
+                      $('#fileupload').after($("<p class='haha'/>").html(file.name+"&nbsp&nbsp").append($("<a target='_blank' class='hehe'/>").attr("href",data.result.file_url).text("预览")));
+		      var links = []; 
+		      $("a[target='_blank']").each(function(){
+			  links.push($(this).attr('href'))
+		      }); 
+	              console.log(links)
+		      $("#file_url_store").val(decodeURIComponent(links.join('\n')))
                  });
               }else{
 		     swal("OH,My God",data.result.msg,"error")
