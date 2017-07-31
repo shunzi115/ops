@@ -23,7 +23,7 @@ def pub_add():
 
 	if request.method == 'POST':
 		pub_info = dict((i,'<br>'.join(j)) for i,j in dict(request.form).items())
-		print "**** pub_info ****"
+		print " %s ".center(100,"*") %("pub_info")
 		print pub_info
 		woops_log.log_write('publish').debug('pub_info:%s' % pub_info)
 		if not pub_info['pub_title'].strip('') or not pub_info['pub_module'].strip('') or not pub_info['pub_content'].strip(''):
@@ -44,7 +44,7 @@ def pub_add():
 			pub_info['pub_status'] = '3'
 		pub_info['pub_submit_time'] = datetime.now().strftime("%Y-%m-%d %X")
 		pub_info['pub_application_people'] = session.get('login_name',None)
-		print '**** pub_info ****'
+		print ' %s '.center(100,"*") %("pub_info")
 		print pub_info
 		insert_fields = [x for x in pub_info.keys()]
 		mysql_exec.insert_sql('publish_online',insert_fields,pub_info)
@@ -60,7 +60,7 @@ def pub_list():
 	pub_info_tuple = mysql_exec.select_sql('publish_online',fields)
         pub_info_list = [dict(zip(fields,i)) for i in pub_info_tuple]
         woops_log.log_write('publish').debug('pub_info_list : %s' % pub_info_list)
-	print "**** pub_info_list ****"
+	print " %s ".center(100,"*") %("pub_info_list")
 	print pub_info_list
         return json.dumps({'pub_info':pub_info_list})
 
@@ -76,7 +76,7 @@ def pub_my():
         	pub_my_tuple = mysql_exec.select_sql('publish_online',fields,my_conditon)
         	pub_my_list = [dict(zip(fields,i)) for i in pub_my_tuple]
         	woops_log.log_write('publish').debug('pub_my_list : %s' % pub_my_list)
-        	print "**** pub_my_list ****"
+        	print " %s ".center(100,"*") %("pub_my_list")
         	print pub_my_list
         	return json.dumps({'pub_my':pub_my_list})
 
@@ -92,7 +92,7 @@ def pub_audit():
         	pub_audit_tuple = mysql_exec.select_sql('publish_online',fields,audit_conditon)
                 pub_audit_list = [dict(zip(fields,i)) for i in pub_audit_tuple]
                 woops_log.log_write('publish').debug('pub_audit_list : %s' % pub_audit_list)
-                print "**** pub_my_audit ****"
+                print " %s ".center(100,"*") %("pub_audit_list")
                 print pub_audit_list
                 return json.dumps({'pub_audit':pub_audit_list})
 	if request.method == 'POST':
@@ -138,7 +138,7 @@ def pub_info():
                 pub_info_tuple = mysql_exec.select_sql('publish_online',fields,pub_info_conditon)
                 pub_info_dict = [dict(zip(fields,i)) for i in pub_info_tuple][0]
                 woops_log.log_write('publish').debug('pub_info_dict : %s' % pub_info_dict)
-                print "**** pub_info_dict ****"
+                print " %s ".center(100,"*") %("pub_info_dict")
                 print pub_info_dict
                 return json.dumps(pub_info_dict)
 

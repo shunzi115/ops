@@ -67,7 +67,7 @@ def pub_opera_shell():
 			lines_str = "".join(f1.read())
 		process_filter_str = 'ps -p %s' %(shell_pid_str)
 		shell_returncode = subprocess.call(process_filter_str,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-		print "***** shell_returncode *****"
+		print " %s ".center(100,"*") %("shell_returncode")
 		print shell_returncode
 		history_end_status = {}
 		if shell_returncode != 0:
@@ -92,7 +92,7 @@ def pub_opera_shell():
 			pub_already_ips = pub_already.split(';')
 		else:
 			pub_already_ips = []
-		print "**** pub_already_ips ****"
+		print " %s ".center(100,"*") %("pub_already_ips")
 		print pub_already_ips
 		file_name_1 = opera_shell_args['pub_app_version'].split('.')[0]
 		file_name_2 = opera_shell_args['pub_app_addr']
@@ -110,11 +110,11 @@ def pub_opera_shell():
 		else:
 			current_version_select_sql = current_version_sql_str + ' and pub_app_version_status in ("rollbacking","using","publishing") order by id DESC limit 1;'
 		app_current_using_select = mysql_exec.general_sql(current_version_select_sql)
-		print "**** app_current_using_select ****"
+		print " %s ".center(100,"*") %("app_current_using_select")
 		print app_current_using_select
 		if app_current_using_select:
 			app_current_using = dict(zip(('pub_app_name','pub_app_version','pub_app_addr'),app_current_using_select[0]))
-			print "**** app_current_using ****"
+			print " %s ".center(100,"*") %("app_current_using")
 			print app_current_using
 			status_update_condition = {'pub_app_name':opera_shell_args['pub_app_name'],'pub_app_version':app_current_using['pub_app_version']}
 		else:
@@ -124,7 +124,7 @@ def pub_opera_shell():
 
 		if opera_shell_args['opera_type'] == 'publish':
 			app_ips_list = mysql_exec.select_sql('cmdb_online',['app_ip'],{'app_name':opera_shell_args['pub_app_name']})[0][0].split('<br>')
-			print "**** status_update_condition ****"
+			print " %s ".center(100,"*") %("status_update_condition")
 			print status_update_condition
 			print pub_already_ips
 			if status_update_condition and not pub_already_ips:
@@ -154,7 +154,7 @@ def pub_opera_shell():
 			file_name = 'rollback_' + file_name_1 + '_' + file_name_2 + '_' + file_name_3 + '.txt'
                         shell_file_dir = shell_dir + 'rollback.sh'
 			rollback_already = mysql_exec.select_sql('pub_version_status',['rollback_addr'],status_update_condition)[0][0]
-			print "**** rollback_already ****"
+			print " %s ".center(100,"*") %("rollback_already")
 			print rollback_already
                 	if rollback_already:
                         	rollback_already_ips = rollback_already.split(';')
@@ -170,7 +170,7 @@ def pub_opera_shell():
                                 return json.dumps({'result':1,'msg':'The IP and version had already Rollbackd'})
 			rollback_already_ips.append(opera_shell_args['pub_app_addr'])
 			app_current_using_ips=app_current_using['pub_app_addr'].split(';')
-			print "**** app_current_using_ips ****"
+			print " %s ".center(100,"*") %("app_current_using_ips")
 			print app_current_using_ips
 			if len(rollback_already_ips) != len(app_current_using_ips):
                                 pub_status_update['pub_app_version_status'] = 'rollbacking'
@@ -191,7 +191,7 @@ def pub_opera_shell():
 				shell_pid = shell_subprocess.pid
 		except:
 			return json.dumps({'result':1,'msg':'The shell subprocess exec failed,please check log'})
-		print "**** update_pre_version_condition ****"
+		print " %s ".center(100,"*") %("update_pre_version_condition")
 		print update_pre_version_condition
 		if update_pre_version_condition:	
 			mysql_exec.update_sql('pub_version_status',pre_version_status,update_pre_version_condition)
@@ -201,7 +201,7 @@ def pub_opera_shell():
 		del opera_history_detail['app_opera_detail']
 		del opera_history_detail['opera_start_time']
 		history_id = mysql_exec.select_sql('pub_history_detail',['id'],opera_history_detail)[0][0]
-		print "**** history_id ****"
+		print " %s ".center(100,"*") %("history_id")
 		print history_id
 		return json.dumps({'result':0,'msg':"正在执行发布脚本,稍后打印执行过程......",'history_file_name':file_name,'shell_pid':shell_pid,'history_id':history_id})
 
