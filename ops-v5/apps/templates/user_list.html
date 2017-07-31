@@ -103,25 +103,25 @@
 	      <div class="col-sm-10">
 	    	 <div class="col-sm-2">
 	            <div class="radio i-checks">
-	               <label><input type="radio" value="0" class="role" name="role" checked="">管理员</label>
+	               <label><input type="radio" value="0" class="role" name="role">管理员</label>
 	            </div>
 	         </div>
 
 	         <div class="col-sm-2">
 	            <div class="radio i-checks">
-	               <label><input type="radio" value="1" class="role" name="role" checked="">运维</label>
+	               <label><input type="radio" value="1" class="role" name="role">运维</label>
 	            </div>
 	         </div>
 
 	         <div class="col-sm-2">
 	            <div class="radio i-checks">
-	               <label><input type="radio" value="2" class="role" name="role" checked="">开发</label>
+	               <label><input type="radio" value="2" class="role" name="role">开发</label>
 	            </div>
 	         </div>
 
 	         <div class="col-sm-2">
 	            <div class="radio i-checks">
-	               <label><input type="radio" value="3" class="role" name="role" checked="">测试</label>
+	               <label><input type="radio" value="3" class="role" name="role">测试</label>
 	            </div>
 	         </div>
 
@@ -233,11 +233,8 @@ $(".user_update").click(function(){
         $("#name_cn").val(data['name_cn'])
         $("#mobile").val(data['mobile'])
         $("#email").val(data['email'])
-	if(data['status'] == 0){
-	   $("#status_ok").attr('checked','')
-	}else{
-	   $("#status_lock").attr('checked','')
-        };
+	$("input[name='role'][value="+data['role']+"]").attr('checked','')
+	$("input[name='status'][value="+data['status']+"]").attr('checked','')
     })
 })
 

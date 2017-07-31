@@ -85,6 +85,7 @@ CREATE TABLE `publish_online` (
   `pub_content` varchar(1000) NOT NULL COMMENT '发布详情',
   `pub_SQL` varchar(10) NOT NULL COMMENT '是否有SQL',
   `pub_SQL_detail` varchar(1000) DEFAULT NULL COMMENT 'SQL详情',
+  `sql_file_url` varchar(500) DEFAULT NULL COMMENT 'SQL文件URL',
   `pub_application_people` varchar(50) NOT NULL COMMENT '申请人',
   `pub_status` tinyint(2) NOT NULL COMMENT '状态-跟用户表角色相关联:3-QA审批中；1-OPS处理中；0-经理审批中；5-处理完成；6-经理/QA不同意发布；7-OPS发布异常;',
   `pub_audit_people` varchar(50) DEFAULT NULL COMMENT '上线审批人',

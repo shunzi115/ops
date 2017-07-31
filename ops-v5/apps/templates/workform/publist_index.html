@@ -310,16 +310,15 @@
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group" id='pub_SQL_detail_div'>
-               <label for="pub_content" class="col-sm-3 control-label">SQL详情</label>
+               <label for="pub_SQL_detail" class="col-sm-3 control-label">SQL详情</label>
                <div class="col-sm-8">
                    <textarea name='pub_SQL_detail' id='pub_SQL_detail_audit' class="form-control" rows="5" readonly="readonly"></textarea>
                </div>
            </div>
            <div class="hr-line-dashed"></div>
-           <div class="form-group">
-               <label for="pub_attach" class="col-sm-3 control-label">SQL附件</label>
-               <div class="col-sm-8">
-                   <input type="file" name="pub_attach" id="exampleInputFile_audit">
+           <div class="form-group" id="files_url_audit_div">
+               <label for="files_url" class="col-sm-3 control-label">SQL附件</label>
+	       <div class="col-sm-8" id="files_url_audit">
                </div>
            </div>
            <div class="hr-line-dashed"></div>
@@ -468,14 +467,14 @@
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group" id='SQL_detail_div'>
-               <label for="pub_content" class="col-sm-3 control-label">SQL详情</label>
+               <label for="pub_SQL_detail" class="col-sm-3 control-label">SQL详情</label>
                <div class="col-sm-8">
                    <textarea name='pub_SQL_detail' id='pub_SQL_detail_detail' class="form-control" rows="5" readonly="readonly"></textarea>
                </div>
            </div>
            <div class="hr-line-dashed"></div>
            <div class="form-group" id="files_url_detail_div">
-               <label for="files_url_detail" class="col-sm-3 control-label">SQL附件</label>
+               <label for="files_url" class="col-sm-3 control-label">SQL附件</label>
                <div class="col-sm-8" id="files_url_detail">
                </div>
            </div>
@@ -855,6 +854,9 @@ $(document).on('click','.QA_audit_btn',function(){
     var id=$(this).attr('data-id')
     var url="/workform/pub_info?id="+id
     $(".qa-audit-sure").attr('data-id',id)
+    $(".haha-audit,.hehe-audit").remove()
+    $("#files_url_audit_div").removeAttr('style')
+    $("#pub_SQL_detail_div").removeAttr('style')
     $("#pub_auditForm [type='radio']").removeAttr('checked')
     $.getJSON(url,function(data){
         $("#pub_title_audit").val(data['pub_title'])
@@ -877,12 +879,28 @@ $(document).on('click','.QA_audit_btn',function(){
 	if(data['pub_SQL']=='YES'){
             $("#SQL_yes").attr('checked','checked')
 	    $("#SQL_no").attr('disabled','disabled')
-            $("#pub_SQL_detail_audit").val(data['pub_SQL_detail'])
+	    if(!data['pub_SQL_detail']){
+                $("#pub_SQL_detail_div").attr('style','display:none')
+            }else{
+                $("#pub_SQL_detail_audit").val(data['pub_SQL_detail'])
+            }
+	    if(data['sql_file_url']){
+                var files=data['sql_file_url'].split(';')
+                $.each(files,function(k,v){
+                    $('#files_url_audit').append($("<p class='haha-audit'/>").html(v.replace('/uploads/','')+"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp").append($("<a target='_blank' class='hehe-audit'/>").attr("href",v).text("预览")));
+                });
+            }else{
+                $("#files_url_audit_div").attr('style','display:none')
+            };
         }else{
 	    $("#SQL_no").attr('checked','checked')
             $("#SQL_yes").attr('disabled','disabled')
             $("#pub_SQL_detail_div").attr('style','display:none')
+	    $("#files_url_audit_div").attr('style','display:none')
         };
+
+
+
     })
 })
 
@@ -917,6 +935,9 @@ $(document).on('click','.OPS_audit_btn',function(){
     var url="/workform/pub_info?id="+id
     $(".ops-audit-sure").attr('data-id',id)
     $("#pub_auditForm [type='radio']").removeAttr('checked')
+    $(".haha-audit,.hehe-audit").remove()
+    $("#files_url_audit_div").removeAttr('style')
+    $("#pub_SQL_detail_div").removeAttr('style')
     $.getJSON(url,function(data){
         $("#pub_title_audit").val(data['pub_title'])
 	if(data['workform_type']=='publish'){
@@ -938,11 +959,24 @@ $(document).on('click','.OPS_audit_btn',function(){
         if(data['pub_SQL']=='YES'){
             $("#SQL_yes").attr('checked','checked')
             $("#SQL_no").attr('disabled','disabled')
-            $("#pub_SQL_detail_audit").val(data['pub_SQL_detail'])
+	    if(!data['pub_SQL_detail']){
+                $("#pub_SQL_detail_div").attr('style','display:none')
+            }else{
+                $("#pub_SQL_detail_audit").val(data['pub_SQL_detail'])
+            }
+	    if(data['sql_file_url']){
+                var files=data['sql_file_url'].split(';')
+                $.each(files,function(k,v){
+                    $('#files_url_audit').append($("<p class='haha-audit'/>").html(v.replace('/uploads/','')+"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp").append($("<a target='_blank' class='hehe-audit'/>").attr("href",v).text("预览")));
+                });
+            }else{
+                $("#files_url_audit_div").attr('style','display:none')
+            };
         }else{
             $("#SQL_no").attr('checked','checked')
             $("#SQL_yes").attr('disabled','disabled')
             $("#pub_SQL_detail_div").attr('style','display:none')
+	    $("#files_url_audit_div").attr('style','display:none')
         };
 	$("#QA_audit").val(data['QA_audit'])
 	if(data['QA_audit_result']=='YES'){
