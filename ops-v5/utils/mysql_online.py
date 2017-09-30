@@ -7,10 +7,10 @@ import traceback
 import woops_log
 
 pool = PooledDB(mysql,
-	host='rm-bp10bh7gc24147f4y.mysql.rds.aliyuncs.com',
+	host='www.mysql.com',
 	port=3306,
-	user='watsons_watch',
-	passwd='hhKOm5AgdYYv6x62XHOF',
+	user='watch',
+	passwd='hhKOHO',
 	db='information_schema',
 	mincached=5,
 	maxcached=20,
